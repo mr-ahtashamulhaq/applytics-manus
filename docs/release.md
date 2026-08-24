@@ -94,7 +94,7 @@ Record these values in the release issue or deployment note:
 
 | Item | Value |
 |---|---|
-| Main commit | `42a1281` database reconciliation |
+| Main commit | `e015919` resume versions |
 | Scraper commit | `0916187` report gate |
 | Supabase migration | `016_resume_versions` and any later migration |
 | Vercel preview URL | Fill after preview |
