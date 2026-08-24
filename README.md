@@ -1,316 +1,180 @@
-<div align="center">
-
-<img src="public/chrome-shiny-wordmark.png" alt="Applytics Logo" width="200" />
-
 # Applytics
 
-**AI-Powered Resume Tailoring for Pakistan's Job Seekers**
+Applytics is an early-access SaaS for job seekers in Pakistan. It connects four parts of a job search:
 
-> This is the production development repository for Applytics. The original `APPLYTICS` repository is kept as a historical reference. Job ingestion runs in the separate [`applytics-job-scraper`](https://github.com/mr-ahtashamulhaq/applytics-job-scraper) repository.
+1. A catalog of independently ingested job listings.
+2. Explainable recommendations based on profile data.
+3. A resume tailored to a selected job.
+4. An application tracker linked to the job and resume.
 
-The production refactor is tracked in [`plan.md`](plan.md). Read [`APPLYTICS_REFACTOR_PLAN.md`](APPLYTICS_REFACTOR_PLAN.md) before making product changes. The design rules are in [`DESIGN.md`](DESIGN.md), and the security release checklist is in [`videcodingsecurity.txt`](videcodingsecurity.txt).
+The product is still in active development. **Mustakbil is the first verified live job source.** LinkedIn, Indeed, and Rozee are not part of the automatic feed until their listing access and parsing are verified.
 
-*Paste a job description. Get a tailored, ATS-safe resume in seconds.*
+> Applytics does not promise that a resume will pass an ATS or lead to an interview. Review every generated claim before you use a resume.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)](https://nextjs.org)
-[![Clerk](https://img.shields.io/badge/Auth-Clerk-purple)](https://clerk.com)
-[![Supabase](https://img.shields.io/badge/Database-Supabase-green)](https://supabase.com)
-[![Groq](https://img.shields.io/badge/AI-Groq-orange)](https://groq.com)
-[![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)](https://vercel.com)
+## Product flow
 
-<br/>
+Create a profile with your education, skills, experience, and projects. Browse the authenticated job catalog. Each listing shows its source, last checked time, and available job details. Save roles that you want to revisit.
 
-[![Visit Live App](https://img.shields.io/badge/Live_Site-Applytics.online-de0d12?style=for-the-badge)](https://www.applytics.online)
+The recommendations page compares the profile city and skills with catalog records. It shows the evidence for each suggestion. It excludes listings with no matching profile signal. It does not create a match score from missing data.
 
+When you select a catalog job, Applytics passes the listing to the resume generator from the server. The job title, company, description, and required skills come from the catalog record. The server stores the selected `job_id` with the job input and generated resume.
 
-</div>
+The generator asks the AI model to rewrite profile content for the selected role. Server validation rejects malformed responses and responses that contain unsupported skills, experience entries, projects, or numbers. You must still review the result because automated checks cannot replace human review.
 
----
+The tracker can store manual applications or applications created from a catalog job and generated resume. It supports status, date applied, application deadline, follow-up date, notes, and a constrained outcome vocabulary.
 
-## 🎯 What is Applytics?
+## Current source health
 
-Applytics is an AI-powered resume tailoring platform built specifically for university students, fresh graduates, and entry-level job seekers in Pakistan. Instead of sending the same generic resume to every employer, Applytics intelligently rewrites your resume to match each job description — optimized for ATS (Applicant Tracking Systems) and keyword-rich.
+| Source | Automatic schedule | Current state |
+|---|---:|---|
+| Mustakbil | Yes | Verified end-to-end and written to the live catalog |
+| LinkedIn | No | No successful controlled write has been verified |
+| Indeed | No | Controlled access is bot-detected |
+| Rozee | No | Current listing markup produced no parseable cards |
 
-**The core promise:** Paste any job description → Applytics tailors your resume to match it → Download a polished, ATS-safe PDF → Track your application.
+The scraper runs in the private [`applytics-job-scraper`](https://github.com/mr-ahtashamulhaq/applytics-job-scraper) repository. GitHub Actions runs the verified source twice each day. The worker needs only `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` for the scheduled path. The service-role key stays in GitHub Actions secrets and is never sent to the browser.
 
----
+Read the scraper [`README.md`](https://github.com/mr-ahtashamulhaq/applytics-job-scraper/blob/main/README.md) and [`docs/github-actions.md`](https://github.com/mr-ahtashamulhaq/applytics-job-scraper/blob/main/docs/github-actions.md) for operations and source recovery tests.
 
-## 🚀 The Problem We Solve
+## Tech stack
 
-Pakistani students and fresh graduates face a brutal job market reality:
-- Most CVs are rejected by ATS software before a human ever reads them
-- Job seekers send the same generic resume to every company
-- No tool exists that bridges the gap between a student's raw profile and what employers actually want
-- Tailoring a resume manually for each job takes hours
+| Layer | Technology |
+|---|---|
+| Application | Next.js 16 App Router, React, TypeScript |
+| UI | Tailwind CSS v4, custom Applytics tokens, Geist, Geist Mono |
+| Authentication | Clerk |
+| Database | Supabase PostgreSQL with RLS and server-side ownership checks |
+| AI | Groq-compatible structured JSON generation |
+| PDF | `@react-pdf/renderer` |
+| Forms and validation | React Hook Form and Zod |
+| UI motion and icons | Framer Motion and Phosphor Icons |
+| Deployment target | Vercel |
 
-Applytics solves all of this in **under 60 seconds**.
+## Repository structure
 
----
-
-## ✨ Features
-
-### 🧠 AI Resume Tailoring
-- Paste any job description (minimum 100 characters)
-- Groq AI (powered by LLaMA 3.3 70B) analyzes your profile against the job requirements
-- Rewrites your experience bullets using the XYZ formula (What · How · Result)
-- Reorders resume sections for maximum relevance to the specific role
-- Generates a tailored, ATS-optimized resume — never fabricating facts
-
-### 📊 Match Score & Keyword Analysis
-- Instant match score (0–100%) showing how well your profile fits the job
-- Missing keywords list — skills you should highlight or add
-- Suggested keywords — terms the employer specifically looks for
-
-### 📄 ATS-Safe PDF Export
-- Download your tailored resume as a clean, single-column PDF
-- Built with `@react-pdf/renderer` — no LaTeX, no external services
-- Helvetica font, no graphics, no tables — maximum ATS compatibility
-- Filename auto-generated: `resume_{company}_{role}.pdf`
-
-### 📋 Application Tracker
-- Save every job you apply to in one place
-- Track status: Draft → Applied → Interview → Rejected → Accepted
-- Visual color-coded status badges
-- Instant optimistic UI updates — no page refresh needed
-
-### 📈 Dashboard
-- At-a-glance stats: resumes generated, applications, interviews, average match score
-- Recent resumes and applications list
-- Profile completeness indicator
-
-### 🔐 Security
-- Clerk authentication — email + social sign-in
-- Supabase Row Level Security (RLS) — every user sees only their own data
-- All AI/DB API keys are server-side only — never exposed to the browser
-- `SUPABASE_SERVICE_ROLE_KEY` and `GROQ_API_KEY` are server-only environment variables
-
----
-
-## 🏗️ Tech Stack
-
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| **Framework** | Next.js 16.2 (App Router) | Server Components + Server Actions = full-stack in one repo |
-| **Language** | TypeScript | Type safety across the entire stack |
-| **Styling** | Tailwind CSS v4 + Custom CSS tokens | Design system with 60+ CSS variables |
-| **Auth** | Clerk v7 | Pre-built UI, secure sessions, Next.js middleware |
-| **Database** | Supabase (PostgreSQL) | DB + RLS + Storage in one service |
-| **AI** | Groq API (LLaMA 3.3 70B) | Structured JSON Output, fast inference, free tier |
-| **PDF** | @react-pdf/renderer | Server-side ATS-safe PDF generation |
-| **Animations** | Framer Motion + GSAP | Premium UI motion on landing page |
-| **Icons** | Phosphor Icons | Consistent, lightweight icon system |
-| **Toasts** | Sonner | Non-blocking success/error notifications |
-| **Forms** | React Hook Form + Zod | Type-safe validation |
-| **Deploy** | Vercel | First-class Next.js CI/CD |
-
----
-
-## 📁 Project Structure
-
-```
-applytics/
-├── app/
-│   ├── api/
-│   │   └── pdf/[id]/          # PDF generation route handler
-│   ├── app/                   # Protected /app/* routes
-│   │   ├── dashboard/         # Dashboard page
-│   │   ├── generate/          # Resume generator + result pages
-│   │   ├── profile/           # User profile setup
-│   │   ├── tracker/           # Application tracker
-│   │   └── layout.tsx         # Auth-guarded app shell
-│   ├── privacy/               # Privacy policy page
-│   ├── sign-in/               # Clerk sign-in page
-│   ├── sign-up/               # Clerk sign-up page
-│   ├── globals.css            # Design token system
-│   ├── layout.tsx             # Root layout + ClerkProvider
-│   └── page.tsx               # Public landing page / auth redirect
-├── components/
-│   ├── landing/               # Landing page sections (Hero, Features, etc.)
-│   ├── layout/                # App shell components (Sidebar, MobileTopBar)
-│   ├── profile/               # Profile form + skills input
-│   ├── tracker/               # Tracker table component
-│   └── ui/                    # Shared UI primitives
-├── lib/
-│   ├── actions/               # Server Actions (dashboard, generate, profile, tracker)
-│   ├── auth/                  # ensureUser utility
-│   ├── groq/                  # Groq client + AI schema
-│   ├── supabase/              # DB clients (admin + browser)
-│   └── types/                 # TypeScript types
-├── public/                    # Static assets (logo, images)
-├── supabase/
-│   └── migrations/            # SQL migration files
-├── proxy.ts                   # Clerk middleware (route protection)
-├── DESIGN.md                  # Full design system specification
-├── plan.md                    # Development roadmap
-└── AGENTS.md                  # AI agent configuration
+```text
+app/
+  app/                         Protected product routes
+    dashboard/                 Activity summary
+    generate/                  Resume input and result pages
+    jobs/                      Catalog and job details
+    recommendations/           Explainable profile-based matches
+    saved-jobs/                User-owned saved listings
+    profile/                   Profile editor
+    tracker/                   Application tracker
+  api/pdf/[id]/                Owned resume PDF response
+  privacy/                     Public privacy route
+  sign-in/ and sign-up/        Clerk authentication routes
+components/                    UI components
+lib/actions/                  Authenticated server actions
+lib/validation/                Server input and AI output schemas
+lib/data/                     Shared catalog selections
+lib/supabase/                  Server and browser clients
+lib/types/                    Handwritten live-schema types
+supabase/migrations/           Ordered database migrations
+DESIGN.md                     Product design rules
+CLAUDE.md                     Engineering behavior rules
+plan.md                       User-facing production refactor plan
 ```
 
----
+## Database contract
 
-## 🗄️ Database Schema
+The live database contains shared catalog tables and user-owned workflow tables. All new user-owned actions resolve the Clerk identity to the internal `users.id`, apply ownership filters, validate input with Zod, and return bounded error messages.
 
-### 5 Tables (Supabase PostgreSQL)
+| Table | Role |
+|---|---|
+| `users` | Maps a Clerk identity to a Supabase user row |
+| `profiles` | Stores the candidate profile used as resume source data |
+| `jobs` | Shared job catalog records from the scraper |
+| `ingestion_runs` | Protected scraper run counters and status |
+| `ingestion_errors` | Protected scraper role and source errors |
+| `job_inputs` | Job context submitted to resume generation |
+| `generated_resumes` | Validated AI output and resume metadata |
+| `saved_jobs` | User-owned bookmarks for catalog jobs |
+| `applications` | User-owned manual or linked applications |
+| `suggestions` | Public product suggestions |
 
-| Table | Key Columns | Purpose |
-|-------|------------|---------|
-| `users` | `clerk_user_id`, `name`, `email` | Clerk ↔ Supabase user sync |
-| `profiles` | `skills[]`, `experience_text`, `projects_text`, education | Resume source data |
-| `job_inputs` | `job_title`, `company_name`, `job_description` | Stored JD for each generation |
-| `generated_resumes` | `match_score`, `missing_keywords[]`, `ai_output` (jsonb) | AI output + metadata |
-| `applications` | `company_name`, `role_title`, `status`, `applied_date` | Job application tracking |
+The catalog workflow links are nullable. Older manual job inputs, resumes, and applications remain valid. The relevant migrations are `002_jobs_catalog.sql`, `003_ingestion_health.sql`, `007_link_catalog_workflows.sql`, `008_saved_jobs.sql`, and `009_tracker_followups.sql`.
 
-All tables have Row Level Security (RLS) policies ensuring complete data isolation between users.
+## Routes
 
----
+| Route | Access | Purpose |
+|---|---|---|
+| `/` | Public | Product overview and early-access entry point |
+| `/privacy` | Public | Privacy information; obtain legal review before launch |
+| `/sign-in` | Public | Clerk sign-in |
+| `/sign-up` | Public | Clerk sign-up |
+| `/app/dashboard` | Authenticated | Resume, application, and profile summary |
+| `/app/profile` | Authenticated | Candidate source profile |
+| `/app/jobs` | Authenticated | Paginated catalog with bounded filters |
+| `/app/jobs/[id]` | Authenticated | Listing details and workflow actions |
+| `/app/recommendations` | Authenticated | Evidence-based profile recommendations |
+| `/app/saved-jobs` | Authenticated | Saved listing review and removal |
+| `/app/generate` | Authenticated | Manual or catalog-based resume generation |
+| `/app/generate/result/[id]` | Authenticated | Owned resume review and tracker handoff |
+| `/app/tracker` | Authenticated | Application status and follow-up management |
 
-## 🔄 AI Pipeline
-
-```
-User Profile + Job Description
-         ↓
-   Groq API (LLaMA 3.3 70B)
-   Structured JSON Output
-         ↓
-┌─────────────────────────────┐
-│  summary                    │
-│  skills_to_emphasize[]      │
-│  rewritten_experience[]     │
-│  rewritten_projects[]       │
-│  suggested_keywords[]       │
-│  missing_keywords[]         │
-│  match_score (0–100)        │
-│  section_order_recommendation│
-└─────────────────────────────┘
-         ↓
-   @react-pdf/renderer
-   ATS-safe PDF generation
-         ↓
-   Download + Save to Tracker
-```
-
-**AI Rules (strictly enforced in system prompt):**
-- ✅ May rewrite and strengthen bullet points
-- ✅ May reframe experience using XYZ formula  
-- ✅ May reorder sections for relevance
-- ❌ Must NOT invent numbers, companies, tools, or employment history
-
----
-
-## ⚙️ Environment Variables
-
-Create a `.env.local` file in the project root:
-
-```env
-# Clerk Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
-CLERK_SECRET_KEY=<your-clerk-secret-key>
-
-# Supabase Database
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-
-# Groq AI
-GROQ_API_KEY=<your-groq-api-key>
-```
-
-> **Security note:** `SUPABASE_SERVICE_ROLE_KEY` and `GROQ_API_KEY` are never prefixed with `NEXT_PUBLIC_` and are only accessible server-side.
-
----
-
-## 🚀 Local Development
+## Local development
 
 ### Prerequisites
-- Node.js 18+
-- A Supabase project (free tier works)
-- A Clerk account (free tier works)
-- A Groq API key (free tier works)
 
-### Setup
+Use Node.js 22 or a compatible current Node.js release. Create accounts for Clerk, Supabase, and the configured Groq-compatible AI provider.
+
+### Install
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/mr-ahtashamulhaq/applytics-manus.git
 cd applytics-manus
-
-# 2. Install dependencies
 npm install
+```
 
-# 3. Set up environment variables
-cp .env.local.example .env.local
-# Fill in your keys in .env.local
+Create `.env.local` with the values for this deployment. Use angle-bracket placeholders when documenting secrets:
 
-# 4. Run Supabase migrations
-# Go to Supabase Dashboard → SQL Editor
-# Run the contents of: supabase/migrations/001_initial_schema.sql
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<clerk publishable key>
+CLERK_SECRET_KEY=<clerk secret key>
+NEXT_PUBLIC_SUPABASE_URL=<supabase project url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase publishable or anon key>
+SUPABASE_SERVICE_ROLE_KEY=<supabase service role key>
+GROQ_API_KEY=<groq api key>
+```
 
-# 5. Start the development server
+Apply the ordered SQL migrations in `supabase/migrations/` to the target Supabase project. Use the Supabase migration tooling or SQL editor. Do not commit `.env.local` or any service key.
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
----
+## Checks before a push
 
-## 📋 Pages & Routes
+Run the following commands from the repository root:
 
-| Route | Access | Description |
-|-------|--------|-------------|
-| `/` | Public | Landing page with product overview |
-| `/sign-in` | Public | Clerk sign-in page |
-| `/sign-up` | Public | Clerk sign-up page |
-| `/privacy` | Public | Privacy policy |
-| `/app/dashboard` | Protected | Stats overview + recent activity |
-| `/app/profile` | Protected | User profile setup form |
-| `/app/generate` | Protected | Job description input + AI generation |
-| `/app/generate/result/[id]` | Protected | Resume preview + PDF download |
-| `/app/tracker` | Protected | Application status tracker |
+```bash
+./node_modules/.bin/tsc --noEmit
+npm run lint
+npm run build
+```
 
----
+The current lint baseline has zero errors and 140 existing warnings. Treat a new error as a release blocker. Run the Impeccable detector for changed UI files before a UI commit.
 
-## 🎨 Design System
+Every meaningful change must update `plan.md`, use a commit message of no more than three words with no punctuation, and push to `mr-ahtashamulhaq/applytics-manus`. Do not push application work to the historical `APPLYTICS` repository.
 
-Applytics uses a custom design token system defined in `globals.css`. Key decisions:
+## Security boundary
 
-- **Font:** Geist (primary) + Geist Mono (data/labels) — not Inter
-- **Brand color:** `#de0d12` (brand-red)
-- **Canvas:** `#ffffff` white + `#f7f6f5` warm off-white surface
-- **Text:** `#0f0f0f` near-black (not pure #000)
-- **Radius:** 6px buttons, 8px cards
-- **Motion:** Framer Motion (UI) + GSAP ScrollTrigger (landing page)
-- **Icons:** Phosphor (consistent weight)
-- **No gradients, no glassmorphism, no Inter** — Notion-inspired clean aesthetic
+The browser does not receive the Supabase service-role key or AI provider key. Server actions perform authentication, ownership checks, bounded input validation, and safe error mapping. The worker uses the Supabase service-role key only in GitHub Actions secrets.
 
-See `DESIGN.md` for the complete design specification.
+The `ingestion_runs` and `ingestion_errors` tables are protected from the public API roles. They contain operational data and are not shown to normal job seekers. Review [`docs/security-scan.md`](docs/security-scan.md) for the current repository and history scan limits.
 
----
+## Early access and legal review
 
-## 🤝 Contributing
+The early-access product is free while the release scope is being validated. This repository does not publish numeric pricing, quotas, or support promises.
 
-This is a Entrepreneurship Subject project / startup MVP. Contributions, bug reports, and feature suggestions are welcome.
+The privacy policy and terms of use need a professional final review before commercial launch. The final documents must cover data retention, AI processing, user rights, acceptable use, deletion, export, and service limitations.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## License
 
----
-
-## Development rules
-
-Use short commit messages with no more than three words and no punctuation. Commit each meaningful change. Update `plan.md` immediately after each completed task and include the related commit hash.
-
-## 📄 License
-
-MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-<div align="center">
-
-**Built for Pakistan's next generation of professionals**
-
-[Visit Applytics](https://applytics.online) · [Privacy Policy](/privacy)
-
-</div>
+MIT. See [`LICENSE`](LICENSE).

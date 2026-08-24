@@ -44,8 +44,8 @@
 
 ### Phase 3: Establish the database source of truth
 
-- [ ] Add the canonical data dictionary.
-- [ ] Reconcile migration history with the live Supabase schema.
+- [x] Add the canonical data dictionary. Added `docs/data-dictionary.md` with live table, column, ownership, link, and migration definitions.
+- [ ] Reconcile migration history with the live Supabase schema. The new catalog, ingestion, workflow-link, saved-job, and tracker migrations are applied; legacy drift review remains.
 - [x] Add backward-compatible `job_id` links to job inputs and generated resumes, plus `job_id` and `generated_resume_id` links to applications; applied as `link_catalog_workflows` and verified live.
 - [ ] Add the normalized job catalog schema.
 - [x] Add ingestion run and ingestion error tables. Applied as `ingestion_health` in Supabase and verified through an Actions run.
@@ -156,14 +156,14 @@ Tracker follow-up validation: TypeScript and production build passed, lint remai
 
 ### Phase 13: Update project documentation
 
-- [ ] Rewrite the main README.
-- [ ] Add architecture documentation. The scraper boundary, catalog schema, and ingestion health tables are documented in the repositories.
-- [ ] Add data dictionary and migration notes.
-- [ ] Add local development instructions.
-- [ ] Add testing and release documentation.
-- [ ] Add deployment and rollback documentation.
+- [x] Rewrite the main README. Removed stale MVP claims, numeric or unsupported promises, emoji headings, and outdated table counts; documented the current early-access product and source health.
+- [x] Add architecture documentation. Added `docs/architecture.md` for the app, worker, database boundary, user flow, and failure behavior.
+- [x] Add data dictionary and migration notes. Added `docs/data-dictionary.md` and listed migrations `001` through `009`.
+- [x] Add local development instructions. The README now documents environment placeholders, migration order, and local checks.
+- [x] Add testing and release documentation. Added `docs/release.md` with application and worker gates.
+- [x] Add deployment and rollback documentation. The runbook documents preview verification, the untouched Vercel integration, forward-only migrations, and rollback handling.
 - [ ] Add decision records.
-- [ ] Push every document to GitHub.
+- [x] Push every document to GitHub after each meaningful documentation subphase.
 
 ### Phase 14: Verify and deploy
 
