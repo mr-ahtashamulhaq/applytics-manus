@@ -68,8 +68,10 @@
 Action-audit validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings. The audit records user filters, selected responses, strict schemas, and safe errors for every current action.
 
 Environment validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
+
+Test validation: `npm test` passed with 2 files and 7 tests; TypeScript, production build, lint, and the production dependency audit also passed.
 - [x] Repair environment validation. The Groq client now initializes at request time and returns a clear server-only configuration error when `GROQ_API_KEY` is missing; public builds do not require the secret.
-- [ ] Add unit, integration, and end-to-end tests.
+- [x] Add focused unit tests. Added Vitest tests for strict resume output, evidence checks, tracker dates, outcomes, and workflow-link UUIDs; integration and end-to-end coverage remain pending.
 
 ### Phase 5: Build job ingestion and catalog operations
 
