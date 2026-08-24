@@ -31,7 +31,7 @@
 - [x] Add ingestion run records. Migration `003_ingestion_health.sql` and worker reporting are live; reporting run `32736499139` verified five scraped, five enriched, and five upserted jobs with zero errors.
 - [x] Configure safe GitHub Actions schedules and manual dispatch.
 - [x] Add scraper README and operations documentation.
-- [ ] Run and verify the first scheduled scrape. Mustakbil manual runs `32735373095`, `32736499139`, and `32737220376` wrote and rechecked active catalog rows and protected run records. The automatic schedule now targets Mustakbil only; the first real scheduled event still needs verification.
+- [ ] Run and verify the first scheduled scrape. Mustakbil manual runs `32735373095`, `32736499139`, and `32737220376` wrote and rechecked active catalog rows and protected run records. The automatic schedule now targets Mustakbil only. The 2026-08-24 15:47 UTC check found only pre-gate failed run `32722505278`; the first post-gate scheduled event remains pending for the next 20:00 UTC slot.
 
 ### Phase 2: Create and migrate the main application repository
 
@@ -223,7 +223,7 @@ Legal-document validation: TypeScript and production build passed, lint remains 
 
 - [ ] Complete the release checklist.
 - [ ] Confirm all product claims match shipped behavior.
-- [ ] Confirm the scraper schedule and run history.
+- [ ] Confirm the scraper schedule and run history. The automatic schedule is gated to Mustakbil, but the first post-gate scheduled event still needs logs and protected `ingestion_runs` verification.
 - [ ] Confirm deletion, export, and privacy flows.
 - [ ] Create the first release tag.
 - [ ] Start weekly operational review.
