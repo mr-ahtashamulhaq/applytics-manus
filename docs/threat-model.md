@@ -43,4 +43,4 @@ The private scraper uses a service-role credential. The credential must exist on
 
 ## Open risks before public release
 
-The product still needs upload validation review for all resume paths, deployed-header verification, a tested secret-rotation procedure, durable usage monitoring, deletion/export flows, and legal review. The Supabase-backed per-IP controls and shared operation flags are implemented, but they must be exercised in preview and monitored after release.
+The product still needs upload validation review for all resume paths, deployed-header verification, a tested secret-rotation procedure, durable usage monitoring, two-account preview verification for export and deletion, a tested provider-cleanup recovery procedure, and legal review. The Supabase-backed per-IP controls, shared operation flags, export route, and deletion action are implemented, but they need operational verification before release.

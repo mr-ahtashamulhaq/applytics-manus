@@ -22,7 +22,7 @@ npm run build
 npm audit --omit=dev
 ```
 
-Lint currently exits with zero errors and 140 existing warnings. A new lint error is a release blocker. The focused test suite currently has 3 files and 9 tests. The production dependency audit must report zero vulnerabilities. A changed UI surface also needs an Impeccable detector pass.
+Lint currently exits with zero errors and 140 existing warnings. A new lint error is a release blocker. The focused test suite currently has 4 files and 11 tests. The production dependency audit must report zero vulnerabilities. A changed UI surface also needs an Impeccable detector pass.
 
 Review the public product claims. The product is free during early access. Do not publish numeric pricing, quotas, guaranteed ATS results, guaranteed interviews, or unsupported source coverage.
 
@@ -48,6 +48,8 @@ Check the following flows in an authenticated preview:
 8. Create a linked tracker application.
 9. Edit deadline, follow-up date, outcome, and notes.
 10. Change status and delete the application.
+11. Download the account export and confirm it contains only the signed-in user's records.
+12. Test typed-confirmation account deletion, local data cleanup, known private-file cleanup, sign-out, and provider-cleanup failure handling.
 
 Check that another user cannot read or modify the first user's rows. Check that a missing job stops new resume or tracker links. Check that invalid UUIDs, dates, URLs, long text, and malformed AI JSON return safe errors. Review `docs/server-action-audit.md` and `docs/threat-model.md` before release.
 
@@ -91,9 +93,9 @@ Record these values in the release issue or deployment note:
 
 | Item | Value |
 |---|---|
-| Main commit | `bcf0fd6` at this documentation update |
+| Main commit | `fea707c` before the privacy-flow changes |
 | Scraper commit | `a739414` at this documentation update |
-| Supabase migration | `009_tracker_followups` and any later migration |
+| Supabase migration | `011_lock_abuse_controls` and any later migration |
 | Vercel preview URL | Fill after preview |
 | Schedule verification run | Pending until the first post-gate schedule event |
 | Legal review | Required before commercial launch |

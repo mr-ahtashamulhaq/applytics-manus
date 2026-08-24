@@ -17,6 +17,8 @@ This audit covers the server actions and route loaders in the early-access app. 
 | `deleteApplication` | Clerk session and local user lookup | UUID schema | Delete includes the resolved user id | Returns a bounded status and user-safe message |
 | `submitSuggestion` | Public action | Bounded suggestion schema | No account ownership applies | Honeypot submissions are dropped; Supabase operation flag plus hashed-IP hourly limit run before insert; database errors are bounded |
 | `GET /api/pdf/[id]` | Clerk session | UUID and stored resume schema | Resume query includes the resolved user id | Returns PDF bytes or a bounded HTTP error |
+| `GET /api/account/export` | Clerk session | No user input; fixed attachment name | Loads only rows for the resolved user id | Returns private JSON with `no-store` caching or a bounded HTTP error |
+| `deleteAccount` | Clerk session | Exact typed confirmation phrase | Loads and deletes only the resolved user's rows and known storage references, then requests Clerk deletion | Returns a bounded status; storage and provider errors are logged without exposing details |
 
 ## Query rules
 
@@ -26,4 +28,4 @@ The server uses Supabase query builders. User input is passed as values, not SQL
 
 The app now uses the `rate_limit_buckets` table and atomic `consume_rate_limit` function for hashed-IP and user limits. The `operation_flags` table and `is_operation_enabled` function provide a fail-closed kill switch for AI generation and public suggestions. Counters are intentionally conservative fixed windows; operations are denied if the control schema is unavailable.
 
-Upload controls are not in the current product. Future upload work must add file type, extension, size, storage, and ownership checks. The app still needs automated ownership tests for a second user and deployed-header verification. These are release gates, not reasons to expose service-role access to the browser.
+Upload controls are not in the current product. Future upload work must add file type, extension, size, storage, and ownership checks. Account export and deletion still need preview verification with two accounts and a tested provider-cleanup recovery procedure. These are release gates, not reasons to expose service-role access to the browser.

@@ -69,7 +69,8 @@ export default function PrivacyPage() {
 
           <Section title="7. Retention and deletion">
             <p>Applytics keeps account and workflow information while it is needed to provide the service or while your account remains active. Retention periods for backups and operational logs require a final documented policy.</p>
-            <p>To request access, correction, export, or deletion, email <a href="mailto:hello@applytics.pk" className="underline underline-offset-4" style={{ color: 'var(--brand-red)' }}>hello@applytics.pk</a>. We will verify the request and explain the next step.</p>
+            <p>Signed-in users can download a JSON export from the Account privacy page. The export includes the account, profile, job inputs, generated resumes, saved jobs, and tracker entries that Applytics can read for that account.</p>
+            <p>Signed-in users can also delete their account from the same page. The service removes the local account records and known generated files before it requests deletion from the authentication provider. A failed provider cleanup needs support follow-up.</p>
           </Section>
 
           <Section title="8. Security">
@@ -78,7 +79,7 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="9. Your choices and rights">
-            <p>Depending on applicable law, you can request access to, correction of, export of, or deletion of your personal information. You can stop using the service at any time. A legal review must confirm the final rights process and response times for each user location.</p>
+            <p>Depending on applicable law, you can request access to, correction of, export of, or deletion of your personal information. The self-serve Account privacy page provides export and deletion controls for signed-in users. You can stop using the service at any time. A legal review must confirm the final rights process and response times for each user location.</p>
           </Section>
 
           <Section title="10. Children">

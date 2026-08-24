@@ -13,6 +13,7 @@ import {
   Sparkle,
   Kanban,
   User,
+  ShieldCheck,
 } from '@phosphor-icons/react'
 
 const NAV_ITEMS = [
@@ -50,6 +51,11 @@ const NAV_ITEMS = [
     label: 'Profile',
     href: '/app/profile',
     icon: User,
+  },
+  {
+    label: 'Privacy and data',
+    href: '/app/account',
+    icon: ShieldCheck,
   },
 ]
 

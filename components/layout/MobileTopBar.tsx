@@ -12,6 +12,7 @@ import {
   User,
   List,
   X,
+  ShieldCheck,
 } from '@phosphor-icons/react'
 
 const NAV_ITEMS = [
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
   { label: 'Generate Resume', href: '/app/generate', icon: FileText },
   { label: 'Tracker', href: '/app/tracker', icon: Kanban },
   { label: 'Profile', href: '/app/profile', icon: User },
+  { label: 'Privacy and data', href: '/app/account', icon: ShieldCheck },
 ]
 
 const drawerVariants = {

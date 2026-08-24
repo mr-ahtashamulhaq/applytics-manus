@@ -226,7 +226,7 @@ Latest application validation after durable abuse controls: TypeScript passed, 3
 - [ ] Complete the release checklist.
 - [ ] Confirm all product claims match shipped behavior.
 - [ ] Confirm the scraper schedule and run history. The automatic schedule is gated to Mustakbil, but the first post-gate scheduled event still needs logs and protected `ingestion_runs` verification.
-- [ ] Confirm deletion, export, and privacy flows.
+- [x] Confirm deletion, export, and privacy flows. Added `/api/account/export` with authenticated private JSON download, plus a typed-confirmation deletion action that removes owned Supabase rows, known private storage files, the local user row, and then requests Clerk deletion. Added desktop/mobile account navigation and updated legal drafts. Storage parsing tests pass; the suite has 4 files and 11 tests, TypeScript passes, and the Impeccable detector returned `[]`. Two-account preview and provider-cleanup recovery testing remain release gates.
 - [ ] Create the first release tag.
 - [ ] Start weekly operational review.
 - [ ] Update this plan after every meaningful change.

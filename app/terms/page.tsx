@@ -71,7 +71,7 @@ export default function TermsPage() {
 
           <Section title="9. Suspension and termination">
             <p>We can suspend or end access when necessary to protect users, the service, a provider, or a source board, or when you breach these terms. You can stop using the service at any time.</p>
-            <p>Deletion requests and data retention follow the <Link href="/privacy" className="underline underline-offset-4" style={{ color: 'var(--brand-red)' }}>Privacy Policy</Link>. The final deletion and export process requires legal and operational review.</p>
+            <p>Signed-in users can export their stored account and workflow data or start account deletion from the Account privacy page. The deletion action requires typed confirmation and removes local records and known generated files before it requests deletion from the authentication provider. Deletion and retention details follow the <Link href="/privacy" className="underline underline-offset-4" style={{ color: 'var(--brand-red)' }}>Privacy Policy</Link>. A qualified lawyer must review this process before commercial launch.</p>
           </Section>
 
           <Section title="10. Disclaimers and liability">
