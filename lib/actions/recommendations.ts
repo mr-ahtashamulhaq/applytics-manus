@@ -68,6 +68,7 @@ export async function loadRecommendations(): Promise<RecommendationResult> {
       if (reasons.length === 0) reasons.push('Review the listing and compare it with your profile')
       return { job, score, matchedSkills, reasons }
     })
+    .filter((recommendation) => recommendation.score > 0)
     .sort((a, b) => b.score - a.score || b.job.last_seen_at.localeCompare(a.job.last_seen_at))
     .slice(0, 20)
 

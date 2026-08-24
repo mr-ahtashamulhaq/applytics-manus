@@ -85,7 +85,7 @@ Action-audit validation: TypeScript and production build passed; lint remains 0 
 - [x] Build `/app/jobs/[id]`. Added full description, source metadata, skills, source link, tailoring action, and tracker action with safe not-found handling.
 - [x] Build `/app/saved-jobs`. Added migration `008_saved_jobs.sql`, ownership-protected save/remove actions, catalog/detail toggles, and a truthful saved-jobs route. Live schema inspection confirms the table, job/user foreign keys, and RLS are present.
 - [x] Build `/app/recommendations`. Added profile-based deterministic ranking using stored skills and city.
-- [x] Add explainable deterministic ranking. The UI shows matched skills or location evidence and does not invent a match when profile data is missing.
+- [x] Add explainable deterministic ranking. The UI shows matched skills or location evidence, excludes zero-signal listings, and does not invent a match when profile data is missing.
 - [ ] Add recommendation event tracking.
 
 Saved jobs validation: production build passed, TypeScript passed, lint passed with 0 errors and the existing 140 warnings, the Impeccable detector returned `[]` for changed UI targets, and the post-migration Supabase security advisor returned zero lints.
