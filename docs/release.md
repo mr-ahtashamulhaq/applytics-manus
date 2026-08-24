@@ -16,11 +16,13 @@ Run the application checks:
 
 ```bash
 ./node_modules/.bin/tsc --noEmit
+npm test
 npm run lint
 npm run build
+npm audit --omit=dev
 ```
 
-Lint currently exits with zero errors and 140 existing warnings. A new lint error is a release blocker. A changed UI surface also needs an Impeccable detector pass.
+Lint currently exits with zero errors and 140 existing warnings. A new lint error is a release blocker. The focused test suite currently has 3 files and 9 tests. The production dependency audit must report zero vulnerabilities. A changed UI surface also needs an Impeccable detector pass.
 
 Review the public product claims. The product is free during early access. Do not publish numeric pricing, quotas, guaranteed ATS results, guaranteed interviews, or unsupported source coverage.
 
@@ -47,7 +49,7 @@ Check the following flows in an authenticated preview:
 9. Edit deadline, follow-up date, outcome, and notes.
 10. Change status and delete the application.
 
-Check that another user cannot read or modify the first user's rows. Check that a missing job stops new resume or tracker links. Check that invalid UUIDs, dates, URLs, long text, and malformed AI JSON return safe errors.
+Check that another user cannot read or modify the first user's rows. Check that a missing job stops new resume or tracker links. Check that invalid UUIDs, dates, URLs, long text, and malformed AI JSON return safe errors. Review `docs/server-action-audit.md` and `docs/threat-model.md` before release.
 
 ## Worker gate
 
@@ -89,8 +91,8 @@ Record these values in the release issue or deployment note:
 
 | Item | Value |
 |---|---|
-| Main commit | Fill after release |
-| Scraper commit | Fill after release |
+| Main commit | `bcf0fd6` at this documentation update |
+| Scraper commit | `a739414` at this documentation update |
 | Supabase migration | `009_tracker_followups` and any later migration |
 | Vercel preview URL | Fill after preview |
 | Schedule verification run | Pending until the first post-gate schedule event |

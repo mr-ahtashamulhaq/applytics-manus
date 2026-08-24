@@ -194,7 +194,7 @@ Bot-protection validation: TypeScript and production build passed, lint remains 
 - [x] Add architecture documentation. Added `docs/architecture.md` for the app, worker, database boundary, user flow, and failure behavior.
 - [x] Add data dictionary and migration notes. Added `docs/data-dictionary.md` and listed migrations `001` through `009`.
 - [x] Add local development instructions. The README now documents environment placeholders, migration order, and local checks.
-- [x] Add testing and release documentation. Added `docs/release.md` with application and worker gates.
+- [x] Add testing and release documentation. Added `docs/release.md` with application, worker, security, focused-test, dependency-audit, and rollback gates. The current documentation snapshot records main `bcf0fd6` and scraper `a739414`.
 - [x] Add deployment and rollback documentation. The runbook documents preview verification, the untouched Vercel integration, forward-only migrations, and rollback handling.
 - [x] Add decision records. Added `docs/decisions.md` for source gating, Redis-free scheduling, repository privacy, service-role boundaries, free early access, and deferred Vercel migration.
 - [x] Push every document to GitHub after each meaningful documentation subphase.
