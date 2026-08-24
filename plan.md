@@ -78,7 +78,7 @@ Test validation: `npm test` passed with 2 files and 7 tests; TypeScript, product
 - [x] Add an authenticated, paginated jobs loader with bounded filters and a safe selected-field response.
 - [x] Define the scraper-to-catalog mapping contract in `supabase/migrations/002_jobs_catalog.sql`.
 - [x] Apply and verify the migration before enabling production writes. Supabase project has the verified `public.jobs` table, and Mustakbil run `32735373095` wrote five active records.
-- [ ] Add freshness, stale, expired, and source-status rules. The worker currently deletes records older than the configured threshold and records source names in ingestion health data.
+- [x] Add freshness, stale, expired, and source-status rules. The worker now keeps catalog history, marks active listings stale after 7 days and expired after 30 days, scopes transitions to configured source boards, and restores observed listings to active through normal upsert. Source health monitoring and alerting remain separate release work.
 - [x] Add pagination and server-side filtering in the authenticated server loader; UI controls remain pending.
 - [x] Add protected ingestion diagnostics in the worker. Main-application diagnostic views remain pending.
 
@@ -90,7 +90,7 @@ Test validation: `npm test` passed with 2 files and 7 tests; TypeScript, product
 - [x] Build `/app/saved-jobs`. Added migration `008_saved_jobs.sql`, ownership-protected save/remove actions, catalog/detail toggles, and a truthful saved-jobs route. Live schema inspection confirms the table, job/user foreign keys, and RLS are present.
 - [x] Build `/app/recommendations`. Added profile-based deterministic ranking using stored skills and city.
 - [x] Add explainable deterministic ranking. The UI shows matched skills or location evidence, excludes zero-signal listings, and does not invent a match when profile data is missing.
-- [ ] Add recommendation event tracking.
+- [x] Add documented internal usage events. Migration `012_usage_events.sql` adds service-role-only, RLS-protected events for recommendation views, saved-job changes, AI generation starts, and PDF downloads. Metadata is allowlisted and bounded; prompts, resume text, source-page content, and IP addresses are not stored. Telemetry is best effort and never blocks a user workflow. The live Supabase security advisor is zero-lint.
 
 Saved jobs validation: production build passed, TypeScript passed, lint passed with 0 errors and the existing 140 warnings, the Impeccable detector returned `[]` for changed UI targets, and the post-migration Supabase security advisor returned zero lints.
 

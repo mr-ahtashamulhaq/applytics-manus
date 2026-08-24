@@ -7,6 +7,7 @@ import { jobFields } from '@/lib/data/jobFields'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import type { Job } from '@/lib/types/database'
 import { savedJobIdSchema, savedJobInputSchema } from '@/lib/validation/savedJobs'
+import { recordUsageEvent } from '@/lib/telemetry/usageEvents'
 
 export interface SavedJob {
   id: string
@@ -108,6 +109,7 @@ export async function saveJob(input: unknown): Promise<{ ok: boolean; saved?: bo
   }, { onConflict: 'user_id,job_id' })
 
   if (error) return { ok: false, error: 'Could not save this job.' }
+  await recordUsageEvent(user.id, 'saved_job_added', { job_id: parsed.data.job_id })
   revalidatePath('/app/jobs')
   revalidatePath('/app/saved-jobs')
   revalidatePath(`/app/jobs/${parsed.data.job_id}`)
@@ -131,6 +133,7 @@ export async function removeSavedJob(input: unknown): Promise<{ ok: boolean; sav
 
   if (error) return { ok: false, error: 'Could not remove this saved job.' }
   if (!data) return { ok: false, error: 'Saved job not found.' }
+  await recordUsageEvent(user.id, 'saved_job_removed', { saved_job_id: parsed.data })
   revalidatePath('/app/jobs')
   revalidatePath('/app/saved-jobs')
   return { ok: true, saved: false }

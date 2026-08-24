@@ -5,6 +5,7 @@ import { auth } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import ResumePDF from '@/components/pdf/ResumePDF'
 import { aiResultSchema } from '@/lib/validation/resume'
+import { recordUsageEvent } from '@/lib/telemetry/usageEvents'
 
 export async function GET(
   _req: NextRequest,
@@ -75,6 +76,7 @@ export async function GET(
     const pdfBuffer = await renderToBuffer(pdfElement as any)
     const safePart = (value: string) => value.replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+|_+$/g, '').slice(0, 60) || 'resume'
     const filename = `${safePart(user.name ?? 'resume')}_${safePart(job?.company_name ?? 'applytics')}.pdf`
+    await recordUsageEvent(user.id, 'pdf_downloaded', { resume_id: parsedId.data })
 
     return new NextResponse(new Uint8Array(pdfBuffer), {
     status: 200,

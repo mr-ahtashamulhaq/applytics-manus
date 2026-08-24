@@ -7,6 +7,7 @@ import { getGroqClient, GROQ_MODEL } from '@/lib/groq/client'
 import { z } from 'zod'
 import { aiResultSchema, validateResumeEvidence } from '@/lib/validation/resume'
 import { abuseControlMessage, checkAbuseControl } from '@/lib/security/abuseControls'
+import { recordUsageEvent } from '@/lib/telemetry/usageEvents'
 export type { AIResult } from '@/lib/validation/resume'
 
 // ── Types ───────────────────────────────────────────────────────
@@ -230,6 +231,9 @@ export async function generateResume(rawInput: GenerateInput): Promise<GenerateR
     if (!abuseControl.allowed) {
       return { success: false, error: abuseControlMessage('ai_generation', abuseControl.reason) }
     }
+    await recordUsageEvent(user.id, 'ai_generation_started', {
+      catalog_job: resolvedInput.job_id ?? null,
+    })
 
     // 5. Build prompt
     const userMessage = buildPrompt(

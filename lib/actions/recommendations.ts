@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { loadJobs } from '@/lib/actions/jobs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import type { Job } from '@/lib/types/database'
+import { recordUsageEvent } from '@/lib/telemetry/usageEvents'
 
 export interface JobRecommendation {
   job: Job
@@ -71,6 +72,10 @@ export async function loadRecommendations(): Promise<RecommendationResult> {
     .filter((recommendation) => recommendation.score > 0)
     .sort((a, b) => b.score - a.score || b.job.last_seen_at.localeCompare(a.job.last_seen_at))
     .slice(0, 20)
+
+  await recordUsageEvent(user.id, 'recommendations_viewed', {
+    recommendation_count: recommendations.length,
+  })
 
   return { recommendations, profileMissing }
 }

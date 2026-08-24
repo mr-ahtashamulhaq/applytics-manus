@@ -108,6 +108,17 @@ The server checks application ownership and checks that linked resumes belong to
 
 The application calls atomic, security-definer functions for these tables. IP values are hashed before storage. Public API roles cannot read or write the tables or execute the functions. A missing control record or database error fails closed for the protected operation.
 
+## Operational usage events
+
+| Column | Type | Meaning | Access |
+|---|---|---|---|
+| `usage_events.user_id` | UUID | User associated with the operation | Service role only |
+| `usage_events.event_name` | text | Allowlisted operational event name | Service role only |
+| `usage_events.metadata` | jsonb | Small allowlisted identifiers or counts | Service role only |
+| `usage_events.created_at` | timestamptz | Event time | Service role only |
+
+Usage events support capacity, reliability, and product-flow review. They are not third-party analytics. The application does not store prompts, resume text, source-page content, or IP addresses in this table.
+
 ## Migration record
 
 | Migration | Scope |
@@ -123,5 +134,6 @@ The application calls atomic, security-definer functions for these tables. IP va
 | `009_tracker_followups.sql` | Deadlines, follow-up dates, outcomes, and indexes |
 | `010_abuse_controls.sql` | Protected operation flags and atomic fixed-window rate-limit counters |
 | `011_lock_abuse_controls.sql` | Explicit deny policies for public API roles on abuse-control tables |
+| `012_usage_events.sql` | Protected minimal operational usage events |
 
 Migration files are ordered. Apply them to a new environment in numeric order. The live schema contains a few fields that were added during earlier operation, so inspect the target schema before applying an older baseline to an existing project.
