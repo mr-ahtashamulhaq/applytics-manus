@@ -148,6 +148,9 @@ export interface Application {
   role_title: string
   status: ApplicationStatus
   applied_date: string | null
+  deadline: string | null
+  follow_up_date: string | null
+  outcome: 'offer' | 'rejected' | 'withdrawn' | 'no_response' | 'hired' | 'other' | null
   notes: string | null
   job_id: string | null
   generated_resume_id: string | null

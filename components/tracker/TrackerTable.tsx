@@ -1,18 +1,20 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { FormEvent, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Trash, CaretUpDown, Plus, X } from '@phosphor-icons/react'
+import { Trash, CaretUpDown, PencilSimple, Plus, X } from '@phosphor-icons/react'
 import {
   addApplication,
   updateApplicationStatus,
   deleteApplication,
+  updateApplicationDetails,
 } from '@/lib/actions/tracker'
 import type { Application, ApplicationStatus } from '@/lib/types/database'
+import type { ApplicationOutcome } from '@/lib/validation/tracker'
 import { toast } from 'sonner'
 
 // ── Status config ────────────────────────────────────────────────
@@ -24,6 +26,15 @@ const STATUS_CONFIG: Record<ApplicationStatus, { label: string; color: string; b
   Accepted:  { label: 'Accepted',  color: '#16a34a', bg: '#f0fdf4' },
 }
 const STATUSES = Object.keys(STATUS_CONFIG) as ApplicationStatus[]
+const OUTCOME_CONFIG: Record<ApplicationOutcome, { label: string; color: string }> = {
+  offer: { label: 'Offer', color: '#166534' },
+  rejected: { label: 'Rejected', color: '#b30a0f' },
+  withdrawn: { label: 'Withdrawn', color: '#787671' },
+  no_response: { label: 'No response', color: '#787671' },
+  hired: { label: 'Hired', color: '#166534' },
+  other: { label: 'Other', color: '#5d5b54' },
+}
+const OUTCOMES = Object.keys(OUTCOME_CONFIG) as ApplicationOutcome[]
 
 // ── Add form schema ───────────────────────────────────────────────
 const addSchema = z.object({
@@ -31,6 +42,9 @@ const addSchema = z.object({
   role_title: z.string().min(1, 'Required'),
   status: z.enum(['Draft', 'Applied', 'Interview', 'Rejected', 'Accepted']),
   applied_date: z.string().optional(),
+  deadline: z.string().optional(),
+  follow_up_date: z.string().optional(),
+  outcome: z.enum(['offer', 'rejected', 'withdrawn', 'no_response', 'hired', 'other']).optional(),
   notes: z.string().optional(),
 })
 type AddForm = z.infer<typeof addSchema>
@@ -244,7 +258,7 @@ function AddModal({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div>
                   <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--ink)' }}>Status</label>
                   <select style={inputStyle} {...register('status')}>
@@ -254,8 +268,26 @@ function AddModal({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--ink)' }}>Date Applied</label>
+                  <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--ink)' }}>Date applied</label>
                   <input type="date" style={inputStyle} {...register('applied_date')} />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--ink)' }}>Outcome</label>
+                  <select style={inputStyle} {...register('outcome')}>
+                    <option value="">Not set</option>
+                    {OUTCOMES.map(outcome => <option key={outcome} value={outcome}>{OUTCOME_CONFIG[outcome].label}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--ink)' }}>Application deadline</label>
+                  <input type="date" style={inputStyle} {...register('deadline')} />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--ink)' }}>Follow up on</label>
+                  <input type="date" style={inputStyle} {...register('follow_up_date')} />
                 </div>
               </div>
 
@@ -306,6 +338,93 @@ function AddModal({
   )
 }
 
+// ── Edit tracker details modal ───────────────────────────────────
+function EditDetailsModal({
+  app,
+  isOpen,
+  onClose,
+  onUpdated,
+}: {
+  app: Application | null
+  isOpen: boolean
+  onClose: () => void
+  onUpdated: (app: Application) => void
+}) {
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState('')
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!app) return
+    const values = new FormData(event.currentTarget)
+    const value = (name: string) => String(values.get(name) ?? '').trim() || undefined
+    setError('')
+    startTransition(async () => {
+      const result = await updateApplicationDetails({
+        id: app.id,
+        deadline: value('deadline'),
+        follow_up_date: value('follow_up_date'),
+        outcome: value('outcome'),
+        notes: value('notes'),
+      })
+      if (result.success && result.application) {
+        onUpdated(result.application)
+        toast.success('Application details updated')
+        onClose()
+      } else {
+        setError(result.error ?? 'Could not update application details.')
+        toast.error(result.error ?? 'Could not update application details.')
+      }
+    })
+  }
+
+  const inputStyle = {
+    border: '1px solid var(--hairline-strong)',
+    borderRadius: 'var(--radius-sm)',
+    background: 'var(--canvas)',
+    color: 'var(--ink)',
+    fontSize: '14px',
+    width: '100%',
+    padding: '8px 12px',
+    outline: 'none',
+  }
+
+  return (
+    <AnimatePresence>
+      {isOpen && app && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(15,15,15,0.5)' }}
+          onClick={(event) => { if (event.target === event.currentTarget) onClose() }}
+        >
+          <motion.div initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 16, opacity: 0 }} className="w-full max-w-md overflow-hidden rounded-lg" style={{ background: 'var(--canvas)', border: '1px solid var(--hairline)' }}>
+            <div className="flex items-center justify-between border-b px-6 py-4" style={{ borderColor: 'var(--hairline)' }}>
+              <div>
+                <h2 className="text-h4" style={{ color: 'var(--ink-deep)' }}>Edit follow-up details</h2>
+                <p className="mt-1 text-xs" style={{ color: 'var(--steel)' }}>{app.role_title} at {app.company_name}</p>
+              </div>
+              <button type="button" onClick={onClose} aria-label="Close edit details" style={{ color: 'var(--steel)' }}><X size={18} /></button>
+            </div>
+            <form onSubmit={onSubmit} className="flex flex-col gap-4 px-6 py-5">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <label className="flex flex-col gap-1.5 text-xs font-medium" style={{ color: 'var(--ink)' }}>Application deadline<input name="deadline" type="date" defaultValue={app.deadline ?? ''} style={inputStyle} /></label>
+                <label className="flex flex-col gap-1.5 text-xs font-medium" style={{ color: 'var(--ink)' }}>Follow up on<input name="follow_up_date" type="date" defaultValue={app.follow_up_date ?? ''} style={inputStyle} /></label>
+              </div>
+              <label className="flex flex-col gap-1.5 text-xs font-medium" style={{ color: 'var(--ink)' }}>Outcome<select name="outcome" defaultValue={app.outcome ?? ''} style={inputStyle}><option value="">Not set</option>{OUTCOMES.map(outcome => <option key={outcome} value={outcome}>{OUTCOME_CONFIG[outcome].label}</option>)}</select></label>
+              <label className="flex flex-col gap-1.5 text-xs font-medium" style={{ color: 'var(--ink)' }}>Notes<textarea name="notes" rows={3} defaultValue={app.notes ?? ''} style={{ ...inputStyle, resize: 'vertical', lineHeight: '1.5' }} /></label>
+              {error && <p className="text-xs" style={{ color: 'var(--brand-red)' }} role="alert">{error}</p>}
+              <div className="flex justify-end gap-2 pt-1"><button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium" style={{ border: '1px solid var(--hairline-strong)', color: 'var(--ink)', borderRadius: 'var(--radius-md)' }}>Cancel</button><button type="submit" disabled={isPending} className="px-4 py-2 text-sm font-medium disabled:opacity-60" style={{ background: 'var(--brand-red)', color: 'var(--on-dark)', borderRadius: 'var(--radius-md)' }}>{isPending ? 'Saving' : 'Save details'}</button></div>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
 // ── Main tracker table ───────────────────────────────────────────
 interface Props {
   initialApplications: Application[]
@@ -319,6 +438,7 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
   const router = useRouter()
   const [apps, setApps] = useState(initialApplications)
   const [showAdd, setShowAdd] = useState(!!defaultCompany)
+  const [editingApp, setEditingApp] = useState<Application | null>(null)
   const [filter, setFilter] = useState<ApplicationStatus | 'All'>('All')
   const [isPending, startTransition] = useTransition()
 
@@ -328,6 +448,11 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
   }
 
   const handleStatusUpdated = () => {
+    router.refresh()
+  }
+
+  const handleDetailsUpdated = (updated: Application) => {
+    setApps(prev => prev.map(app => app.id === updated.id ? updated : app))
     router.refresh()
   }
 
@@ -360,7 +485,7 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
 
   return (
     <>
-      <AddModal
+            <AddModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
         onAdded={handleAdded}
@@ -368,6 +493,12 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
         defaultRole={defaultRole}
         defaultJobId={defaultJobId}
         defaultResumeId={defaultResumeId}
+      />
+      <EditDetailsModal
+        app={editingApp}
+        isOpen={Boolean(editingApp)}
+        onClose={() => setEditingApp(null)}
+        onUpdated={handleDetailsUpdated}
       />
 
       {/* Filter bar + Add button */}
@@ -420,12 +551,13 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
           <p className="text-xs">Click &ldquo;Add Application&rdquo; to start tracking</p>
         </div>
       ) : (
-        <div className="rounded-lg overflow-visible" style={{ border: '1px solid var(--hairline)' }}>
+        <div className="overflow-x-auto rounded-lg">
+          <div className="min-w-[720px] overflow-visible rounded-lg" style={{ border: '1px solid var(--hairline)' }}>
           {/* Table header */}
           <div
             className="grid text-xs font-semibold uppercase tracking-wide px-4 py-2.5 rounded-t-lg"
             style={{
-              gridTemplateColumns: '1fr 1fr 140px 100px 36px',
+              gridTemplateColumns: '1fr 1.2fr 120px 150px 70px',
               background: 'var(--surface)',
               borderBottom: '1px solid var(--hairline)',
               color: 'var(--steel)',
@@ -434,7 +566,7 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
             <span>Company</span>
             <span>Role</span>
             <span>Status</span>
-            <span>Date</span>
+            <span>Next action</span>
             <span />
           </div>
 
@@ -448,7 +580,7 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
                 exit={{ opacity: 0, x: -8 }}
                 className="grid items-center px-4 py-3 group"
                 style={{
-                  gridTemplateColumns: '1fr 1fr 140px 100px 36px',
+                  gridTemplateColumns: '1fr 1.2fr 120px 150px 70px',
                   borderBottom: i < filtered.length - 1 ? '1px solid var(--hairline)' : 'none',
                   background: 'var(--canvas)',
                   overflow: 'visible',
@@ -471,25 +603,39 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
                     onStatusChange={handleStatusChange}
                   />
                 </div>
-                <span className="text-xs" style={{ color: 'var(--stone)' }}>
-                  {app.applied_date
-                    ? new Date(app.applied_date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short' })
-                    : '-'}
-                </span>
-                <button
-                  onClick={() => handleDelete(app.id)}
-                  disabled={isPending}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded"
-                  style={{ color: 'var(--stone)' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--brand-red)' }}
-                  onMouseLeave={e => { e.currentTarget.style.color = 'var(--stone)' }}
-                  aria-label="Delete application"
-                >
-                  <Trash size={14} />
-                </button>
+                <div className="pr-2 text-xs" style={{ color: 'var(--stone)' }}>
+                  <p>{app.applied_date ? `Applied ${new Date(app.applied_date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short' })}` : 'Not applied'}</p>
+                  {app.deadline && <p className="mt-0.5">Deadline {new Date(app.deadline).toLocaleDateString('en-PK', { day: 'numeric', month: 'short' })}</p>}
+                  {app.follow_up_date && <p className="mt-0.5" style={{ color: 'var(--brand-red)' }}>Follow up {new Date(app.follow_up_date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short' })}</p>}
+                  {app.outcome && <p className="mt-0.5" style={{ color: OUTCOME_CONFIG[app.outcome].color }}>{OUTCOME_CONFIG[app.outcome].label}</p>}
+                </div>
+                <div className="flex items-center justify-end gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setEditingApp(app)}
+                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded transition-colors"
+                    style={{ color: 'var(--steel)' }}
+                    aria-label={`Edit ${app.role_title} details`}
+                    title="Edit follow-up details"
+                  >
+                    <PencilSimple size={15} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(app.id)}
+                    disabled={isPending}
+                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded transition-colors disabled:opacity-60"
+                    style={{ color: 'var(--steel)' }}
+                    aria-label={`Delete ${app.role_title} application`}
+                    title="Delete application"
+                  >
+                    <Trash size={14} />
+                  </button>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>
+          </div>
         </div>
       )}
 

@@ -8,6 +8,7 @@ import {
   applicationIdSchema,
   applicationInputSchema,
   applicationStatusSchema,
+  applicationDetailsSchema,
   type ApplicationInput,
 } from '@/lib/validation/tracker'
 
@@ -74,6 +75,9 @@ export async function addApplication(input: ApplicationInput): Promise<{ success
       role_title: parsed.data.role_title,
       status: parsed.data.status,
       applied_date: parsed.data.applied_date || null,
+      deadline: parsed.data.deadline || null,
+      follow_up_date: parsed.data.follow_up_date || null,
+      outcome: parsed.data.outcome || null,
       notes: parsed.data.notes || null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -117,6 +121,38 @@ export async function updateApplicationStatus(
   revalidatePath('/app/tracker')
   revalidatePath('/app/dashboard')
   return { success: true }
+}
+
+// ── Update follow-up details ─────────────────────────────────────
+export async function updateApplicationDetails(input: unknown): Promise<{ success: boolean; error?: string; application?: Application }> {
+  const parsed = applicationDetailsSchema.safeParse(input)
+  if (!parsed.success) return { success: false, error: 'Please check the follow-up details.' }
+
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'Not authenticated' }
+
+  const { data: user } = await supabaseAdmin
+    .from('users').select('id').eq('clerk_user_id', userId).single()
+  if (!user) return { success: false, error: 'User not found' }
+
+  const { data, error } = await supabaseAdmin
+    .from('applications')
+    .update({
+      deadline: parsed.data.deadline || null,
+      follow_up_date: parsed.data.follow_up_date || null,
+      outcome: parsed.data.outcome || null,
+      notes: parsed.data.notes || null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', parsed.data.id)
+    .eq('user_id', user.id)
+    .select()
+    .maybeSingle()
+
+  if (error || !data) return { success: false, error: 'Application not found.' }
+  revalidatePath('/app/tracker')
+  revalidatePath('/app/dashboard')
+  return { success: true, application: data as Application }
 }
 
 // ── Delete application ───────────────────────────────────────────
