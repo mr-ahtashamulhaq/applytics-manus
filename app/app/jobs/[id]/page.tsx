@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowSquareOut, Briefcase, MapPin } from '@phosphor-icons/react/dist/ssr'
 import { loadJob } from '@/lib/actions/jobs'
+import { loadSavedJobMap } from '@/lib/actions/savedJobs'
+import SaveJobButton from '@/components/jobs/SaveJobButton'
 import type { JobSourceBoard } from '@/lib/types/database'
 
 export const metadata = {
@@ -25,6 +27,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
   const { id } = await params
   const job = await loadJob(id)
   if (!job) notFound()
+  const savedState = await loadSavedJobMap()
 
   return (
     <div className="mx-auto w-full max-w-4xl">
@@ -75,6 +78,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
             Use this verified listing as the source context for a job-specific resume.
           </p>
           <div className="mt-4 flex flex-col gap-2">
+            <SaveJobButton jobId={job.id} savedId={savedState.saved[job.id]} />
             <Link href={`/app/generate?jobId=${encodeURIComponent(job.id)}`} className="inline-flex min-h-11 items-center justify-center px-3 text-sm font-semibold" style={{ background: 'var(--brand-red)', color: 'var(--on-dark)', borderRadius: 'var(--radius-md)' }}>Tailor resume</Link>
             <Link href={`/app/tracker?jobId=${encodeURIComponent(job.id)}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.company)}`} className="inline-flex min-h-11 items-center justify-center border px-3 text-sm font-medium" style={{ borderColor: 'var(--hairline-strong)', color: 'var(--charcoal)', borderRadius: 'var(--radius-md)' }}>Track application</Link>
             <a href={job.source_url} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 text-sm font-medium" style={{ color: 'var(--slate)' }}>Open source <ArrowSquareOut size={15} aria-hidden="true" /></a>

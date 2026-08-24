@@ -1,5 +1,6 @@
 import { loadJobs } from '@/lib/actions/jobs'
 import JobsCatalog from './JobsCatalog'
+import { loadSavedJobMap } from '@/lib/actions/savedJobs'
 
 export const metadata = {
   title: 'Jobs | Applytics',
@@ -30,7 +31,7 @@ export default async function JobsPage({ searchParams }: { searchParams: SearchP
     page_size: 20,
   }
 
-  const result = await loadJobs(filters)
+  const [result, savedState] = await Promise.all([loadJobs(filters), loadSavedJobMap()])
 
-  return <JobsCatalog result={result} filters={filters} />
+  return <JobsCatalog result={result} filters={filters} saved={savedState.saved} />
 }

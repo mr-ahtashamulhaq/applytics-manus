@@ -81,10 +81,12 @@
 - [x] Build `/app/jobs`. Added server-loaded filters, source health messaging, job cards, direct source links, resume handoff links, pagination, loading skeletons, and an accessible empty state. Design direction is documented in `design-system/applytics/pages/jobs.md`.
 
 - [x] Build `/app/jobs/[id]`. Added full description, source metadata, skills, source link, tailoring action, and tracker action with safe not-found handling.
-- [ ] Build `/app/saved-jobs`.
+- [x] Build `/app/saved-jobs`. Added migration `008_saved_jobs.sql`, ownership-protected save/remove actions, catalog/detail toggles, and a truthful saved-jobs route. Live schema inspection confirms the table, job/user foreign keys, and RLS are present.
 - [x] Build `/app/recommendations`. Added profile-based deterministic ranking using stored skills and city.
 - [x] Add explainable deterministic ranking. The UI shows matched skills or location evidence and does not invent a match when profile data is missing.
 - [ ] Add recommendation event tracking.
+
+Saved jobs validation: production build passed, TypeScript passed, lint passed with 0 errors and the existing 140 warnings, and the Impeccable detector returned `[]` for changed UI targets.
 
 ### Phase 7: Improve resume generation and PDF output
 

@@ -130,6 +130,15 @@ export interface IngestionError {
   created_at: string
 }
 
+export interface SavedJob {
+  id: string
+  user_id: string
+  job_id: string
+  note: string | null
+  created_at: string
+  updated_at: string
+}
+
 export type ApplicationStatus = 'Draft' | 'Applied' | 'Interview' | 'Rejected' | 'Accepted'
 
 export interface Application {

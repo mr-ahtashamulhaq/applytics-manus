@@ -9,6 +9,7 @@ import {
   SquaresFour,
   FileText,
   Briefcase,
+  BookmarkSimple,
   Sparkle,
   Kanban,
   User,
@@ -34,6 +35,11 @@ const NAV_ITEMS = [
     label: 'Recommendations',
     href: '/app/recommendations',
     icon: Sparkle,
+  },
+  {
+    label: 'Saved jobs',
+    href: '/app/saved-jobs',
+    icon: BookmarkSimple,
   },
   {
     label: 'Tracker',

@@ -4,11 +4,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useTransition } from 'react'
 import { ArrowSquareOut, CaretLeft, CaretRight, Funnel, MapPin, MagnifyingGlass } from '@phosphor-icons/react'
+import SaveJobButton from '@/components/jobs/SaveJobButton'
 import type { Job, JobSourceBoard } from '@/lib/types/database'
 import type { JobCatalogResult } from '@/lib/actions/jobs'
 
 interface JobsCatalogProps {
   result: JobCatalogResult
+  saved: Record<string, string>
   filters: {
     q?: string
     location?: string
@@ -40,7 +42,7 @@ function formatExperience(job: Job) {
   return null
 }
 
-function JobCard({ job }: { job: Job }) {
+function JobCard({ job, savedId }: { job: Job; savedId?: string }) {
   const experience = formatExperience(job)
   const visibleSkills = job.skills_required.slice(0, 4)
 
@@ -83,6 +85,7 @@ function JobCard({ job }: { job: Job }) {
           )}
         </div>
         <div className="flex shrink-0 flex-row gap-2 md:flex-col md:items-stretch">
+          <SaveJobButton jobId={job.id} savedId={savedId} variant="compact" />
           <Link
             href={`/app/generate?jobId=${encodeURIComponent(job.id)}`}
             className="inline-flex min-h-11 items-center justify-center px-3 text-sm font-semibold transition-colors"
@@ -120,7 +123,7 @@ function buildHref(filters: JobsCatalogProps['filters'], page: number) {
   return query ? `/app/jobs?${query}` : '/app/jobs'
 }
 
-export default function JobsCatalog({ result, filters }: JobsCatalogProps) {
+export default function JobsCatalog({ result, filters, saved }: JobsCatalogProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const totalPages = Math.max(1, Math.ceil(result.total / result.page_size))
@@ -234,7 +237,7 @@ export default function JobsCatalog({ result, filters }: JobsCatalogProps) {
       {!result.error && result.jobs.length > 0 && (
         <>
           <section aria-label="Job listings">
-            {result.jobs.map((job) => <JobCard key={job.id} job={job} />)}
+            {result.jobs.map((job) => <JobCard key={job.id} job={job} savedId={saved[job.id]} />)}
           </section>
           <nav className="mt-6 flex items-center justify-between" aria-label="Job pages">
             <span className="text-xs" style={{ color: 'var(--stone)', fontFamily: 'var(--font-mono)' }}>Page {filters.page} of {totalPages}</span>

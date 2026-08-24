@@ -4,41 +4,8 @@ import { auth } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import type { Job } from '@/lib/types/database'
 import { jobCatalogFiltersSchema } from '@/lib/validation/jobs'
+import { jobFields } from '@/lib/data/jobFields'
 import { z } from 'zod'
-
-const jobFields = [
-  'id',
-  'source_job_id',
-  'job_fingerprint',
-  'title',
-  'company',
-  'location',
-  'source_url',
-  'source_board',
-  'description',
-  'skills_required',
-  'experience_required',
-  'experience_min_years',
-  'experience_max_years',
-  'education_required',
-  'employment_type',
-  'industry',
-  'salary_text',
-  'salary_currency',
-  'salary_min',
-  'salary_max',
-  'salary_period',
-  'posted_at',
-  'first_seen_at',
-  'last_seen_at',
-  'last_checked_at',
-  'parser_version',
-  'enricher_version',
-  'enrichment_confidence',
-  'status',
-  'created_at',
-  'updated_at',
-].join(',')
 
 export interface JobCatalogResult {
   jobs: Job[]
