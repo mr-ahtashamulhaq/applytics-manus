@@ -94,11 +94,13 @@ Saved jobs validation: production build passed, TypeScript passed, lint passed w
 
 - [x] Connect `/app/jobs` to `/app/generate?jobId=...`; resolve the catalog record server-side, prefill the form, and persist `job_id` on job inputs and generated resumes.
 - [x] Validate generation input bounds and catalog-job IDs server-side.
-- [ ] Improve generation input and review flow.
+- [x] Improve generation input and review flow. The result route validates UUIDs, verifies ownership, and rejects malformed stored AI output before rendering or linking.
 
 Resume validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
 
 PDF endpoint validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
+
+Resume result validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the result route detector returned `[]`.
 - [x] Add strict AI output validation. Added a strict Zod schema for all nested fields, array sizes, text bounds, score range, and unknown-key rejection.
 - [x] Prevent invented resume content. Added prompt constraints and a server-side evidence check for profile-supported skills, roles, companies, projects, dates, and numbers; unsupported model output is rejected before persistence.
 - [ ] Add resume editing and version history.

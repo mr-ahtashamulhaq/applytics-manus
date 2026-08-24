@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { auth } from '@clerk/nextjs/server'
-import type { AIResult } from '@/lib/actions/generate'
+import { z } from 'zod'
+import { aiResultSchema } from '@/lib/validation/resume'
 import MatchScoreRing from '@/components/generate/MatchScoreRing'
 import ResumePreview from '@/components/generate/ResumePreview'
 import DownloadPDFButton from '@/components/generate/DownloadPDFButton'
@@ -17,6 +18,8 @@ interface Props {
 
 export default async function ResultPage({ params }: Props) {
   const { id } = await params
+  if (!z.string().uuid().safeParse(id).success) notFound()
+
   const { userId } = await auth()
   if (!userId) notFound()
 
@@ -39,7 +42,10 @@ export default async function ResultPage({ params }: Props) {
 
   if (!resume) notFound()
 
-  const ai = resume.ai_output as AIResult
+  const parsedAi = aiResultSchema.safeParse(resume.ai_output)
+  if (!parsedAi.success) notFound()
+
+  const ai = parsedAi.data
   const jobTitle = (resume.job_inputs as { job_title: string; company_name: string } | null)?.job_title ?? 'Role'
   const companyName = (resume.job_inputs as { job_title: string; company_name: string } | null)?.company_name ?? 'Company'
 
