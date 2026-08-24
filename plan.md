@@ -69,11 +69,11 @@
 
 ### Phase 6: Build discovery and recommendations
 
-- [ ] Build `/app/jobs`.
+- [ ] Build `/app/jobs`. Design direction is documented in `design-system/applytics/pages/jobs.md`; implementation waits for the Phase 1 scheduled-run gate.
 - [ ] Build `/app/jobs/[id]`.
 - [ ] Build `/app/saved-jobs`.
 - [ ] Build `/app/recommendations`.
-- [ ] Add explainable deterministic ranking.
+- [ ] Add explainable deterministic ranking. Show evidence only when matched skills or experience data exists; never fabricate scores or metrics.
 - [ ] Add recommendation event tracking.
 
 ### Phase 7: Improve resume generation and PDF output
