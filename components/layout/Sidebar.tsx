@@ -9,6 +9,7 @@ import {
   SquaresFour,
   FileText,
   Briefcase,
+  Sparkle,
   Kanban,
   User,
 } from '@phosphor-icons/react'
@@ -28,6 +29,11 @@ const NAV_ITEMS = [
     label: 'Jobs',
     href: '/app/jobs',
     icon: Briefcase,
+  },
+  {
+    label: 'Recommendations',
+    href: '/app/recommendations',
+    icon: Sparkle,
   },
   {
     label: 'Tracker',

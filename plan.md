@@ -82,8 +82,8 @@
 
 - [x] Build `/app/jobs/[id]`. Added full description, source metadata, skills, source link, tailoring action, and tracker action with safe not-found handling.
 - [ ] Build `/app/saved-jobs`.
-- [ ] Build `/app/recommendations`.
-- [ ] Add explainable deterministic ranking. Show evidence only when matched skills or experience data exists; never fabricate scores or metrics.
+- [x] Build `/app/recommendations`. Added profile-based deterministic ranking using stored skills and city.
+- [x] Add explainable deterministic ranking. The UI shows matched skills or location evidence and does not invent a match when profile data is missing.
 - [ ] Add recommendation event tracking.
 
 ### Phase 7: Improve resume generation and PDF output
