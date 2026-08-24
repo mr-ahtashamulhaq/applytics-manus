@@ -49,7 +49,7 @@
 - [ ] Add the normalized job catalog schema.
 - [x] Add ingestion run and ingestion error tables. Applied as `ingestion_health` in Supabase and verified through an Actions run.
 - [ ] Add saved jobs, recommendation events, and usage events.
-- [ ] Test RLS policies, indexes, constraints, and ownership rules.
+- [ ] Test RLS policies, indexes, constraints, and ownership rules. The security advisor is clean after ingestion-table hardening; performance advisories remain for legacy foreign-key indexes, repeated auth-policy evaluation, and unused indexes on newly created tables.
 
 ### Phase 4: Repair the application foundation
 
@@ -115,7 +115,7 @@
 
 ### Phase 11: Implement security and privacy controls
 
-- [ ] Complete every applicable item in videcodingsecurity.txt.
+- [ ] Complete every applicable item in videcodingsecurity.txt. Supabase security advisors report no current lints after migrations `004_lock_ingestion_health` and `005_restrict_rls_helper` and explicit role revocation in `006_revoke_rls_helper_roles`.
 - [ ] Scan files and history for secrets.
 - [ ] Test RLS and ownership boundaries.
 - [ ] Add upload validation and safe storage.
