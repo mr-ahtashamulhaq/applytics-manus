@@ -221,16 +221,15 @@ function DonutChart({ data }: DonutChartProps) {
   const radius = (size - strokeWidth) / 2
   const circumference = radius * 2 * Math.PI
 
-  let currentOffset = 0
-
   return (
     <div className="flex flex-col sm:flex-row items-center gap-8 py-2">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="transform -rotate-90">
           {data.map((d, i) => {
             const dasharray = (d.pct / 100) * circumference
-            const dashoffset = -currentOffset
-            currentOffset += dasharray
+            const dashoffset = -data
+              .slice(0, i)
+              .reduce((offset, segment) => offset + (segment.pct / 100) * circumference, 0)
             const color = d.primary ? 'var(--brand-red)' : i === 1 ? 'var(--steel)' : 'var(--hairline-strong)'
             return (
               <circle
@@ -379,7 +378,7 @@ function ChartCard({
       {finding && (
         <div
           className="mt-2 px-4 py-3"
-          style={{ background: 'var(--brand-red-subtle)', borderLeft: '3px solid var(--brand-red)' }}
+          style={{ background: 'var(--brand-red-subtle)', border: '1px solid var(--brand-red)' }}
         >
           <p className="text-xs font-medium" style={{ color: 'var(--brand-red-deep)', lineHeight: 1.5 }}>
             {finding}

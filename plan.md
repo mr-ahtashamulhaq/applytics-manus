@@ -59,6 +59,7 @@
 - [x] Preserve and strengthen tracker ownership filters; invalid IDs and unauthorized rows now return safe no-row errors.
 - [x] Add server-side Zod schemas for tracker inputs, statuses, dates, notes, and UUIDs.
 - [x] Return bounded, user-safe tracker errors instead of raw database messages.
+- [x] Clear the two baseline lint errors in the research chart and liquid button; the lint check now has zero errors, with existing warnings documented for later cleanup.
 - [ ] Repair authentication and ownership checks across all server actions.
 - [ ] Add server-side schemas and validation to the remaining server actions.
 - [ ] Add structured logging.

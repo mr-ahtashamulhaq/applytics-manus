@@ -54,12 +54,18 @@ export const MetalButton = React.forwardRef<HTMLButtonElement, MetalButtonProps>
   ({ children, className = '', variant = 'default', asChild = false, ...props }, ref) => {
     const [isPressed, setIsPressed] = React.useState(false)
     const [isHovered, setIsHovered] = React.useState(false)
-    const [isTouchDevice, setIsTouchDevice] = React.useState(false)
+    const supportsHover = React.useSyncExternalStore(
+      (onChange) => {
+        const mediaQuery = window.matchMedia('(hover: hover)')
+        const handleChange = () => onChange()
+        mediaQuery.addEventListener('change', handleChange)
+        return () => mediaQuery.removeEventListener('change', handleChange)
+      },
+      () => window.matchMedia('(hover: hover)').matches,
+      () => false,
+    )
+    const isTouchDevice = !supportsHover
     const Comp = asChild ? Slot : 'button'
-
-    React.useEffect(() => {
-      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0)
-    }, [])
 
     const colors = colorVariants[variant]
     const transitionStyle = 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)'
