@@ -1,6 +1,6 @@
 # APPLYTICS Production Refactor Plan
 
-**Status:** Phase 1 is ready to begin. Product refactoring has not started.
+**Status:** Phase 1 scraper setup is operational for Mustakbil and the main repository bootstrap is complete. Ingestion health records, scheduled-run verification, and the remaining product refactor are pending.
 
 ## Repository rules
 
@@ -20,17 +20,18 @@
 - [x] Create the `applytics-job-scraper` repository privately.
 - [x] Add the upstream scraper source with attribution and license preservation.
 - [x] Add `DESIGN.md`, `videcodingsecurity.txt`, and `CLAUDE.md` to the project workspace.
-- [ ] Confirm the `agents.zip` installation plan and add applicable skills.
-- [ ] Define the Applytics job output contract.
-- [ ] Add dry-run support.
-- [ ] Add parser fixtures and enrichment tests.
+- [x] Force-add and verify `DESIGN.md`, `CLAUDE.md`, and `.agents/` on the public remote. Commit `4608b45`.
+- [x] Confirm the `agents.zip` installation plan and add applicable skills.
+- [x] Define the Applytics job output contract.
+- [x] Add dry-run support.
+- [x] Add parser fixtures and enrichment tests.
 - [x] Add the Applytics catalog schema mapping in the scraper repository. See scraper commit `c4a56a6`.
 - [x] Add the first Applytics `jobs` catalog migration file. See commit `557edb0`.
-- [x] Apply and verify the `jobs` migration in Supabase. Applied `jobs_catalog` to project `ndcchdxnjdcowyocmcyo`; verified the table, columns, indexes, constraints, and RLS. Live rows: `0`.
+- [x] Apply and verify the `jobs` migration in Supabase. Applied `jobs_catalog` to project `ndcchdxnjdcowyocmcyo`; verified the table, columns, indexes, constraints, and RLS. Mustakbil run `32735373095` then wrote and verified five active rows.
 - [ ] Add ingestion run records.
-- [ ] Configure safe GitHub Actions schedules and manual dispatch.
-- [ ] Add scraper README and operations documentation.
-- [ ] Run and verify the first scheduled scrape.
+- [x] Configure safe GitHub Actions schedules and manual dispatch.
+- [x] Add scraper README and operations documentation.
+- [ ] Run and verify the first scheduled scrape. Mustakbil manual run `32735373095` wrote five active catalog rows; the scheduled path still needs verification.
 
 ### Phase 2: Create and migrate the main application repository
 
@@ -61,7 +62,7 @@
 ### Phase 5: Build job ingestion and catalog operations
 
 - [x] Define the scraper-to-catalog mapping contract in `supabase/migrations/002_jobs_catalog.sql`.
-- [x] Apply and verify the migration before enabling production writes. Supabase project has the verified `public.jobs` table; production writes remain pending a successful real scraper record.
+- [x] Apply and verify the migration before enabling production writes. Supabase project has the verified `public.jobs` table, and Mustakbil run `32735373095` wrote five active records.
 - [ ] Add freshness, stale, expired, and source-status rules.
 - [ ] Add pagination and server-side filtering.
 - [ ] Add protected ingestion diagnostics.
@@ -173,7 +174,9 @@
 
 ## Current completed bootstrap
 
-**Commit:** `4d5ea7e` (`Bootstrap Manus`)
+**Bootstrap commit:** `4d5ea7e` (`Bootstrap Manus`)
+
+**Required guidance files commit:** `4608b45` (`Track project guidance`)
 
 - `applytics-manus` local workspace created.
 - `applytics-job-scraper` local workspace created.
