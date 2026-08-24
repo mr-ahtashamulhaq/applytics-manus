@@ -3,7 +3,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
-import type { Application, ApplicationStatus } from '@/lib/types/database'
+import type { Application, ApplicationStatus, ApplicationWithLinks, LinkedJobSummary, LinkedResumeSummary } from '@/lib/types/database'
 import {
   applicationIdSchema,
   applicationInputSchema,
@@ -13,7 +13,7 @@ import {
 } from '@/lib/validation/tracker'
 
 // ── Load all applications ────────────────────────────────────────
-export async function loadApplications() {
+export async function loadApplications(): Promise<ApplicationWithLinks[]> {
   const { userId } = await auth()
   if (!userId) return []
 
@@ -27,7 +27,37 @@ export async function loadApplications() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  return data ?? []
+  const applications = (data ?? []) as Application[]
+  const jobIds = [...new Set(applications.map((application) => application.job_id).filter((id): id is string => Boolean(id)))]
+  const resumeIds = [...new Set(applications.map((application) => application.generated_resume_id).filter((id): id is string => Boolean(id)))]
+
+  let jobs: LinkedJobSummary[] = []
+  if (jobIds.length > 0) {
+    const { data: jobRows } = await supabaseAdmin
+      .from('jobs')
+      .select('id, title, company, source_url, status')
+      .in('id', jobIds)
+    jobs = (jobRows ?? []) as LinkedJobSummary[]
+  }
+
+  let resumes: LinkedResumeSummary[] = []
+  if (resumeIds.length > 0) {
+    const { data: resumeRows } = await supabaseAdmin
+      .from('generated_resumes')
+      .select('id, job_id, created_at')
+      .eq('user_id', user.id)
+      .in('id', resumeIds)
+    resumes = (resumeRows ?? []) as LinkedResumeSummary[]
+  }
+
+  const jobsById = new Map(jobs.map((job) => [job.id, job]))
+  const resumesById = new Map(resumes.map((resume) => [resume.id, resume]))
+
+  return applications.map((application) => ({
+    ...application,
+    linked_job: application.job_id ? jobsById.get(application.job_id) ?? null : null,
+    linked_resume: application.generated_resume_id ? resumesById.get(application.generated_resume_id) ?? null : null,
+  }))
 }
 
 // ── Add application ──────────────────────────────────────────────

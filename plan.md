@@ -107,12 +107,15 @@ Resume validation: TypeScript and production build passed; lint remains 0 errors
 
 - [x] Link applications to catalog jobs. The live schema has `applications.job_id`, and the result-to-tracker handoff carries it through server validation.
 - [x] Link applications to resume versions. The live schema has `applications.generated_resume_id`, and the tracker checks resume ownership before inserting the link.
+- [x] Surface linked job and resume in tracker rows. Tracker rows show an internal catalog link, stale state, and an attached-resume indicator; summaries load with ownership filters.
 
 - [x] Add deadlines and follow-up dates. Migration `009_tracker_followups.sql` added nullable `deadline` and `follow_up_date` fields, indexes, validated creation, and authenticated editing; live schema verification confirmed both columns as nullable dates.
 - [x] Add outcomes and status definitions. Added constrained outcome values (`offer`, `rejected`, `withdrawn`, `no_response`, `hired`, `other`) with UI labels and safe updates; live schema verification confirmed the nullable outcome column.
 - [ ] Add mobile, loading, empty, error, and rollback states.
 
 Tracker follow-up validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for `TrackerTable.tsx`.
+
+Tracker linkage validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the tracker UI detector returned `[]`.
 
 ### Phase 9: Apply DESIGN.md and improve UX
 

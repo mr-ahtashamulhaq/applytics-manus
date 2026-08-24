@@ -141,6 +141,25 @@ export interface SavedJob {
 
 export type ApplicationStatus = 'Draft' | 'Applied' | 'Interview' | 'Rejected' | 'Accepted'
 
+export interface LinkedJobSummary {
+  id: string
+  title: string
+  company: string
+  source_url: string
+  status: JobStatus
+}
+
+export interface LinkedResumeSummary {
+  id: string
+  job_id: string | null
+  created_at: string
+}
+
+export interface ApplicationWithLinks extends Application {
+  linked_job: LinkedJobSummary | null
+  linked_resume: LinkedResumeSummary | null
+}
+
 export interface Application {
   id: string
   user_id: string

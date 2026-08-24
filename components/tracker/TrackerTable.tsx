@@ -2,6 +2,7 @@
 
 import { FormEvent, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,7 +14,7 @@ import {
   deleteApplication,
   updateApplicationDetails,
 } from '@/lib/actions/tracker'
-import type { Application, ApplicationStatus } from '@/lib/types/database'
+import type { Application, ApplicationStatus, ApplicationWithLinks } from '@/lib/types/database'
 import type { ApplicationOutcome } from '@/lib/validation/tracker'
 import { toast } from 'sonner'
 
@@ -427,7 +428,7 @@ function EditDetailsModal({
 
 // ── Main tracker table ───────────────────────────────────────────
 interface Props {
-  initialApplications: Application[]
+  initialApplications: ApplicationWithLinks[]
   defaultCompany?: string
   defaultRole?: string
   defaultJobId?: string
@@ -438,7 +439,7 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
   const router = useRouter()
   const [apps, setApps] = useState(initialApplications)
   const [showAdd, setShowAdd] = useState(!!defaultCompany)
-  const [editingApp, setEditingApp] = useState<Application | null>(null)
+  const [editingApp, setEditingApp] = useState<ApplicationWithLinks | null>(null)
   const [filter, setFilter] = useState<ApplicationStatus | 'All'>('All')
   const [isPending, startTransition] = useTransition()
 
@@ -452,13 +453,13 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
   }
 
   const handleDetailsUpdated = (updated: Application) => {
-    setApps(prev => prev.map(app => app.id === updated.id ? updated : app))
+    setApps(prev => prev.map(app => app.id === updated.id ? { ...app, ...updated } : app))
     router.refresh()
   }
 
   // Add — instantly prepend to local list, no page reload needed
   const handleAdded = (app: Application) => {
-    setApps(prev => [app, ...prev])
+    setApps(prev => [{ ...app, linked_job: null, linked_resume: null }, ...prev])
     router.refresh() // keep server state in sync
   }
 
@@ -552,7 +553,7 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
         </div>
       ) : (
         <div className="overflow-x-auto rounded-lg">
-          <div className="min-w-[720px] overflow-visible rounded-lg" style={{ border: '1px solid var(--hairline)' }}>
+          <div className="min-w-[760px] overflow-visible rounded-lg" style={{ border: '1px solid var(--hairline)' }}>
           {/* Table header */}
           <div
             className="grid text-xs font-semibold uppercase tracking-wide px-4 py-2.5 rounded-t-lg"
@@ -591,8 +592,16 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
                 </span>
                 <div className="pr-2">
                   <p className="text-sm truncate" style={{ color: 'var(--charcoal)' }}>{app.role_title}</p>
+                  {app.linked_job && (
+                    <Link href={`/app/jobs/${app.linked_job.id}`} className="mt-0.5 block truncate text-xs underline underline-offset-2" style={{ color: 'var(--brand-red)' }}>
+                      Catalog job{app.linked_job.status === 'stale' ? ' · stale' : ''}
+                    </Link>
+                  )}
+                  {app.linked_resume && (
+                    <p className="mt-0.5 text-xs" style={{ color: 'var(--steel)' }}>Resume attached</p>
+                  )}
                   {app.notes && (
-                    <p className="text-xs truncate mt-0.5" style={{ color: 'var(--stone)' }}>{app.notes}</p>
+                    <p className="mt-0.5 truncate text-xs" style={{ color: 'var(--stone)' }}>{app.notes}</p>
                   )}
                 </div>
                 <div style={{ overflow: 'visible' }}>
