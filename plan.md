@@ -97,11 +97,14 @@ Saved jobs validation: production build passed, TypeScript passed, lint passed w
 - [ ] Improve generation input and review flow.
 
 Resume validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
+
+PDF endpoint validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
 - [x] Add strict AI output validation. Added a strict Zod schema for all nested fields, array sizes, text bounds, score range, and unknown-key rejection.
 - [x] Prevent invented resume content. Added prompt constraints and a server-side evidence check for profile-supported skills, roles, companies, projects, dates, and numbers; unsupported model output is rejected before persistence.
 - [ ] Add resume editing and version history.
 - [ ] Redesign PDF output using DESIGN.md.
 - [ ] Test PDF layout with short and long content.
+- [x] Harden the PDF download boundary. UUIDs, ownership, strict stored-AI output validation, safe filenames, and bounded render failures are enforced in `/api/pdf/[id]`.
 
 ### Phase 8: Build the linked application tracker
 

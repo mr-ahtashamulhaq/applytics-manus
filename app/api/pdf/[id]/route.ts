@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { renderToBuffer } from '@react-pdf/renderer'
+import { z } from 'zod'
 import { auth } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import ResumePDF from '@/components/pdf/ResumePDF'
-import type { AIResult } from '@/lib/actions/generate'
+import { aiResultSchema } from '@/lib/validation/resume'
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
+  const parsedId = z.string().uuid().safeParse(id)
+  if (!parsedId.success) return new NextResponse('Not found', { status: 404 })
+
   const { userId } = await auth()
   if (!userId) return new NextResponse('Unauthorized', { status: 401 })
 
@@ -26,7 +30,7 @@ export async function GET(
   const { data: resume } = await supabaseAdmin
     .from('generated_resumes')
     .select('*, job_inputs(job_title, company_name)')
-    .eq('id', id)
+    .eq('id', parsedId.data)
     .eq('user_id', user.id)
     .single()
 
@@ -39,7 +43,10 @@ export async function GET(
     .eq('user_id', user.id)
     .single()
 
-  const ai = resume.ai_output as AIResult
+  const parsedAi = aiResultSchema.safeParse(resume.ai_output)
+  if (!parsedAi.success) return new NextResponse('Resume is not ready', { status: 422 })
+
+  const ai = parsedAi.data
   const job = resume.job_inputs as { job_title: string; company_name: string } | null
 
   // Build the PDF element — react-pdf needs a Document at the root
@@ -62,18 +69,23 @@ export async function GET(
     profile: profileData,
   })
 
-  // Render PDF buffer
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pdfBuffer = await renderToBuffer(pdfElement as any)
+  try {
+    // Render PDF buffer
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pdfBuffer = await renderToBuffer(pdfElement as any)
+    const safePart = (value: string) => value.replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+|_+$/g, '').slice(0, 60) || 'resume'
+    const filename = `${safePart(user.name ?? 'resume')}_${safePart(job?.company_name ?? 'applytics')}.pdf`
 
-  const filename = `${(user.name ?? 'resume').replace(/\s+/g, '_')}_${(job?.company_name ?? 'applytics').replace(/\s+/g, '_')}.pdf`
-
-  return new NextResponse(new Uint8Array(pdfBuffer), {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
     status: 200,
     headers: {
       'Content-Type': 'application/pdf',
       'Content-Disposition': `attachment; filename="${filename}"`,
-      'Content-Length': String(pdfBuffer.length),
-    },
-  })
+        'Content-Length': String(pdfBuffer.length),
+      },
+    })
+  } catch {
+    console.error('[pdf] render failed')
+    return new NextResponse('Could not create the PDF', { status: 500 })
+  }
 }
