@@ -12,6 +12,7 @@ const FOOTER_LINKS = {
   Company: [
     { label: 'About', href: '/#mission' },
     { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms of Use', href: '/terms' },
     { label: 'Contact', href: 'mailto:hello@applytics.online' },
   ],
   Account: [

@@ -180,10 +180,12 @@ SEO validation: TypeScript and production build passed, lint remains 0 errors wi
 
 ### Phase 15: Rewrite legal documents
 
-- [ ] Rewrite the Privacy Policy professionally.
-- [ ] Rewrite the Terms of Use professionally.
-- [ ] Add data retention, AI processing, user rights, acceptable use, disclaimers, and contact details.
-- [ ] Obtain qualified legal review before commercial launch.
+- [x] Rewrite the Privacy Policy professionally. Replaced stale provider, analytics, retention, and deletion claims with an early-access draft that matches the current service.
+- [x] Rewrite the Terms of Use professionally. Added the actual catalog, AI, PDF, tracker, acceptable-use, third-party, and early-access conditions.
+- [x] Add data retention, AI processing, user rights, acceptable use, disclaimers, and contact details. Both pages identify the remaining legal decisions and require qualified legal review before publication.
+- [ ] Obtain qualified legal review before commercial launch. This remains a release gate.
+
+Legal-document validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for the changed legal and footer files.
 
 ### Phase 16: Final release and maintenance
 
