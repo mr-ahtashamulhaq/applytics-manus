@@ -94,7 +94,7 @@ Record these values in the release issue or deployment note:
 
 | Item | Value |
 |---|---|
-| Main commit | `444c5aa` prepared handoff |
+| Main commit | Latest pushed `main` branch; verify with `git log -1 --oneline` |
 | Scraper commit | `0916187` report gate |
 | Supabase migration | `016_resume_versions` and any later migration |
 | Vercel preview URL | Separate `applytics-manus` diagnostic project exists; it is not production |
