@@ -4,6 +4,11 @@ import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import type { Application, ApplicationStatus } from '@/lib/types/database'
+import {
+  applicationIdSchema,
+  applicationInputSchema,
+  applicationStatusSchema,
+} from '@/lib/validation/tracker'
 
 // ── Load all applications ────────────────────────────────────────
 export async function loadApplications() {
@@ -31,6 +36,9 @@ export async function addApplication(input: {
   applied_date?: string
   notes?: string
 }): Promise<{ success: boolean; error?: string; application?: Application }> {
+  const parsed = applicationInputSchema.safeParse(input)
+  if (!parsed.success) return { success: false, error: 'Please check the application details.' }
+
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'Not authenticated' }
 
@@ -42,18 +50,18 @@ export async function addApplication(input: {
     .from('applications')
     .insert({
       user_id: user.id,
-      company_name: input.company_name,
-      role_title: input.role_title,
-      status: input.status,
-      applied_date: input.applied_date || null,
-      notes: input.notes || null,
+      company_name: parsed.data.company_name,
+      role_title: parsed.data.role_title,
+      status: parsed.data.status,
+      applied_date: parsed.data.applied_date || null,
+      notes: parsed.data.notes || null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
     .select()
     .single()
 
-  if (error) return { success: false, error: error.message }
+  if (error) return { success: false, error: 'Could not save the application.' }
   revalidatePath('/app/tracker')
   revalidatePath('/app/dashboard')
   return { success: true, application: data as Application }
@@ -64,6 +72,12 @@ export async function updateApplicationStatus(
   id: string,
   status: ApplicationStatus
 ): Promise<{ success: boolean; error?: string }> {
+  const parsedId = applicationIdSchema.safeParse(id)
+  const parsedStatus = applicationStatusSchema.safeParse(status)
+  if (!parsedId.success || !parsedStatus.success) {
+    return { success: false, error: 'Invalid application update.' }
+  }
+
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'Not authenticated' }
 
@@ -71,13 +85,15 @@ export async function updateApplicationStatus(
     .from('users').select('id').eq('clerk_user_id', userId).single()
   if (!user) return { success: false, error: 'User not found' }
 
-  const { error } = await supabaseAdmin
+  const { data: updated, error } = await supabaseAdmin
     .from('applications')
-    .update({ status, updated_at: new Date().toISOString() })
-    .eq('id', id)
+    .update({ status: parsedStatus.data, updated_at: new Date().toISOString() })
+    .eq('id', parsedId.data)
     .eq('user_id', user.id)
+    .select('id')
+    .maybeSingle()
 
-  if (error) return { success: false, error: error.message }
+  if (error || !updated) return { success: false, error: 'Application not found.' }
   revalidatePath('/app/tracker')
   revalidatePath('/app/dashboard')
   return { success: true }
@@ -85,6 +101,9 @@ export async function updateApplicationStatus(
 
 // ── Delete application ───────────────────────────────────────────
 export async function deleteApplication(id: string): Promise<{ success: boolean; error?: string }> {
+  const parsedId = applicationIdSchema.safeParse(id)
+  if (!parsedId.success) return { success: false, error: 'Invalid application.' }
+
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'Not authenticated' }
 
@@ -92,13 +111,15 @@ export async function deleteApplication(id: string): Promise<{ success: boolean;
     .from('users').select('id').eq('clerk_user_id', userId).single()
   if (!user) return { success: false, error: 'User not found' }
 
-  const { error } = await supabaseAdmin
+  const { data: deleted, error } = await supabaseAdmin
     .from('applications')
     .delete()
-    .eq('id', id)
+    .eq('id', parsedId.data)
     .eq('user_id', user.id)
+    .select('id')
+    .maybeSingle()
 
-  if (error) return { success: false, error: error.message }
+  if (error || !deleted) return { success: false, error: 'Application not found.' }
   revalidatePath('/app/tracker')
   revalidatePath('/app/dashboard')
   return { success: true }

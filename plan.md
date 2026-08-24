@@ -56,9 +56,12 @@
 - [x] Resolve the existing Clerk appearance typecheck errors on sign-in and sign-up pages.
 - [x] Update handwritten TypeScript types for the live users, profiles, generated-resumes, jobs, ingestion-runs, and ingestion-errors tables.
 - [x] Defer server Supabase client creation until request time and fail clearly when server environment variables are missing; TypeScript and production build pass.
-- [ ] Repair authentication and ownership checks.
-- [ ] Add server-side schemas and validation.
-- [ ] Add safe error handling and structured logging.
+- [x] Preserve and strengthen tracker ownership filters; invalid IDs and unauthorized rows now return safe no-row errors.
+- [x] Add server-side Zod schemas for tracker inputs, statuses, dates, notes, and UUIDs.
+- [x] Return bounded, user-safe tracker errors instead of raw database messages.
+- [ ] Repair authentication and ownership checks across all server actions.
+- [ ] Add server-side schemas and validation to the remaining server actions.
+- [ ] Add structured logging.
 - [ ] Repair environment validation.
 - [ ] Add unit, integration, and end-to-end tests.
 
