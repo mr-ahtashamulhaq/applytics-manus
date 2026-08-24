@@ -68,10 +68,11 @@
 
 ### Phase 5: Build job ingestion and catalog operations
 
+- [x] Add an authenticated, paginated jobs loader with bounded filters and a safe selected-field response.
 - [x] Define the scraper-to-catalog mapping contract in `supabase/migrations/002_jobs_catalog.sql`.
 - [x] Apply and verify the migration before enabling production writes. Supabase project has the verified `public.jobs` table, and Mustakbil run `32735373095` wrote five active records.
 - [ ] Add freshness, stale, expired, and source-status rules. The worker currently deletes records older than the configured threshold and records source names in ingestion health data.
-- [ ] Add pagination and server-side filtering.
+- [x] Add pagination and server-side filtering in the authenticated server loader; UI controls remain pending.
 - [x] Add protected ingestion diagnostics in the worker. Main-application diagnostic views remain pending.
 
 ### Phase 6: Build discovery and recommendations
