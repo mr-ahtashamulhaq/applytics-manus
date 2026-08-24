@@ -86,7 +86,7 @@
 - [x] Add explainable deterministic ranking. The UI shows matched skills or location evidence and does not invent a match when profile data is missing.
 - [ ] Add recommendation event tracking.
 
-Saved jobs validation: production build passed, TypeScript passed, lint passed with 0 errors and the existing 140 warnings, and the Impeccable detector returned `[]` for changed UI targets.
+Saved jobs validation: production build passed, TypeScript passed, lint passed with 0 errors and the existing 140 warnings, the Impeccable detector returned `[]` for changed UI targets, and the post-migration Supabase security advisor returned zero lints.
 
 ### Phase 7: Improve resume generation and PDF output
 
