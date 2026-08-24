@@ -122,5 +122,6 @@ The application calls atomic, security-definer functions for these tables. IP va
 | `008_saved_jobs.sql` | User-owned saved catalog jobs |
 | `009_tracker_followups.sql` | Deadlines, follow-up dates, outcomes, and indexes |
 | `010_abuse_controls.sql` | Protected operation flags and atomic fixed-window rate-limit counters |
+| `011_lock_abuse_controls.sql` | Explicit deny policies for public API roles on abuse-control tables |
 
 Migration files are ordered. Apply them to a new environment in numeric order. The live schema contains a few fields that were added during earlier operation, so inspect the target schema before applying an older baseline to an existing project.
