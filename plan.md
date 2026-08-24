@@ -153,9 +153,11 @@ FAQ validation: TypeScript and production build passed, lint remains 0 errors wi
 - [ ] Test RLS and ownership boundaries.
 - [ ] Add upload validation and safe storage.
 - [ ] Add rate limiting and bot protection.
-- [ ] Add security headers and HTTPS checks.
+- [x] Add security headers and HTTPS checks. `next.config.ts` adds CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy; production responses add HSTS and `upgrade-insecure-requests`.
 - [ ] Run dependency security scans.
 - [ ] Create a threat model and incident runbook.
+
+Security-header validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
 
 ### Phase 12: Add free-tier controls and operations
 
