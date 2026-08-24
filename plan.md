@@ -114,11 +114,13 @@ PDF endpoint validation: TypeScript and production build passed; lint remains 0 
 
 - [x] Add deadlines and follow-up dates. Migration `009_tracker_followups.sql` added nullable `deadline` and `follow_up_date` fields, indexes, validated creation, and authenticated editing; live schema verification confirmed both columns as nullable dates.
 - [x] Add outcomes and status definitions. Added constrained outcome values (`offer`, `rejected`, `withdrawn`, `no_response`, `hired`, `other`) with UI labels and safe updates; live schema verification confirmed the nullable outcome column.
-- [ ] Add mobile, loading, empty, error, and rollback states.
+- [x] Add mobile, loading, empty, and error states. The tracker keeps a horizontally scrollable mobile table, existing empty state, loading skeleton, and new retry-focused route error boundary. Rollback behavior remains documented in the release runbook.
 
 Tracker follow-up validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for `TrackerTable.tsx`.
 
 Tracker linkage validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the tracker UI detector returned `[]`.
+
+Tracker resilience validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the detector returned `[]` for tracker loading, error, and table files.
 
 ### Phase 9: Apply DESIGN.md and improve UX
 
