@@ -77,8 +77,9 @@
 
 ### Phase 6: Build discovery and recommendations
 
-- [ ] Build `/app/jobs`. Design direction is documented in `design-system/applytics/pages/jobs.md`; implementation waits for the Phase 1 scheduled-run gate.
-- [ ] Build `/app/jobs/[id]`.
+- [x] Build `/app/jobs`. Added server-loaded filters, source health messaging, job cards, direct source links, resume handoff links, pagination, loading skeletons, and an accessible empty state. Design direction is documented in `design-system/applytics/pages/jobs.md`.
+
+- [ ] Build `/app/jobs/[id]`. The catalog cards currently link directly to the source while detail-page implementation remains pending.
 - [ ] Build `/app/saved-jobs`.
 - [ ] Build `/app/recommendations`.
 - [ ] Add explainable deterministic ranking. Show evidence only when matched skills or experience data exists; never fabricate scores or metrics.

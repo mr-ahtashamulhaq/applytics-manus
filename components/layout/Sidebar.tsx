@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import {
   SquaresFour,
   FileText,
+  Briefcase,
   Kanban,
   User,
 } from '@phosphor-icons/react'
@@ -22,6 +23,11 @@ const NAV_ITEMS = [
     label: 'Generate Resume',
     href: '/app/generate',
     icon: FileText,
+  },
+  {
+    label: 'Jobs',
+    href: '/app/jobs',
+    icon: Briefcase,
   },
   {
     label: 'Tracker',
