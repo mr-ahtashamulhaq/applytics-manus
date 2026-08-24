@@ -128,7 +128,7 @@ Tracker follow-up validation: TypeScript and production build passed, lint remai
 - [x] Add unique title and meta description for every route. Added root defaults and route-specific metadata for the current public and authenticated pages.
 - [x] Add Open Graph metadata, robots.txt, sitemap, and canonical URLs. Root metadata now uses a configurable site URL, while robots and sitemap expose public pages only.
 - [ ] Add internal links and breadcrumbs.
-- [ ] Add a five-item FAQ.
+- [x] Add a five-item FAQ. Added current-scope answers for verified sources, recommendations, resume review, tracker links, and free early access.
 - [ ] Add a real conversion thank-you page.
 - [ ] Add approved local structured data.
 - [ ] Add analytics only after consent and privacy review.
@@ -137,6 +137,8 @@ Tracker follow-up validation: TypeScript and production build passed, lint remai
 - [x] Remove public analytics until consent and privacy review. The unconditional root analytics script was removed.
 
 SEO and public-copy validation: TypeScript and production build passed after changing the server-rendered pricing icon to the SSR-safe entrypoint. Lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for changed public UI files.
+
+FAQ validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for the homepage and FAQ component.
 
 ### Phase 11: Implement security and privacy controls
 

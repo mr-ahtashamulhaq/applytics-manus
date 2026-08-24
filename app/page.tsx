@@ -10,6 +10,7 @@ import WhoItsFor from '@/components/landing/WhoItsFor'
 import PricingSection from '@/components/landing/PricingSection'
 import MissionBand from '@/components/landing/MissionBand'
 import FinalCTA from '@/components/landing/FinalCTA'
+import FAQSection from '@/components/landing/FAQSection'
 import Footer from '@/components/landing/Footer'
 import type { Metadata } from 'next'
 
@@ -46,8 +47,10 @@ export default async function RootPage() {
       <Features />
       <VisionSection />
       <WhoItsFor />
-      <PricingSection />
-      <MissionBand />
+              <PricingSection />
+        <FAQSection />
+        <MissionBand />
+
       <FinalCTA />
       <Footer />
     </main>
