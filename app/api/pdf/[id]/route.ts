@@ -5,6 +5,7 @@ import { auth } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import ResumePDF from '@/components/pdf/ResumePDF'
 import { aiResultSchema } from '@/lib/validation/resume'
+import { loadLatestResumeVersion } from '@/lib/account/resumeVersions'
 import { recordUsageEvent } from '@/lib/telemetry/usageEvents'
 
 export async function GET(
@@ -47,7 +48,8 @@ export async function GET(
   const parsedAi = aiResultSchema.safeParse(resume.ai_output)
   if (!parsedAi.success) return new NextResponse('Resume is not ready', { status: 422 })
 
-  const ai = parsedAi.data
+  const latestAi = await loadLatestResumeVersion(parsedId.data, user.id)
+  const ai = latestAi ?? parsedAi.data
   const job = resume.job_inputs as { job_title: string; company_name: string } | null
 
   // Build the PDF element — react-pdf needs a Document at the root

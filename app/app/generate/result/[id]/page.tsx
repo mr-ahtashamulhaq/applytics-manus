@@ -6,6 +6,8 @@ import { z } from 'zod'
 import { aiResultSchema } from '@/lib/validation/resume'
 import MatchScoreRing from '@/components/generate/MatchScoreRing'
 import ResumePreview from '@/components/generate/ResumePreview'
+import ResumeVersionEditor from '@/components/generate/ResumeVersionEditor'
+import { loadLatestResumeVersion } from '@/lib/account/resumeVersions'
 import DownloadPDFButton from '@/components/generate/DownloadPDFButton'
 
 export const metadata = {
@@ -45,7 +47,8 @@ export default async function ResultPage({ params }: Props) {
   const parsedAi = aiResultSchema.safeParse(resume.ai_output)
   if (!parsedAi.success) notFound()
 
-  const ai = parsedAi.data
+  const latestAi = await loadLatestResumeVersion(id, user.id)
+  const ai = latestAi ?? parsedAi.data
   const jobTitle = (resume.job_inputs as { job_title: string; company_name: string } | null)?.job_title ?? 'Role'
   const companyName = (resume.job_inputs as { job_title: string; company_name: string } | null)?.company_name ?? 'Company'
 
@@ -126,6 +129,7 @@ export default async function ResultPage({ params }: Props) {
 
       {/* Full resume preview */}
       <ResumePreview ai={ai} jobTitle={jobTitle} company={companyName} resumeId={id} />
+      <ResumeVersionEditor resumeId={id} initialAi={ai} />
 
       {/* Actions */}
       <div className="flex items-center gap-3 mt-5 flex-wrap">

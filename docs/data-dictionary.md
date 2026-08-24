@@ -119,6 +119,18 @@ The application calls atomic, security-definer functions for these tables. IP va
 
 Usage events support capacity, reliability, and product-flow review. They are not third-party analytics. The application does not store prompts, resume text, source-page content, or IP addresses in this table.
 
+## Resume versions
+
+| Column | Type | Meaning | Access |
+|---|---|---|---|
+| `resume_versions.generated_resume_id` | UUID | Original generated resume that anchors the version history | Service role only |
+| `resume_versions.user_id` | UUID | Owner of the generated resume and edited version | Service role only |
+| `resume_versions.version` | integer | Monotonic version number per generated resume | Service role only |
+| `resume_versions.content` | jsonb | Strictly validated user-authored resume content | Service role only |
+| `resume_versions.created_at` / `updated_at` | timestamptz | Version timestamps | Service role only |
+
+The original AI result remains in `generated_resumes.ai_output`. The result route and PDF endpoint verify ownership and use the latest valid user version when one exists. Tracker rows continue to link to `generated_resumes.id` for backward compatibility.
+
 ## Migration record
 
 | Migration | Scope |
@@ -138,5 +150,6 @@ Usage events support capacity, reliability, and product-flow review. They are no
 | `013_legacy_fk_indexes.sql` | Foreign-key indexes for legacy ownership and cascade paths |
 | `014_optimize_legacy_rls.sql` | Statement-level auth evaluation for legacy ownership policies |
 | `015_optimize_saved_jobs_rls.sql` | Statement-level auth evaluation for saved-job ownership policies |
+| `016_resume_versions.sql` | Owned user-authored resume versions separate from original AI output |
 
 Migration files are ordered. Apply them to a new environment in numeric order. Migration `013_legacy_fk_indexes.sql` adds indexes confirmed missing by the live inspection on `applications.user_id`, `generated_resumes.user_id`, `generated_resumes.job_input_id`, and `job_inputs.user_id`. Migrations `014` and `015` optimize the legacy and saved-job ownership policies without changing their access rules. The live performance advisor now reports only informational unused-index notices; required indexes remain in place. The live schema contains a few fields that were added during earlier operation, so inspect the target schema before applying an older baseline to an existing project.

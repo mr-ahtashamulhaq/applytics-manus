@@ -6,6 +6,7 @@ This audit covers the server actions and route loaders in the early-access app. 
 |---|---|---|---|---|
 | `loadDashboard` | Clerk session and local user bootstrap | No user form input | User id on every user-table query | Returns a small dashboard shape or `null` |
 | `generateResume` | Clerk session and local user bootstrap | Bounded job input and strict AI output schema | Profile, user inputs, and generated resume use the resolved user id; catalog job is resolved server-side | Supabase operation flag plus hashed-IP hourly and user daily limits run before the AI call; returns a bounded status and user-safe message |
+| `saveResumeVersion` and `loadResumeVersions` | Clerk session and local user bootstrap | UUID plus strict AI-result schema | Base generated resume and version rows are filtered by the resolved user id | Stores only separate user-authored content; malformed stored versions are omitted from reads and errors are bounded |
 | `loadJobs` and `loadJob` | Clerk session | Bounded filters and UUID job id | Catalog is limited to allowed status values | Returns selected catalog fields only |
 | `saveProfile` | Clerk session and local user bootstrap | Bounded profile schema and URL checks | Writes only the resolved user profile | Returns a bounded status and user-safe message |
 | `loadRecommendations` | Clerk session and local user lookup | No user form input | Reads the resolved profile and active catalog rows | Returns evidence reasons and no zero-signal listing; writes a minimal protected usage event with the result count |
@@ -16,7 +17,7 @@ This audit covers the server actions and route loaders in the early-access app. 
 | `updateApplicationDetails` | Clerk session and local user lookup | Date, outcome, notes, and UUID schemas | Update includes the resolved user id | Returns a bounded status and user-safe message |
 | `deleteApplication` | Clerk session and local user lookup | UUID schema | Delete includes the resolved user id | Returns a bounded status and user-safe message |
 | `submitSuggestion` | Public action | Bounded suggestion schema | No account ownership applies | Honeypot submissions are dropped; Supabase operation flag plus hashed-IP hourly limit run before insert; database errors are bounded |
-| `GET /api/pdf/[id]` | Clerk session | UUID and stored resume schema | Resume query includes the resolved user id | Writes a minimal protected download event after rendering; returns PDF bytes or a bounded HTTP error |
+| `GET /api/pdf/[id]` | Clerk session | UUID and stored resume schema | Resume query includes the resolved user id; latest version also filters by the resolved user id | Writes a minimal protected download event after rendering; returns PDF bytes or a bounded HTTP error |
 | `GET /api/account/export` | Clerk session | No user input; fixed attachment name | Loads only rows for the resolved user id | Returns private JSON with `no-store` caching or a bounded HTTP error |
 | `deleteAccount` | Clerk session | Exact typed confirmation phrase | Loads and deletes only the resolved user's rows and known storage references, then requests Clerk deletion | Returns a bounded status; storage and provider errors are logged without exposing details |
 

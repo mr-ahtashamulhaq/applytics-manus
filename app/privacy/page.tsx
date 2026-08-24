@@ -40,7 +40,7 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="3. Information created by the service">
-            <p>Applytics creates job input records, resume result records, resume metadata, saved-job records, application records, and limited operational records for job ingestion.</p>
+            <p>Applytics creates job input records, resume result records, user-authored resume version records, resume metadata, saved-job records, application records, and limited operational records for job ingestion.</p>
             <p>Applytics also records minimal internal usage events for recommendation views, saved-job changes, resume-generation starts, and PDF downloads. These events support reliability and capacity review. They do not include prompts, resume text, source-page content, or IP addresses.</p>
             <p>The job catalog contains listing information collected from source boards. It is separate from your private profile and workflow records.</p>
           </Section>

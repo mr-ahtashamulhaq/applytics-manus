@@ -50,6 +50,7 @@ Check the following flows in an authenticated preview:
 10. Change status and delete the application.
 11. Download the account export and confirm it contains only the signed-in user's records.
 12. Test typed-confirmation account deletion, local data cleanup, known private-file cleanup, sign-out, and provider-cleanup failure handling.
+13. Edit the summary and emphasized skills, save a separate version, reopen the result, confirm the latest version is shown, and download a PDF from that version.
 
 Check that another user cannot read or modify the first user's rows. Check that a missing job stops new resume or tracker links. Check that invalid UUIDs, dates, URLs, long text, and malformed AI JSON return safe errors. Review `docs/server-action-audit.md` and `docs/threat-model.md` before release.
 
@@ -95,7 +96,7 @@ Record these values in the release issue or deployment note:
 |---|---|
 | Main commit | `42a1281` database reconciliation |
 | Scraper commit | `0916187` report gate |
-| Supabase migration | `015_optimize_saved_jobs_rls` and any later migration |
+| Supabase migration | `016_resume_versions` and any later migration |
 | Vercel preview URL | Fill after preview |
 | Schedule verification run | Pending until the first post-gate schedule event |
 | Legal review | Required before commercial launch |

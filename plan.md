@@ -109,7 +109,7 @@ Resume result validation: TypeScript and production build passed, lint remains 0
 PDF layout validation: 3 test files and 9 tests passed; TypeScript, production build, lint, and the production dependency audit also passed.
 - [x] Add strict AI output validation. Added a strict Zod schema for all nested fields, array sizes, text bounds, score range, and unknown-key rejection.
 - [x] Prevent invented resume content. Added prompt constraints and a server-side evidence check for profile-supported skills, roles, companies, projects, dates, and numbers; unsupported model output is rejected before persistence.
-- [ ] Add resume editing and version history.
+- [x] Add resume editing and version history. Migration `016_resume_versions.sql` stores strict user-authored content separately from `generated_resumes.ai_output`, with ownership checks and version numbers. The result preview and PDF endpoint use the latest owned version, while tracker links remain backward-compatible with the generated resume record. Tests, TypeScript, build, audit, and the Impeccable detector pass.
 - [ ] Redesign PDF output using DESIGN.md.
 - [x] Test PDF layout with short and long content. Vitest renders both fixtures to valid PDF buffers; visual template redesign remains pending.
 - [x] Harden the PDF download boundary. UUIDs, ownership, strict stored-AI output validation, safe filenames, and bounded render failures are enforced in `/api/pdf/[id]`.
