@@ -67,7 +67,7 @@ export default function FinalCTA() {
                 className="text-base"
                 style={{ color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, maxWidth: '520px' }}
               >
-                Free to start. No credit card. Your first tailored resume is ready in under 60 seconds.
+                Free during early access. Start with your profile, choose a role, and review the result before you apply.
               </p>
             </div>
 
@@ -82,7 +82,7 @@ export default function FinalCTA() {
                 className="text-center text-xs"
                 style={{ color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-geist-mono)' }}
               >
-                No credit card required
+                Free during early access
               </p>
             </div>
           </div>

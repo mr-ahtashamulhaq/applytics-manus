@@ -9,48 +9,27 @@ gsap.registerPlugin(ScrollTrigger)
 const PROBLEMS = [
   {
     number: '01',
-    title: 'Opportunities you never see',
-    body: 'Jobs are posted across LinkedIn, Facebook groups, WhatsApp communities, Discord servers, university portals, and company websites. Most candidates are only checking one or two. Every week, relevant opportunities disappear before they ever appear on your radar.',
+    title: 'Listings are spread across places',
+    body: 'Job information lives across boards, company pages, and community channels. It is hard to compare roles, source links, and freshness in one view.',
   },
   {
     number: '02',
-    title: 'Hours wasted per application',
-    body: 'The same resume goes to every company. Each application takes 20-30 minutes of copy-pasting, reformatting, and guessing what the recruiter wants to see. The process is repetitive, manual, and produces mediocre results at scale.',
+    title: 'Every application needs context',
+    body: 'A single general resume does not capture the language of every role. Moving between a listing, profile, resume, and application record adds manual work.',
   },
   {
     number: '03',
-    title: 'No visibility into what is working',
-    body: 'No analytics. No response rate data. No signal on why you were rejected. Most job seekers track applications in a Notes app - or not at all. Without data, nothing improves and nothing changes.',
+    title: 'Follow-ups are easy to lose',
+    body: 'Application status, deadlines, notes, and the resume used for a role often live in separate places. A focused tracker keeps the next action visible.',
   },
 ]
 
-const STATS = [
-  { value: '52', label: 'students surveyed' },
-  { value: '71%', label: 'rated this platform highly useful' },
-  { value: '1 in 2', label: 'never track their applications' },
-  { value: '30+ min', label: 'wasted per application' },
-]
 
 export default function ProblemSection() {
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Stat strip items
-      gsap.fromTo('.stat-item',
-        { opacity: 0, y: 16 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.45,
-          stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.stat-strip',
-            start: 'top 80%',
-            once: true,
-          },
-        }
-      )
       // Problem rows
       gsap.fromTo('.problem-row',
         { opacity: 0, y: 24 },
@@ -144,51 +123,12 @@ export default function ProblemSection() {
           ))}
         </div>
 
-        {/* Research stats strip */}
-        <div
-          className="stat-strip mt-0"
-          style={{
-            background: 'var(--surface)',
-            borderTop: '1px solid var(--hairline)',
-            borderBottom: '1px solid var(--hairline)',
-            padding: '28px 0',
-          }}
-        >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-0">
-            {STATS.map((s, i) => (
-              <div
-                key={s.label}
-                className="stat-item flex flex-col items-center justify-center py-4 px-6 text-center"
-                style={{
-                  borderRight: i < STATS.length - 1 ? '1px solid var(--hairline)' : 'none',
-                }}
-              >
-                <span
-                  className="text-3xl lg:text-4xl font-bold mb-1"
-                  style={{
-                    color: 'var(--brand-red)',
-                    fontFamily: 'var(--font-geist-mono)',
-                    letterSpacing: '-1px',
-                  }}
-                >
-                  {s.value}
-                </span>
-                <span
-                  className="text-xs font-medium uppercase tracking-wider"
-                  style={{ color: 'var(--steel)', fontFamily: 'var(--font-geist-mono)' }}
-                >
-                  {s.label}
-                </span>
-              </div>
-            ))}
-          </div>
-          {/* Survey attribution */}
-          <p
-            className="text-center text-xs mt-4"
-            style={{ color: 'var(--stone)', fontFamily: 'var(--font-geist-mono)' }}
-          >
-            Based on student survey · April 2026 · Pakistan
-          </p>
+        <div className="grid grid-cols-1 gap-px border-y md:grid-cols-3" style={{ background: 'var(--hairline)', borderColor: 'var(--hairline)' }}>
+          {['Compare current listings', 'Tailor supported profile content', 'Keep follow-ups visible'].map((item) => (
+            <div key={item} className="px-6 py-5" style={{ background: 'var(--surface)' }}>
+              <p className="text-sm font-medium" style={{ color: 'var(--charcoal)' }}>{item}</p>
+            </div>
+          ))}
         </div>
 
       </div>

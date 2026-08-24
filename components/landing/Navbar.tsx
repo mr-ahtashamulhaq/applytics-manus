@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { label: 'The Problem', href: '/#problem' },
   { label: 'Platform',    href: '/#platform' },
   { label: 'Features',    href: '/#features' },
-  { label: 'Pricing',     href: '/#pricing' },
+  { label: 'Early access', href: '/#pricing' },
   { label: 'Research',    href: '/research' },
 ]
 

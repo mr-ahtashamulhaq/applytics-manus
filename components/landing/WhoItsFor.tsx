@@ -16,17 +16,17 @@ const PERSONAS = [
   },
   {
     tag: 'Fresh graduate',
-    headline: 'Sending 50 applications. Getting 2 responses.',
+    headline: 'Starting a job search with one general resume.',
     scenario:
-      'You graduated six months ago. You are applying to everything and hearing nothing back. The problem is not your resume - it is that the same resume is going to every job. Applytics fixes that by tailoring each application to the specific role in seconds.',
+      'You are ready to apply, but each role asks for different evidence. Applytics helps you compare a listing with your profile and prepare a reviewable version for that role.',
     detail: 'BS/BBA · Fresh out of university',
   },
   {
     tag: 'Early-career professional',
     headline: 'Trying to level up but losing track of everything.',
     scenario:
-      'You have 1-2 years of experience and want a better role. You are juggling applications, interviews, follow-ups, and still doing your current job. Applytics becomes your command center - tracking every move and helping you apply smarter while you stay focused on the work.',
-    detail: '1-3 years experience · Career changers',
+      'You have experience and want a better role. Applications, interviews, deadlines, and follow-ups compete with your current work. Applytics keeps the records and next actions together.',
+    detail: 'Early-career professionals · Career changers',
   },
 ]
 

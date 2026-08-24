@@ -132,9 +132,11 @@ Tracker follow-up validation: TypeScript and production build passed, lint remai
 - [ ] Add a real conversion thank-you page.
 - [ ] Add approved local structured data.
 - [ ] Add analytics only after consent and privacy review.
-- [x] Remove unsupported price and feature claims. The rewritten README and current metadata describe free early access, verified Mustakbil coverage, and shipped workflow behavior without numeric pricing or guarantees.
+- [x] Remove unsupported price and feature claims. The landing page now uses free early-access copy, verified Mustakbil coverage, review-first resume language, and no fake survey, match-score, response-rate, timing, pricing, or outcome promises.
+- [x] Review public authentication and research copy. Sign-in, sign-up, research, mission, audience, platform, and roadmap surfaces now match the current product scope.
+- [x] Remove public analytics until consent and privacy review. The unconditional root analytics script was removed.
 
-SEO validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for the changed public route files.
+SEO and public-copy validation: TypeScript and production build passed after changing the server-rendered pricing icon to the SSR-safe entrypoint. Lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for changed public UI files.
 
 ### Phase 11: Implement security and privacy controls
 

@@ -9,25 +9,25 @@ gsap.registerPlugin(ScrollTrigger)
 
 const FEATURES = [
   {
-    tag: 'ATS Intelligence',
-    title: 'Resumes that actually get read.',
-    body: 'Most resumes are filtered out before a human ever sees them. Applytics rewrites your resume to match the exact language of the job description and keywords recruiters scan for, in the format ATS systems understand.',
+    tag: 'Job-specific resumes',
+    title: 'A resume built around the role.',
+    body: 'Applytics compares the selected listing with your profile, then rewrites supported experience and project content for that role. Review every statement before you apply.',
     Icon: Target,
     visual: 'ats',
     available: true,
   },
   {
-    tag: 'Match Score',
-    title: 'Know your odds before you apply.',
-    body: 'See a match score for every application. Understand exactly which keywords you matched, which you missed, and what to add to your profile to improve your chances on future roles.',
+    tag: 'Profile comparison',
+    title: 'See what the listing asks for.',
+    body: 'Review the skills and keywords that appear in the selected job. Applytics separates profile evidence from suggestions so you can decide what to improve.',
     Icon: ChartBar,
     visual: 'score',
     available: true,
   },
   {
     tag: 'Application Tracker',
-    title: 'One place for every application.',
-    body: 'Track every job you applied to. Update status from Applied to Interview to Offer in a single click. Replace your spreadsheet and Notes app with a dashboard built for the job search.',
+    title: 'Keep the next step visible.',
+    body: 'Track manual or catalog-linked applications with status, dates, deadlines, follow-ups, outcomes, notes, and the resume used for the role.',
     Icon: Briefcase,
     visual: 'tracker',
     available: true,
@@ -36,25 +36,14 @@ const FEATURES = [
 
 // ── Feature visual mock-ups ─────────────────────────────────────
 function ATSVisual() {
-  const lines = [95, 80, 70, 88, 60, 75]
   return (
-    <div className="w-full max-w-[340px] p-5 rounded-lg" style={{ border: '1px solid var(--hairline)', background: 'var(--surface-soft)' }}>
-      <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--brand-red)', fontFamily: 'var(--font-geist-mono)' }}>
-        ATS scan result
-      </p>
+    <div className="w-full max-w-[340px] rounded-lg p-5" style={{ border: '1px solid var(--hairline)', background: 'var(--surface-soft)' }}>
+      <p className="mb-4 text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--brand-red)', fontFamily: 'var(--font-geist-mono)' }}>Resume review</p>
       <div className="flex flex-col gap-2.5">
-        {['React', 'TypeScript', 'REST APIs', 'Agile', 'Node.js', 'Git'].map((kw, i) => (
-          <div key={kw} className="flex items-center gap-3">
-            <span className="text-xs w-20 flex-shrink-0" style={{ color: 'var(--charcoal)' }}>{kw}</span>
-            <div className="flex-1 h-1.5 rounded-full" style={{ background: 'var(--hairline)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${lines[i]}%`, background: lines[i] > 75 ? 'var(--brand-red)' : 'var(--hairline-strong)' }}
-              />
-            </div>
-            <span className="text-xs w-8 text-right" style={{ color: 'var(--steel)', fontFamily: 'var(--font-geist-mono)' }}>
-              {lines[i]}%
-            </span>
+        {['Role language', 'Profile evidence', 'Resume wording', 'Final review'].map((item, index) => (
+          <div key={item} className="flex items-center gap-3 border-b pb-2.5 last:border-0 last:pb-0" style={{ borderColor: 'var(--hairline)' }}>
+            <span className="text-xs" style={{ color: 'var(--stone)', fontFamily: 'var(--font-geist-mono)' }}>0{index + 1}</span>
+            <span className="text-sm" style={{ color: 'var(--charcoal)' }}>{item}</span>
           </div>
         ))}
       </div>
@@ -63,35 +52,13 @@ function ATSVisual() {
 }
 
 function ScoreVisual() {
-  const circumference = 2 * Math.PI * 40
   return (
-    <div className="w-full max-w-[340px] p-5 rounded-lg flex flex-col items-center" style={{ border: '1px solid var(--hairline)', background: 'var(--surface-soft)' }}>
-      <p className="text-xs font-semibold uppercase tracking-widest mb-5 self-start" style={{ color: 'var(--brand-red)', fontFamily: 'var(--font-geist-mono)' }}>
-        Match analysis
-      </p>
-      <div className="relative mb-4">
-        <svg width="100" height="100" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="40" fill="none" stroke="var(--hairline)" strokeWidth="7" />
-          <circle
-            cx="50" cy="50" r="40" fill="none"
-            stroke="var(--brand-red)" strokeWidth="7"
-            strokeDasharray={`${circumference * 0.84} ${circumference}`}
-            strokeLinecap="round"
-            transform="rotate(-90 50 50)"
-          />
-        </svg>
-        <span className="absolute inset-0 flex items-center justify-center text-2xl font-bold"
-          style={{ color: 'var(--ink-deep)', fontFamily: 'var(--font-geist-mono)' }}>
-          84%
-        </span>
-      </div>
-      <div className="flex gap-3">
-        {[{ label: 'Matched', val: '12', color: 'var(--brand-red)' }, { label: 'Missing', val: '2', color: 'var(--stone)' }].map(s => (
-          <div key={s.label} className="text-center">
-            <p className="text-xl font-bold" style={{ color: s.color, fontFamily: 'var(--font-geist-mono)' }}>{s.val}</p>
-            <p className="text-xs" style={{ color: 'var(--steel)' }}>{s.label}</p>
-          </div>
-        ))}
+    <div className="w-full max-w-[340px] rounded-lg p-5" style={{ border: '1px solid var(--hairline)', background: 'var(--surface-soft)' }}>
+      <p className="mb-4 text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--brand-red)', fontFamily: 'var(--font-geist-mono)' }}>Comparison signals</p>
+      <div className="flex flex-col gap-3">
+        <div className="border p-3" style={{ borderColor: 'var(--hairline)', background: 'var(--canvas)' }}><p className="text-xs" style={{ color: 'var(--steel)' }}>From the listing</p><p className="mt-1 text-sm font-medium" style={{ color: 'var(--ink-deep)' }}>Required skills and role language</p></div>
+        <div className="border p-3" style={{ borderColor: 'var(--hairline)', background: 'var(--canvas)' }}><p className="text-xs" style={{ color: 'var(--steel)' }}>From your profile</p><p className="mt-1 text-sm font-medium" style={{ color: 'var(--ink-deep)' }}>Skills, projects, and experience</p></div>
+        <p className="text-xs" style={{ color: 'var(--stone)' }}>Review the evidence before you decide.</p>
       </div>
     </div>
   )
@@ -99,22 +66,17 @@ function ScoreVisual() {
 
 function TrackerVisual() {
   const rows = [
-    { company: 'Devsinc', role: 'Frontend Dev', status: 'Interview', statusColor: '#d97706', statusBg: '#fffbeb' },
-    { company: 'Arbisoft', role: 'React Engineer', status: 'Applied', statusColor: '#2563eb', statusBg: '#eff6ff' },
-    { company: 'Avanceon', role: 'Fullstack Dev', status: 'Applied', statusColor: '#2563eb', statusBg: '#eff6ff' },
+    { label: 'Catalog listing', value: 'Linked' },
+    { label: 'Resume version', value: 'Attached' },
+    { label: 'Next follow-up', value: 'Your date' },
   ]
   return (
-    <div className="w-full max-w-[340px] rounded-lg overflow-hidden" style={{ border: '1px solid var(--hairline)' }}>
-      <div className="px-4 py-2.5 grid grid-cols-[1fr_1fr_80px] text-xs font-semibold uppercase tracking-wide"
-        style={{ background: 'var(--surface)', color: 'var(--steel)', borderBottom: '1px solid var(--hairline)', fontFamily: 'var(--font-geist-mono)' }}>
-        <span>Company</span><span>Role</span><span>Status</span>
-      </div>
-      {rows.map((r, i) => (
-        <div key={i} className="px-4 py-3 grid grid-cols-[1fr_1fr_80px] items-center"
-          style={{ borderBottom: i < rows.length - 1 ? '1px solid var(--hairline)' : 'none', background: 'var(--canvas)' }}>
-          <span className="text-sm font-medium" style={{ color: 'var(--ink-deep)' }}>{r.company}</span>
-          <span className="text-xs" style={{ color: 'var(--charcoal)' }}>{r.role}</span>
-          <span className="text-xs font-medium px-1.5 py-0.5 rounded" style={{ color: r.statusColor, background: r.statusBg, borderRadius: '3px' }}>{r.status}</span>
+    <div className="w-full max-w-[340px] overflow-hidden rounded-lg" style={{ border: '1px solid var(--hairline)' }}>
+      <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wide" style={{ background: 'var(--surface)', color: 'var(--steel)', borderBottom: '1px solid var(--hairline)', fontFamily: 'var(--font-geist-mono)' }}>Application record</div>
+      {rows.map((row, index) => (
+        <div key={row.label} className="flex items-center justify-between gap-4 px-4 py-3" style={{ borderBottom: index < rows.length - 1 ? '1px solid var(--hairline)' : 'none', background: 'var(--canvas)' }}>
+          <span className="text-sm" style={{ color: 'var(--charcoal)' }}>{row.label}</span>
+          <span className="text-xs font-medium" style={{ color: row.value === 'Your date' ? 'var(--brand-red)' : 'var(--steel)', fontFamily: 'var(--font-geist-mono)' }}>{row.value}</span>
         </div>
       ))}
     </div>

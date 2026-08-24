@@ -2,8 +2,8 @@ import { SignUp } from '@clerk/nextjs'
 import Image from 'next/image'
 
 export const metadata = {
-  title: 'Applytics',
-  description: 'Create your free Applytics account and start tailoring resumes.',
+  title: 'Create an Applytics account',
+  description: 'Create a free early-access account to find listings, tailor resumes, and track applications.',
 }
 
 export default function SignUpPage() {
@@ -31,14 +31,14 @@ export default function SignUpPage() {
             className="text-h2 mb-5"
             style={{ color: 'var(--on-dark)', letterSpacing: '-0.5px' }}
           >
-            Your resume, tailored in seconds.
+            Start with a clearer job search.
           </h2>
           <ul className="flex flex-col gap-3">
             {[
-              'Paste any job description',
-              'AI tailors your resume to match',
-              'Download an ATS-friendly PDF',
-              'Track every application in one place',
+              'Browse the current verified job catalog',
+              'Compare listings with your profile',
+              'Review a job-specific resume draft',
+              'Track applications and follow-ups',
             ].map((point) => (
               <li key={point} className="flex items-center gap-3">
                 <span

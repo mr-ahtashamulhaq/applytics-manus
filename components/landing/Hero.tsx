@@ -5,108 +5,40 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { ArrowRight, FileText, CheckCircle, Minus } from '@phosphor-icons/react'
+import { ArrowRight, FileText, CheckCircle } from '@phosphor-icons/react'
 import { BGPattern } from '@/components/ui/bg-pattern'
 import { MetalButton } from '@/components/ui/liquid-glass-button'
-import AnimatedTextCycle from '@/components/ui/animated-text-cycle'
 
 const TextPressure = dynamic(() => import('@/components/landing/TextPressure'), { ssr: false })
 
-// ── Fake product mockup card ─────────────────────────────────────
+// ── Product workflow preview ─────────────────────────────────────
 function ProductMockup() {
-  const keywords = ['React', 'TypeScript', 'Node.js', 'Problem Solving', 'REST APIs']
-  const missing  = ['Docker', 'CI/CD']
+  const steps = [
+    { label: 'Selected job', value: 'Source context' },
+    { label: 'Your profile', value: 'Skills and evidence' },
+    { label: 'Resume review', value: 'Check before applying' },
+  ]
 
   return (
     <motion.div
-      animate={{ y: [0, -6, 0] }}
-      transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-      className="w-full max-w-[420px] rounded-lg overflow-hidden"
-      style={{
-        border: '1px solid var(--hairline)',
-        background: 'var(--canvas)',
-        boxShadow: '0 16px 48px -8px rgba(15,12,8,0.14)',
-      }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: 'easeOut' }}
+      className="w-full max-w-[420px] overflow-hidden rounded-lg"
+      style={{ border: '1px solid var(--hairline)', background: 'var(--canvas)', boxShadow: '0 16px 48px -8px rgba(15,12,8,0.14)' }}
     >
-      {/* Card header */}
-      <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--hairline)' }}>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--brand-red)', fontFamily: 'var(--font-geist-mono)' }}>
-            Match Score
-          </p>
-          <p className="text-sm font-medium mt-0.5" style={{ color: 'var(--charcoal)' }}>
-            Frontend Engineer · Avanceon
-          </p>
-        </div>
-        {/* Score ring SVG */}
-        <div className="relative flex-shrink-0">
-          <svg width="56" height="56" viewBox="0 0 56 56">
-            <circle cx="28" cy="28" r="22" fill="none" stroke="var(--hairline)" strokeWidth="5" />
-            <circle
-              cx="28" cy="28" r="22" fill="none"
-              stroke="var(--brand-red)" strokeWidth="5"
-              strokeDasharray={`${2 * Math.PI * 22 * 0.84} ${2 * Math.PI * 22}`}
-              strokeDashoffset="0"
-              strokeLinecap="round"
-              transform="rotate(-90 28 28)"
-            />
-          </svg>
-          <span
-            className="absolute inset-0 flex items-center justify-center text-sm font-bold"
-            style={{ color: 'var(--ink-deep)', fontFamily: 'var(--font-geist-mono)' }}
-          >
-            84%
-          </span>
-        </div>
+      <div className="flex items-center gap-2 border-b px-5 py-4" style={{ borderColor: 'var(--hairline)' }}>
+        <FileText size={18} style={{ color: 'var(--brand-red)' }} aria-hidden="true" />
+        <div><p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--brand-red)', fontFamily: 'var(--font-geist-mono)' }}>Resume workflow</p><p className="mt-0.5 text-sm font-medium" style={{ color: 'var(--charcoal)' }}>From job context to a reviewable draft</p></div>
       </div>
-
-      {/* Matched keywords */}
-      <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--hairline)' }}>
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--steel)', fontFamily: 'var(--font-geist-mono)' }}>
-          Matched
-        </p>
-        <div className="flex flex-wrap gap-1.5">
-          {keywords.map(k => (
-            <span key={k} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium" style={{ background: 'var(--surface)', color: 'var(--charcoal)', border: '1px solid var(--hairline)', borderRadius: '3px' }}>
-              <CheckCircle size={10} weight="fill" style={{ color: 'var(--brand-red)' }} />
-              {k}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Missing keywords */}
-      <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--hairline)' }}>
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--steel)', fontFamily: 'var(--font-geist-mono)' }}>
-          Add to stand out
-        </p>
-        <div className="flex flex-wrap gap-1.5">
-          {missing.map(k => (
-            <span key={k} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium" style={{ background: 'var(--brand-red-subtle)', color: 'var(--brand-red-deep)', border: '1px solid #fcd4d4', borderRadius: '3px' }}>
-              <Minus size={10} />
-              {k}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Resume preview lines */}
-      <div className="px-5 py-3">
-        <div className="flex items-center gap-2 mb-2">
-          <FileText size={13} style={{ color: 'var(--brand-red)' }} />
-          <p className="text-xs font-medium" style={{ color: 'var(--ink)', fontFamily: 'var(--font-geist-mono)' }}>
-            resume_avanceon.pdf
-          </p>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          {[90, 70, 85, 55].map((w, i) => (
-            <div
-              key={i}
-              className="h-1.5 rounded-full"
-              style={{ width: `${w}%`, background: 'var(--hairline-strong)' }}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col gap-3 px-5 py-4">
+        {steps.map((step, index) => (
+          <div key={step.label} className="flex items-center gap-3 border-b pb-3 last:border-0 last:pb-0" style={{ borderColor: 'var(--hairline)' }}>
+            <span className="text-xs" style={{ color: 'var(--stone)', fontFamily: 'var(--font-geist-mono)' }}>0{index + 1}</span>
+            <div><p className="text-sm font-medium" style={{ color: 'var(--ink-deep)' }}>{step.label}</p><p className="text-xs" style={{ color: 'var(--steel)' }}>{step.value}</p></div>
+            <CheckCircle size={17} className="ml-auto" style={{ color: 'var(--brand-red)' }} aria-hidden="true" />
+          </div>
+        ))}
       </div>
     </motion.div>
   )
@@ -115,8 +47,6 @@ function ProductMockup() {
 // ── Hero ─────────────────────────────────────────────────────────
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null)
-
-  const CYCLE_WORDS = ['interviews', 'responses', 'callbacks', 'offers']
 
   const slideUp = {
     hidden: { opacity: 0, y: 16 },
@@ -172,15 +102,7 @@ export default function Hero() {
               className="text-2xl lg:text-3xl font-light mb-6 relative"
               style={{ color: 'var(--ink)', lineHeight: 1.35, letterSpacing: '-0.5px' }}
             >
-              <span>Built to get more </span>
-              <span style={{ color: 'var(--brand-red)', position: 'relative', display: 'inline-block' }}>
-                <AnimatedTextCycle
-                  words={CYCLE_WORDS}
-                  interval={2800}
-                  className="text-2xl lg:text-3xl"
-                />
-              </span>
-              <span>.</span>
+              <span>Built for a clearer job search.</span>
             </motion.div>
 
             {/* Body */}
@@ -189,9 +111,7 @@ export default function Hero() {
               className="text-base lg:text-lg mb-8 max-w-[520px]"
               style={{ color: 'var(--charcoal)', lineHeight: 1.75 }}
             >
-              12 tabs open. The same resume going everywhere. No idea why
-              you&apos;re being rejected. Applytics is the single platform that manages your
-              entire job search.
+              Find current listings, compare them with your profile, tailor supported content for a selected role, and keep applications connected.
             </motion.p>
 
             {/* CTAs */}
@@ -228,7 +148,7 @@ export default function Hero() {
               className="mt-5 text-xs"
               style={{ color: 'var(--stone)' }}
             >
-              No credit card required &middot; Free to start &middot; Built for Pakistan
+              Free during early access &middot; Built for job seekers in Pakistan
             </motion.p>
           </div>
 
@@ -239,14 +159,6 @@ export default function Hero() {
             transition={{ delay: 0.35, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="relative hidden lg:flex justify-center items-center"
           >
-            {/* Glow behind card */}
-            <div
-              className="absolute inset-0 rounded-2xl"
-              style={{
-                background: 'radial-gradient(ellipse at center, rgba(222,13,18,0.06) 0%, transparent 70%)',
-                transform: 'scale(1.1)',
-              }}
-            />
             <ProductMockup />
           </motion.div>
 

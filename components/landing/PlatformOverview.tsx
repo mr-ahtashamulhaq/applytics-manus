@@ -12,8 +12,8 @@ const PILLARS = [
     number: '01',
     Icon: MagnifyingGlass,
     title: 'Discover',
-    headline: 'Every opportunity. One place.',
-    body: 'Jobs posted across LinkedIn, Facebook, WhatsApp, job portals, and university career pages - aggregated and ranked by relevance to your profile. No more tab-switching.',
+    headline: 'A catalog you can inspect.',
+    body: 'Applytics is starting with a verified Mustakbil feed. Other sources remain outside the automatic schedule until their access and parsing are verified.',
     status: 'coming-soon',
     statusLabel: 'Coming soon',
   },
@@ -21,8 +21,8 @@ const PILLARS = [
     number: '02',
     Icon: FileText,
     title: 'Apply',
-    headline: 'AI-tailored applications in seconds.',
-    body: 'Paste any job description. Get a resume tailored to match it | keywords optimized, experience reordered, ATS-safe PDF ready to download. One master profile. Infinite versions.',
+    headline: 'A resume for the selected role.',
+    body: 'Choose a catalog job or paste job details. Applytics uses your profile and the selected role to create a reviewable resume and PDF.',
     status: 'live',
     statusLabel: 'Available now',
   },
@@ -30,8 +30,8 @@ const PILLARS = [
     number: '03',
     Icon: ChartBar,
     title: 'Track',
-    headline: 'Command your entire job search.',
-    body: 'Track every application. See response rates. Understand which resumes perform best. Replace your Notes app and spreadsheets with one intelligent dashboard.',
+    headline: 'Keep applications connected.',
+    body: 'Track manual or catalog-linked applications with status, dates, deadlines, follow-ups, outcomes, notes, and the resume used.',
     status: 'live',
     statusLabel: 'Available now',
   },
@@ -39,8 +39,8 @@ const PILLARS = [
     number: '04',
     Icon: Trophy,
     title: 'Grow',
-    headline: 'An AI coach in your corner.',
-    body: 'Skill gap analysis, career path recommendations, interview prep, LinkedIn optimization. Applytics learns from your job search and tells you exactly what to work on next.',
+    headline: 'More career tools over time.',
+    body: 'The early-access roadmap includes more discovery and preparation tools. We will label each capability when it is available.',
     status: 'coming-soon',
     statusLabel: 'Coming soon',
   },
@@ -96,7 +96,7 @@ export default function PlatformOverview() {
               className="text-4xl lg:text-5xl font-bold"
               style={{ color: 'var(--ink-deep)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
-              One system for your entire career.
+              One place to move your job search forward.
             </h2>
           </div>
           <div>
@@ -104,8 +104,7 @@ export default function PlatformOverview() {
               className="text-base lg:text-lg"
               style={{ color: 'var(--charcoal)', lineHeight: 1.65 }}
             >
-              Applytics is not another job tool. It is a career operating system built
-              around four pillars - designed to work together and improve over time as you do.
+              Applytics connects job discovery, resume tailoring, recommendations, saved listings, and application tracking. The current early-access scope is shown below.
             </p>
           </div>
         </div>

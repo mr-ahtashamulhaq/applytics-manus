@@ -32,16 +32,6 @@ export default function MissionBand() {
       className="w-full relative overflow-hidden"
       style={{ background: 'var(--brand-black)', padding: 'clamp(80px, 10vw, 140px) 0' }}
     >
-      {/* Subtle grid pattern on dark bg */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
-        }}
-      />
-
       <div className="relative z-10 max-w-[1280px] mx-auto px-6">
         <div className="mission-content max-w-[860px] mx-auto text-center">
 
@@ -64,7 +54,7 @@ export default function MissionBand() {
             We are not helping people apply to more jobs.
             <br />
             We are helping them{' '}
-            <span style={{ color: 'var(--brand-red)', fontWeight: 600 }}>get more responses.</span>
+            <span style={{ color: 'var(--brand-red)', fontWeight: 600 }}>apply with context.</span>
           </blockquote>
 
           {/* Divider */}
@@ -77,7 +67,7 @@ export default function MissionBand() {
                 Mission
               </p>
               <p className="text-base" style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>
-                Turning applications into interviews for Pakistan&apos;s job seekers.
+                Helping Pakistan&apos;s job seekers prepare stronger applications.
               </p>
             </div>
             <div>
@@ -85,8 +75,7 @@ export default function MissionBand() {
                 Vision
               </p>
               <p className="text-base" style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>
-                To become Pakistan&apos;s leading career support platform and help millions of people
-                connect with meaningful career opportunities over the next 10 years.
+                To build a trusted career support platform that helps people find, prepare for, and track better opportunities.
               </p>
             </div>
           </div>

@@ -32,10 +32,10 @@ export default function SignInPage() {
             className="text-h2 mb-3"
             style={{ color: 'var(--on-dark)', letterSpacing: '-0.5px' }}
           >
-            Tailored resumes for every job.
+            Bring context to every application.
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--on-dark-muted)' }}>
-            Paste a job description. Get an ATS-optimized resume in seconds. Built for Pakistani students and graduates.
+            Choose a current listing or enter job details. Review a job-specific resume draft and keep the application record connected.
           </p>
         </div>
 

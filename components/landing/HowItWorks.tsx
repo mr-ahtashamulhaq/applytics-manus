@@ -18,13 +18,13 @@ const STEPS = [
     number: '02',
     Icon: Sparkle,
     title: 'AI tailors your resume',
-    body: 'Our model rewrites your experience bullets, emphasizes matched skills, and removes everything irrelevant to this specific role.',
+    body: 'The model rewrites supported experience and project content, then separates profile evidence from suggested keywords for your review.',
   },
   {
     number: '03',
     Icon: FilePdf,
     title: 'Download and apply',
-    body: 'Get an ATS-safe PDF in seconds. See your match score. Know where you stand before you hit send.',
+    body: 'Review the generated resume, check its facts, and download a PDF when you are ready to apply.',
   },
 ]
 

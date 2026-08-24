@@ -17,33 +17,33 @@ gsap.registerPlugin(ScrollTrigger)
 const COMING_FEATURES = [
   {
     Icon: MagnifyingGlass,
-    title: 'Job Discovery',
-    body: 'Aggregated opportunities from LinkedIn, Facebook, WhatsApp, job boards, and company websites - filtered by your profile and ranked by fit.',
+    title: 'Source expansion',
+    body: 'Add more job sources only after access, parsing, freshness, and source-link behavior are verified.',
   },
   {
     Icon: EnvelopeSimple,
     title: 'Cover Letter Generator',
-    body: 'AI-generated cover letters tailored to each role, company culture, and your personal experience. Personalized, not generic.',
+    body: 'A possible future workflow for drafting a cover letter from the selected role and your supported profile evidence.',
   },
   {
     Icon: Microphone,
     title: 'Interview Preparation',
-    body: 'AI mock interviews, behavioral question practice, company-specific prep, and real-time feedback on your answers.',
+    body: 'A possible future practice space for role questions and structured preparation.',
   },
   {
     Icon: Graph,
     title: 'Skill Gap Analysis',
-    body: 'Compare your current skills against target roles. Get specific recommendations on what to learn, build, or certify next.',
+    body: 'A possible future comparison of target-role requirements with profile skills and projects.',
   },
   {
     Icon: Users,
     title: 'Referral Network',
-    body: 'Connect with alumni and professionals, request referrals, and build the relationships that actually get you through the door.',
+    body: 'A possible future space for networking notes and referral activity. It is not available today.',
   },
   {
     Icon: ClockCountdown,
-    title: 'Career CRM',
-    body: 'Manage recruiters, hiring managers, follow-up schedules, and networking contacts. Treat your job search like a professional operation.',
+    title: 'Career contacts',
+    body: 'A possible future extension for recruiter and networking contact records.',
   },
 ]
 
@@ -97,15 +97,13 @@ export default function VisionSection() {
               className="text-4xl lg:text-5xl font-bold mb-5"
               style={{ color: 'var(--ink-deep)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
-              Your career platform. Not just your resume tool.
+              A platform we are building in clear stages.
             </h2>
             <p
               className="text-base lg:text-lg"
               style={{ color: 'var(--charcoal)', lineHeight: 1.65, maxWidth: '520px' }}
             >
-              Resume tailoring and application tracking are live today. Here is what the complete
-              Applytics platform is building toward - and why early users who join now
-              will benefit most.
+              The catalog, recommendations, saved jobs, resume tailoring, and application tracking are live today. The cards below show future work, not current promises.
             </p>
           </div>
           <div
@@ -120,12 +118,12 @@ export default function VisionSection() {
             </p>
             <div className="flex flex-col gap-3">
               {[
-                { label: 'AI Resume Tailoring', live: true },
-                { label: 'ATS Match Score', live: true },
-                { label: 'Application Tracker', live: true },
-                { label: 'Job Discovery', live: false },
-                { label: 'Cover Letter AI', live: false },
-                { label: 'Interview Prep', live: false },
+                { label: 'Verified job catalog', live: true },
+                { label: 'Profile recommendations', live: true },
+                { label: 'Saved jobs', live: true },
+                { label: 'AI resume tailoring', live: true },
+                { label: 'Application tracker', live: true },
+                { label: 'More source coverage', live: false },
               ].map(item => (
                 <div key={item.label} className="flex items-center justify-between">
                   <span className="text-sm" style={{ color: 'var(--charcoal)' }}>{item.label}</span>
