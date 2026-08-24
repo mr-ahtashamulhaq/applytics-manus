@@ -5,6 +5,8 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { ensureUser } from '@/lib/auth/ensureUser'
 import { groq } from '@/lib/groq/client'
 import { z } from 'zod'
+import { aiResultSchema, validateResumeEvidence } from '@/lib/validation/resume'
+export type { AIResult } from '@/lib/validation/resume'
 
 // ── Types ───────────────────────────────────────────────────────
 
@@ -23,25 +25,6 @@ const generateInputSchema = z.object({
   job_description: z.string().trim().max(30000).optional(),
   required_skills: z.string().trim().max(2000).optional(),
 })
-
-export interface AIResult {
-  summary: string
-  skills_to_emphasize: string[]
-  rewritten_experience: {
-    role: string
-    company: string
-    duration?: string
-    bullets: string[]
-  }[]
-  rewritten_projects: {
-    title: string
-    bullets: string[]
-  }[]
-  suggested_keywords: string[]
-  missing_keywords: string[]
-  match_score: number
-  section_order_recommendation: string[]
-}
 
 export interface GenerateResult {
   success: boolean
@@ -84,6 +67,9 @@ STRICT RULES - NEVER VIOLATE:
 - Do NOT invent companies, employers, or clients
 - Do NOT invent tools or technologies not mentioned in the profile
 - Do NOT fabricate numbers or metrics that are not present in the original
+- Do NOT add a project, role, employer, date, technology, certification, or achievement that is not supported by the profile
+- Keep suggested and missing keywords separate from the candidate's factual resume content
+- Calculate match_score only from observable overlap between the supplied profile and job requirements; it is an estimate, not a fact
 - You MAY rewrite weak or vague bullet points into stronger, more impact-driven language
 - You MAY expand and elaborate on what the candidate has described
 - You MAY infer reasonable context from technologies mentioned (e.g. if they mention React, you can describe component architecture, state management, etc.)
@@ -254,22 +240,31 @@ export async function generateResume(rawInput: GenerateInput): Promise<GenerateR
     const rawJson = completion.choices[0]?.message?.content
     if (!rawJson) return { success: false, error: 'AI returned empty response. Please try again.' }
 
-    // 7. Parse + validate AI result
-    let aiResult: AIResult
+    // 7. Parse and validate the complete AI result contract.
+    let parsedJson: unknown
     try {
-      aiResult = JSON.parse(rawJson)
+      parsedJson = JSON.parse(rawJson)
     } catch {
-      console.error('[generateResume] JSON parse error:', rawJson.slice(0, 200))
+      console.error('[generateResume] AI JSON parse error')
       return { success: false, error: 'AI returned invalid format. Please try again.' }
     }
 
-    // Validate required fields
-    if (
-      typeof aiResult.match_score !== 'number' ||
-      !Array.isArray(aiResult.suggested_keywords) ||
-      !Array.isArray(aiResult.missing_keywords)
-    ) {
-      return { success: false, error: 'AI response incomplete. Please try again.' }
+    const parsedAiResult = aiResultSchema.safeParse(parsedJson)
+    if (!parsedAiResult.success) {
+      console.error('[generateResume] AI schema validation failed:', parsedAiResult.error.issues.length)
+      return { success: false, error: 'AI response did not match the required resume format. Please try again.' }
+    }
+    const aiResult = parsedAiResult.data
+    const unsupportedClaim = validateResumeEvidence(aiResult, [
+      profile.skills ?? [],
+      profile.experience_text ?? '',
+      profile.projects_text ?? '',
+      profile.degree ?? '',
+      profile.university ?? '',
+    ].join(' '))
+    if (unsupportedClaim) {
+      console.error('[generateResume] AI evidence validation failed:', unsupportedClaim.split(':')[0])
+      return { success: false, error: 'AI response included content that was not supported by your profile. Please try again.' }
     }
 
     // 8. Save job_inputs record
