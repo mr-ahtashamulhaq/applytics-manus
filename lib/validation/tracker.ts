@@ -9,6 +9,8 @@ export const applicationStatusSchema = z.enum([
 ])
 
 export const applicationInputSchema = z.object({
+  job_id: z.string().uuid().optional(),
+  generated_resume_id: z.string().uuid().optional(),
   company_name: z.string().trim().min(1).max(160),
   role_title: z.string().trim().min(1).max(160),
   status: applicationStatusSchema,

@@ -138,12 +138,16 @@ function AddModal({
   onAdded,
   defaultCompany,
   defaultRole,
+  defaultJobId,
+  defaultResumeId,
 }: {
   isOpen: boolean
   onClose: () => void
   onAdded: (app: Application) => void
   defaultCompany?: string
   defaultRole?: string
+  defaultJobId?: string
+  defaultResumeId?: string
 }) {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState('')
@@ -160,7 +164,11 @@ function AddModal({
   const onSubmit = (data: AddForm) => {
     setError('')
     startTransition(async () => {
-      const res = await addApplication(data)
+      const res = await addApplication({
+        ...data,
+        job_id: defaultJobId,
+        generated_resume_id: defaultResumeId,
+      })
       if (res.success && res.application) {
         reset()
         toast.success('Application added')
@@ -303,9 +311,11 @@ interface Props {
   initialApplications: Application[]
   defaultCompany?: string
   defaultRole?: string
+  defaultJobId?: string
+  defaultResumeId?: string
 }
 
-export default function TrackerTable({ initialApplications, defaultCompany, defaultRole }: Props) {
+export default function TrackerTable({ initialApplications, defaultCompany, defaultRole, defaultJobId, defaultResumeId }: Props) {
   const router = useRouter()
   const [apps, setApps] = useState(initialApplications)
   const [showAdd, setShowAdd] = useState(!!defaultCompany)
@@ -356,6 +366,8 @@ export default function TrackerTable({ initialApplications, defaultCompany, defa
         onAdded={handleAdded}
         defaultCompany={defaultCompany}
         defaultRole={defaultRole}
+        defaultJobId={defaultJobId}
+        defaultResumeId={defaultResumeId}
       />
 
       {/* Filter bar + Add button */}

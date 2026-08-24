@@ -7,7 +7,7 @@ export const metadata = {
 }
 
 interface Props {
-  searchParams: Promise<{ from?: string; title?: string; company?: string }>
+  searchParams: Promise<{ from?: string; title?: string; company?: string; jobId?: string; resumeId?: string }>
 }
 
 export default async function TrackerPage({ searchParams }: Props) {
@@ -28,6 +28,8 @@ export default async function TrackerPage({ searchParams }: Props) {
         initialApplications={applications}
         defaultCompany={params.company}
         defaultRole={params.title}
+        defaultJobId={params.jobId}
+        defaultResumeId={params.resumeId ?? params.from}
       />
     </div>
   )

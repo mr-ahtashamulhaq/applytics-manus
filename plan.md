@@ -99,8 +99,9 @@
 
 ### Phase 8: Build the linked application tracker
 
-- [ ] Link applications to catalog jobs.
-- [ ] Link applications to resume versions.
+- [x] Link applications to catalog jobs. The live schema has `applications.job_id`, and the result-to-tracker handoff carries it through server validation.
+- [x] Link applications to resume versions. The live schema has `applications.generated_resume_id`, and the tracker checks resume ownership before inserting the link.
+
 - [ ] Add deadlines and follow-up dates.
 - [ ] Add outcomes and status definitions.
 - [ ] Add mobile, loading, empty, error, and rollback states.

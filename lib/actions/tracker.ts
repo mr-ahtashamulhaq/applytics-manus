@@ -8,6 +8,7 @@ import {
   applicationIdSchema,
   applicationInputSchema,
   applicationStatusSchema,
+  type ApplicationInput,
 } from '@/lib/validation/tracker'
 
 // ── Load all applications ────────────────────────────────────────
@@ -29,13 +30,7 @@ export async function loadApplications() {
 }
 
 // ── Add application ──────────────────────────────────────────────
-export async function addApplication(input: {
-  company_name: string
-  role_title: string
-  status: ApplicationStatus
-  applied_date?: string
-  notes?: string
-}): Promise<{ success: boolean; error?: string; application?: Application }> {
+export async function addApplication(input: ApplicationInput): Promise<{ success: boolean; error?: string; application?: Application }> {
   const parsed = applicationInputSchema.safeParse(input)
   if (!parsed.success) return { success: false, error: 'Please check the application details.' }
 
@@ -46,10 +41,35 @@ export async function addApplication(input: {
     .from('users').select('id').eq('clerk_user_id', userId).single()
   if (!user) return { success: false, error: 'User not found' }
 
+  if (parsed.data.job_id) {
+    const { data: job } = await supabaseAdmin
+      .from('jobs')
+      .select('id')
+      .eq('id', parsed.data.job_id)
+      .in('status', ['active', 'stale'])
+      .maybeSingle()
+    if (!job) return { success: false, error: 'The selected job is no longer available.' }
+  }
+
+  if (parsed.data.generated_resume_id) {
+    const { data: resume } = await supabaseAdmin
+      .from('generated_resumes')
+      .select('id, job_id')
+      .eq('id', parsed.data.generated_resume_id)
+      .eq('user_id', user.id)
+      .maybeSingle()
+    if (!resume) return { success: false, error: 'The selected resume was not found.' }
+    if (parsed.data.job_id && resume.job_id && resume.job_id !== parsed.data.job_id) {
+      return { success: false, error: 'The resume and job do not match.' }
+    }
+  }
+
   const { data, error } = await supabaseAdmin
     .from('applications')
     .insert({
       user_id: user.id,
+      job_id: parsed.data.job_id ?? null,
+      generated_resume_id: parsed.data.generated_resume_id ?? null,
       company_name: parsed.data.company_name,
       role_title: parsed.data.role_title,
       status: parsed.data.status,

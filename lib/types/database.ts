@@ -140,6 +140,8 @@ export interface Application {
   status: ApplicationStatus
   applied_date: string | null
   notes: string | null
+  job_id: string | null
+  generated_resume_id: string | null
   created_at: string
   updated_at: string
 }

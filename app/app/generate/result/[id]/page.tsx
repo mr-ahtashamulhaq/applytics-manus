@@ -139,7 +139,7 @@ export default async function ResultPage({ params }: Props) {
           filename={`${jobTitle.replace(/\s+/g,'_')}_${companyName.replace(/\s+/g,'_')}.pdf`}
         />
         <Link
-          href={`/app/tracker?from=${id}&title=${encodeURIComponent(jobTitle)}&company=${encodeURIComponent(companyName)}`}
+          href={`/app/tracker?from=${id}${resume.job_id ? `&jobId=${encodeURIComponent(resume.job_id)}` : ''}&title=${encodeURIComponent(jobTitle)}&company=${encodeURIComponent(companyName)}`}
           className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors"
           style={{
             background: 'var(--brand-red)',
