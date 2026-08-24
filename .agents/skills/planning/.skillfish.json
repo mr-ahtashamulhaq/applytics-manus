@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "planning",
+  "owner": "newtro",
+  "repo": "claude-plugins",
+  "path": "interactive-dev/skills/planning",
+  "branch": "main",
+  "sha": "a72228654f830bbdaeaac3600fd019c85d03f95b",
+  "source": "manual"
+}
