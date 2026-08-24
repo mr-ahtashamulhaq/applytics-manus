@@ -124,15 +124,17 @@ Tracker follow-up validation: TypeScript and production build passed, lint remai
 
 ### Phase 10: Complete SEO and public-site requirements
 
-- [ ] Add custom 404 page.
-- [ ] Add unique title and meta description for every route.
-- [ ] Add Open Graph metadata, robots.txt, sitemap, and canonical URLs.
+- [x] Add custom 404 page. Added a branded recovery page with a direct homepage link.
+- [x] Add unique title and meta description for every route. Added root defaults and route-specific metadata for the current public and authenticated pages.
+- [x] Add Open Graph metadata, robots.txt, sitemap, and canonical URLs. Root metadata now uses a configurable site URL, while robots and sitemap expose public pages only.
 - [ ] Add internal links and breadcrumbs.
 - [ ] Add a five-item FAQ.
 - [ ] Add a real conversion thank-you page.
 - [ ] Add approved local structured data.
 - [ ] Add analytics only after consent and privacy review.
-- [ ] Remove unsupported price and feature claims.
+- [x] Remove unsupported price and feature claims. The rewritten README and current metadata describe free early access, verified Mustakbil coverage, and shipped workflow behavior without numeric pricing or guarantees.
+
+SEO validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for the changed public route files.
 
 ### Phase 11: Implement security and privacy controls
 
