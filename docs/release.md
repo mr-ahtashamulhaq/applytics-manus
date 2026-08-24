@@ -75,7 +75,7 @@ Do not mark automatic scheduling as verified until all of these facts are record
 
 ## Preview and rollback
 
-Do not switch the current Vercel Git integration during a code-only change. First create a preview deployment from the new repository, verify all environment variables, and test the authenticated flows.
+Do not switch the current Vercel Git integration during a code-only change. Follow `docs/original-vercel-handoff.md` to replace the user's local source while keeping the existing `applytics` project linked to the historical repository. Verify all environment variables and test the authenticated flows only after the user pushes the replacement through that original repository.
 
 Create a release tag only after the preview gate passes:
 
@@ -97,7 +97,7 @@ Record these values in the release issue or deployment note:
 | Main commit | `e015919` resume versions |
 | Scraper commit | `0916187` report gate |
 | Supabase migration | `016_resume_versions` and any later migration |
-| Vercel preview URL | Fill after preview |
+| Vercel preview URL | Separate `applytics-manus` diagnostic project exists; it is not production |
 | Schedule verification run | Pending until the first post-gate schedule event |
 | Legal review | Required before commercial launch |
 

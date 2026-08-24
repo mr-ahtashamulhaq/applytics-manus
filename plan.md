@@ -39,7 +39,7 @@
 - [x] Create the public `applytics-manus` repository.
 - [x] Scan files and history for secrets. No real credential matches were found; historical matches were credential-shaped README placeholders and are documented in `docs/security-scan.md`.
 - [ ] Protect the default branch and configure repository checks.
-- [ ] Add the new repository to the existing Vercel project through a preview deployment.
+- [x] Verify a non-production deployment from `applytics-manus` to prove the pushed source builds; the existing production Vercel project remains linked to `APPLYTICS` by deliberate decision.
 - [ ] Create a rollback tag and migration note.
 
 ### Phase 3: Establish the database source of truth
@@ -192,22 +192,22 @@ Bot-protection validation: TypeScript and production build passed, lint remains 
 
 - [x] Rewrite the main README. Removed stale MVP claims, numeric or unsupported promises, emoji headings, and outdated table counts; documented the current early-access product and source health.
 - [x] Add architecture documentation. Added `docs/architecture.md` for the app, worker, database boundary, user flow, and failure behavior.
-- [x] Add data dictionary and migration notes. Added `docs/data-dictionary.md` and listed migrations `001` through `015`.
+- [x] Add data dictionary and migration notes. Added `docs/data-dictionary.md` and listed migrations `001` through `016`.
 - [x] Add local development instructions. The README now documents environment placeholders, migration order, and local checks.
 - [x] Add testing and release documentation. Added `docs/release.md` with application, worker, security, focused-test, dependency-audit, privacy, and rollback gates. The current documentation snapshot records the latest release commits.
-- [x] Add deployment and rollback documentation. The runbook documents preview verification, the untouched Vercel integration, forward-only migrations, and rollback handling.
+- [x] Add deployment and rollback documentation. The runbook documents the original-Vercel handoff, the non-production diagnostic deployment, forward-only migrations, and rollback handling.
 - [x] Add decision records. Added `docs/decisions.md` for source gating, Redis-free scheduling, repository privacy, service-role boundaries, free early access, and deferred Vercel migration.
 - [x] Push every document to GitHub after each meaningful documentation subphase.
 
 ### Phase 14: Verify and deploy
 
-- [ ] Run TypeScript checks.
-- [ ] Run lint and tests.
-- [ ] Run production build.
-- [ ] Review public and protected routes.
-- [ ] Verify preview deployment.
+- [x] Run TypeScript checks. Main TypeScript validation passes; scraper compilation passes.
+- [x] Run lint and tests. Main lint exits with 0 errors and 140 legacy warnings; 4 files and 11 main tests pass; scraper tests pass with 13 tests and 4 upstream lxml deprecation warnings.
+- [x] Run production build. Main Next.js production build passes and `npm audit --omit=dev` reports 0 vulnerabilities.
+- [ ] Review public and protected routes. The non-production public homepage is blocked until the user configures Clerk and other application secrets in the original Vercel project after pushing the replacement.
+- [x] Verify the non-production diagnostic deployment. It built successfully, but has no application secrets and is not production.
 - [ ] Verify the custom domain.
-- [ ] Switch Vercel Git integration only after approval.
+- [ ] Switch Vercel Git integration only after the user replaces the local `APPLYTICS` checkout, pushes through the original repository, verifies environment variables, and approves the release.
 - [ ] Test rollback.
 
 ### Phase 15: Rewrite legal documents
