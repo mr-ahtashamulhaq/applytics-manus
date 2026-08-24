@@ -94,7 +94,7 @@ Record these values in the release issue or deployment note:
 
 | Item | Value |
 |---|---|
-| Main commit | `e015919` resume versions |
+| Main commit | `444c5aa` prepared handoff |
 | Scraper commit | `0916187` report gate |
 | Supabase migration | `016_resume_versions` and any later migration |
 | Vercel preview URL | Separate `applytics-manus` diagnostic project exists; it is not production |
