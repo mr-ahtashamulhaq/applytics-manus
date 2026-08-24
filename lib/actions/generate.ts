@@ -32,6 +32,8 @@ export interface GenerateResult {
   error?: string
 }
 
+const DAILY_GENERATION_GUARD = 20
+
 // ── System prompt ───────────────────────────────────────────────
 
 function buildPrompt(profile: Record<string, unknown>, input: GenerateInput): string {
@@ -156,6 +158,20 @@ export async function generateResume(rawInput: GenerateInput): Promise<GenerateR
       .single()
 
     if (!user) return { success: false, error: 'User not found. Try signing out and back in.' }
+
+    const dayStart = new Date()
+    dayStart.setUTCHours(0, 0, 0, 0)
+    const { count: generationsToday, error: usageError } = await supabaseAdmin
+      .from('generated_resumes')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .gte('created_at', dayStart.toISOString())
+
+    if (usageError) {
+      console.error('[generateResume] usage guard query failed')
+    } else if ((generationsToday ?? 0) >= DAILY_GENERATION_GUARD) {
+      return { success: false, error: 'Daily resume generation is temporarily limited. Please try again tomorrow.' }
+    }
 
     // 2. Resolve catalog context when the request came from the jobs page
     let resolvedInput: GenerateInput = input

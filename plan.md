@@ -154,15 +154,18 @@ FAQ validation: TypeScript and production build passed, lint remains 0 errors wi
 - [ ] Add upload validation and safe storage.
 - [ ] Add rate limiting and bot protection.
 - [x] Add security headers and HTTPS checks. `next.config.ts` adds CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy; production responses add HSTS and `upgrade-insecure-requests`.
-- [ ] Run dependency security scans.
+- [x] Run dependency security scans. Updated Next.js and its ESLint config to `16.3.2`, removed unused `lucide-react` and `shadcn` dependencies, removed the obsolete stylesheet import, and verified `npm audit --omit=dev` reports zero vulnerabilities.
 - [ ] Create a threat model and incident runbook.
 
 Security-header validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
 
+Dependency and usage validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the production dependency audit reports zero vulnerabilities.
+
 ### Phase 12: Add free-tier controls and operations
 
 - [ ] Add AI, PDF, scraper, storage, and analytics usage events.
-- [ ] Add per-user and per-IP limits.
+- [x] Add a per-user generation guard. Resume generation applies a temporary server-side daily fair-use guard before the AI call; the limit is not advertised as a product quota.
+- [ ] Add per-IP limits.
 - [ ] Add expensive-operation kill switches.
 - [ ] Add scraper health and freshness monitoring.
 - [ ] Add cost and capacity alerts.
