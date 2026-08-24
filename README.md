@@ -202,8 +202,8 @@ Create a `.env.local` file in the project root:
 
 ```env
 # Clerk Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>
 
 # Supabase Database
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -211,7 +211,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 # Groq AI
-GROQ_API_KEY=gsk_...
+GROQ_API_KEY=<your-groq-api-key>
 ```
 
 > **Security note:** `SUPABASE_SERVICE_ROLE_KEY` and `GROQ_API_KEY` are never prefixed with `NEXT_PUBLIC_` and are only accessible server-side.

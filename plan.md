@@ -37,7 +37,7 @@
 
 - [x] Copy the current APPLYTICS source into this repository.
 - [x] Create the public `applytics-manus` repository.
-- [ ] Scan files and history for secrets.
+- [x] Scan files and history for secrets. No real credential matches were found; historical matches were credential-shaped README placeholders and are documented in `docs/security-scan.md`.
 - [ ] Protect the default branch and configure repository checks.
 - [ ] Add the new repository to the existing Vercel project through a preview deployment.
 - [ ] Create a rollback tag and migration note.
@@ -116,7 +116,7 @@
 ### Phase 11: Implement security and privacy controls
 
 - [ ] Complete every applicable item in videcodingsecurity.txt. Supabase security advisors report no current lints after migrations `004_lock_ingestion_health` and `005_restrict_rls_helper` and explicit role revocation in `006_revoke_rls_helper_roles`.
-- [ ] Scan files and history for secrets.
+- [x] Scan files and history for secrets. No real credential matches were found; historical matches were credential-shaped README placeholders and are documented in `docs/security-scan.md`.
 - [ ] Test RLS and ownership boundaries.
 - [ ] Add upload validation and safe storage.
 - [ ] Add rate limiting and bot protection.
@@ -136,7 +136,7 @@
 ### Phase 13: Update project documentation
 
 - [ ] Rewrite the main README.
-- [ ] Add architecture documentation.
+- [ ] Add architecture documentation. The scraper boundary, catalog schema, and ingestion health tables are documented in the repositories.
 - [ ] Add data dictionary and migration notes.
 - [ ] Add local development instructions.
 - [ ] Add testing and release documentation.
