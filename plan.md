@@ -31,7 +31,7 @@
 - [x] Add ingestion run records. Migration `003_ingestion_health.sql` and worker reporting are live; reporting run `32736499139` verified five scraped, five enriched, and five upserted jobs with zero errors.
 - [x] Configure safe GitHub Actions schedules and manual dispatch.
 - [x] Add scraper README and operations documentation.
-- [ ] Run and verify the first scheduled scrape. Mustakbil manual run `32735373095` wrote five active catalog rows; the automatic schedule still needs verification.
+- [ ] Run and verify the first scheduled scrape. Mustakbil manual runs `32735373095`, `32736499139`, and `32737220376` wrote and rechecked active catalog rows and protected run records. The automatic schedule now targets Mustakbil only; the first real scheduled event still needs verification.
 
 ### Phase 2: Create and migrate the main application repository
 
@@ -63,7 +63,7 @@
 
 - [x] Define the scraper-to-catalog mapping contract in `supabase/migrations/002_jobs_catalog.sql`.
 - [x] Apply and verify the migration before enabling production writes. Supabase project has the verified `public.jobs` table, and Mustakbil run `32735373095` wrote five active records.
-- [ ] Add freshness, stale, expired, and source-status rules.
+- [ ] Add freshness, stale, expired, and source-status rules. The worker currently deletes records older than the configured threshold and records source names in ingestion health data.
 - [ ] Add pagination and server-side filtering.
 - [x] Add protected ingestion diagnostics in the worker. Main-application diagnostic views remain pending.
 
