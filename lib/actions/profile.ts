@@ -4,6 +4,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { ensureUser } from '@/lib/auth/ensureUser'
+import { profileFormSchema } from '@/lib/validation/profile'
 
 export interface ProfileFormData {
   // Personal
@@ -75,10 +76,21 @@ export async function loadProfile(): Promise<ProfileFormData | null> {
 
 // ── Save profile ────────────────────────────────────────────────
 export async function saveProfile(data: ProfileFormData): Promise<{ success: boolean; error?: string }> {
+  const parsed = profileFormSchema.safeParse(data)
+  if (!parsed.success) return { success: false, error: 'Please check the profile fields.' }
+  const input = parsed.data
+
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'Not authenticated' }
 
   try {
+    const clerkUser = await currentUser()
+    await ensureUser(
+      userId,
+      clerkUser?.emailAddresses[0]?.emailAddress,
+      clerkUser?.fullName
+    )
+
     // Get Supabase user UUID
     const { data: user, error: userError } = await supabaseAdmin
       .from('users')
@@ -91,7 +103,7 @@ export async function saveProfile(data: ProfileFormData): Promise<{ success: boo
     // Update user name
     await supabaseAdmin
       .from('users')
-      .update({ name: data.full_name, updated_at: new Date().toISOString() })
+      .update({ name: input.full_name, updated_at: new Date().toISOString() })
       .eq('id', user.id)
 
     // Check if profile row already exists
@@ -103,16 +115,16 @@ export async function saveProfile(data: ProfileFormData): Promise<{ success: boo
 
     const profilePayload = {
       user_id: user.id,
-      phone: data.phone || null,
-      city: data.city || null,
-      linkedin_url: data.linkedin_url || null,
-      portfolio_url: data.portfolio_url || null,
-      university: data.university || null,
-      degree: data.degree || null,
-      graduation_status: data.graduation_status || null,
-      skills: data.skills.length > 0 ? data.skills : null,
-      experience_text: data.experience_text || null,
-      projects_text: data.projects_text || null,
+      phone: input.phone || null,
+      city: input.city || null,
+      linkedin_url: input.linkedin_url || null,
+      portfolio_url: input.portfolio_url || null,
+      university: input.university || null,
+      degree: input.degree || null,
+      graduation_status: input.graduation_status || null,
+      skills: input.skills.length > 0 ? input.skills : null,
+      experience_text: input.experience_text || null,
+      projects_text: input.projects_text || null,
       updated_at: new Date().toISOString(),
     }
 
@@ -133,8 +145,8 @@ export async function saveProfile(data: ProfileFormData): Promise<{ success: boo
     }
 
     if (profileError) {
-      console.error('[saveProfile] error:', profileError)
-      return { success: false, error: profileError.message }
+      console.error('[saveProfile] profile persistence failed')
+      return { success: false, error: 'Could not save your profile.' }
     }
 
     revalidatePath('/app/profile')
