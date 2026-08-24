@@ -3,7 +3,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { ensureUser } from '@/lib/auth/ensureUser'
-import { groq } from '@/lib/groq/client'
+import { getGroqClient, GROQ_MODEL } from '@/lib/groq/client'
 import { z } from 'zod'
 import { aiResultSchema, validateResumeEvidence } from '@/lib/validation/resume'
 export type { AIResult } from '@/lib/validation/resume'
@@ -236,8 +236,8 @@ export async function generateResume(rawInput: GenerateInput): Promise<GenerateR
     )
 
     // 6. Call Groq
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+    const completion = await getGroqClient().chat.completions.create({
+      model: GROQ_MODEL,
       messages: [
         {
           role: 'system',

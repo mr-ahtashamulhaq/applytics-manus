@@ -66,7 +66,9 @@
 - [ ] Add structured logging.
 
 Action-audit validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings. The audit records user filters, selected responses, strict schemas, and safe errors for every current action.
-- [ ] Repair environment validation.
+
+Environment validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
+- [x] Repair environment validation. The Groq client now initializes at request time and returns a clear server-only configuration error when `GROQ_API_KEY` is missing; public builds do not require the secret.
 - [ ] Add unit, integration, and end-to-end tests.
 
 ### Phase 5: Build job ingestion and catalog operations
