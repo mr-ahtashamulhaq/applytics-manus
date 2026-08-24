@@ -152,7 +152,8 @@ FAQ validation: TypeScript and production build passed, lint remains 0 errors wi
 - [x] Scan files and history for secrets. No real credential matches were found; historical matches were credential-shaped README placeholders and are documented in `docs/security-scan.md`.
 - [x] Test RLS and ownership boundaries. Live read-only checks confirmed RLS is enabled on `saved_jobs`, `ingestion_runs`, and `ingestion_errors`; saved-job policies are user-owned, and ingestion tables deny all `anon` and `authenticated` operations.
 - [x] Review upload validation and safe storage scope. The current app has no browser file input or upload endpoint; `resume_file_url` is not written by the current UI. Any future upload must validate MIME type, extension, size, ownership, and non-executable storage before release.
-- [ ] Add rate limiting and bot protection.
+- [x] Add basic bot protection. The public suggestion form includes a visually hidden honeypot and the server silently drops bot-filled submissions.
+- [ ] Add durable rate limiting for public feedback and AI operations.
 - [x] Add security headers and HTTPS checks. `next.config.ts` adds CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy; production responses add HSTS and `upgrade-insecure-requests`.
 - [x] Run dependency security scans. Updated Next.js and its ESLint config to `16.3.2`, removed unused `lucide-react` and `shadcn` dependencies, removed the obsolete stylesheet import, and verified `npm audit --omit=dev` reports zero vulnerabilities.
 - [x] Create a threat model and incident runbook. Added `docs/threat-model.md` and `docs/security-incident-runbook.md` with trust boundaries, residual risks, containment steps, recovery checks, and communication fields.
@@ -165,11 +166,13 @@ Security-header validation: TypeScript and production build passed; lint remains
 
 Dependency and usage validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the production dependency audit reports zero vulnerabilities.
 
+Bot-protection validation: TypeScript and production build passed, lint remains 0 errors with the existing 140 warnings, and the Impeccable detector returned `[]` for the feedback form.
+
 ### Phase 12: Add free-tier controls and operations
 
 - [ ] Add AI, PDF, scraper, storage, and analytics usage events.
 - [x] Add a per-user generation guard. Resume generation applies a temporary server-side daily fair-use guard before the AI call; the limit is not advertised as a product quota.
-- [ ] Add per-IP limits.
+- [ ] Add per-IP limits. A shared durable store is still required for reliable limits across serverless instances.
 - [ ] Add expensive-operation kill switches.
 - [ ] Add scraper health and freshness monitoring.
 - [ ] Add cost and capacity alerts.

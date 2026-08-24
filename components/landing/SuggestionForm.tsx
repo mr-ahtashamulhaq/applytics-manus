@@ -9,6 +9,7 @@ export default function SuggestionForm() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [suggestion, setSuggestion] = useState('')
+  const [website, setWebsite] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -18,7 +19,7 @@ export default function SuggestionForm() {
     if (!suggestion.trim()) return
     setError('')
     startTransition(async () => {
-      const res = await submitSuggestion({ name, email, suggestion })
+      const res = await submitSuggestion({ name, email, suggestion, website })
       if (res.success) {
         setSubmitted(true)
       } else {
@@ -75,7 +76,7 @@ export default function SuggestionForm() {
               <p className="text-base font-semibold" style={{ color: 'var(--ink-deep)' }}>Thank you!</p>
               <p className="text-sm" style={{ color: 'var(--charcoal)' }}>Your suggestion has been received. We read every single one.</p>
               <button
-                onClick={() => { setSubmitted(false); setSuggestion(''); setName(''); setEmail('') }}
+                onClick={() => { setSubmitted(false); setSuggestion(''); setName(''); setEmail(''); setWebsite('') }}
                 className="mt-2 text-sm underline"
                 style={{ color: 'var(--steel)' }}
               >
@@ -91,6 +92,16 @@ export default function SuggestionForm() {
               onSubmit={handleSubmit}
               className="flex flex-col gap-4"
             >
+              <input
+                type="text"
+                name="website"
+                value={website}
+                onChange={e => setWebsite(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-10000px', width: '1px', height: '1px', overflow: 'hidden' }}
+              />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--ink)' }}>

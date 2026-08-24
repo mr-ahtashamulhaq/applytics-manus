@@ -8,7 +8,10 @@ export async function submitSuggestion(input: {
   name?: string
   email?: string
   suggestion: string
+  website?: string
 }): Promise<{ success: boolean; error?: string }> {
+  if (typeof input.website === 'string' && input.website.trim()) return { success: true }
+
   const parsed = suggestionInputSchema.safeParse(input)
   if (!parsed.success) return { success: false, error: 'Please check your suggestion and email.' }
   const data = parsed.data
