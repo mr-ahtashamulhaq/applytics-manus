@@ -26,7 +26,7 @@
 - [ ] Add parser fixtures and enrichment tests.
 - [x] Add the Applytics catalog schema mapping in the scraper repository. See scraper commit `c4a56a6`.
 - [x] Add the first Applytics `jobs` catalog migration file. See commit `557edb0`.
-- [ ] Apply and verify the `jobs` migration in Supabase.
+- [x] Apply and verify the `jobs` migration in Supabase. Applied `jobs_catalog` to project `ndcchdxnjdcowyocmcyo`; verified the table, columns, indexes, constraints, and RLS. Live rows: `0`.
 - [ ] Add ingestion run records.
 - [ ] Configure safe GitHub Actions schedules and manual dispatch.
 - [ ] Add scraper README and operations documentation.
@@ -61,7 +61,7 @@
 ### Phase 5: Build job ingestion and catalog operations
 
 - [x] Define the scraper-to-catalog mapping contract in `supabase/migrations/002_jobs_catalog.sql`.
-- [ ] Apply and verify the migration before enabling production writes.
+- [x] Apply and verify the migration before enabling production writes. Supabase project has the verified `public.jobs` table; production writes remain pending a successful real scraper record.
 - [ ] Add freshness, stale, expired, and source-status rules.
 - [ ] Add pagination and server-side filtering.
 - [ ] Add protected ingestion diagnostics.
