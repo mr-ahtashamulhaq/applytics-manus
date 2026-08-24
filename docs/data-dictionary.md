@@ -135,5 +135,8 @@ Usage events support capacity, reliability, and product-flow review. They are no
 | `010_abuse_controls.sql` | Protected operation flags and atomic fixed-window rate-limit counters |
 | `011_lock_abuse_controls.sql` | Explicit deny policies for public API roles on abuse-control tables |
 | `012_usage_events.sql` | Protected minimal operational usage events |
+| `013_legacy_fk_indexes.sql` | Foreign-key indexes for legacy ownership and cascade paths |
+| `014_optimize_legacy_rls.sql` | Statement-level auth evaluation for legacy ownership policies |
+| `015_optimize_saved_jobs_rls.sql` | Statement-level auth evaluation for saved-job ownership policies |
 
-Migration files are ordered. Apply them to a new environment in numeric order. The live schema contains a few fields that were added during earlier operation, so inspect the target schema before applying an older baseline to an existing project.
+Migration files are ordered. Apply them to a new environment in numeric order. Migration `013_legacy_fk_indexes.sql` adds indexes confirmed missing by the live inspection on `applications.user_id`, `generated_resumes.user_id`, `generated_resumes.job_input_id`, and `job_inputs.user_id`. Migrations `014` and `015` optimize the legacy and saved-job ownership policies without changing their access rules. The live performance advisor now reports only informational unused-index notices; required indexes remain in place. The live schema contains a few fields that were added during earlier operation, so inspect the target schema before applying an older baseline to an existing project.

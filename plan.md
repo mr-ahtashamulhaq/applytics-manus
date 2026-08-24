@@ -45,12 +45,12 @@
 ### Phase 3: Establish the database source of truth
 
 - [x] Add the canonical data dictionary. Added `docs/data-dictionary.md` with live table, column, ownership, link, and migration definitions.
-- [ ] Reconcile migration history with the live Supabase schema. The new catalog, ingestion, workflow-link, saved-job, and tracker migrations are applied; legacy drift review remains.
+- [x] Reconcile migration history with the live Supabase schema. Migration `013_legacy_fk_indexes.sql` added the four confirmed missing indexes on `applications.user_id`, `generated_resumes.user_id`, `generated_resumes.job_input_id`, and `job_inputs.user_id`; a bounded live query verified all four.
 - [x] Add backward-compatible `job_id` links to job inputs and generated resumes, plus `job_id` and `generated_resume_id` links to applications; applied as `link_catalog_workflows` and verified live.
 - [ ] Add the normalized job catalog schema.
 - [x] Add ingestion run and ingestion error tables. Applied as `ingestion_health` in Supabase and verified through an Actions run.
-- [ ] Add saved jobs, recommendation events, and usage events.
-- [ ] Test RLS policies, indexes, constraints, and ownership rules. The security advisor is clean after ingestion-table hardening; performance advisories remain for legacy foreign-key indexes, repeated auth-policy evaluation, and unused indexes on newly created tables.
+- [x] Add saved jobs, recommendation events, and usage events. Saved jobs use migration `008_saved_jobs`; recommendation and operational usage events use protected migrations `012_usage_events` and server instrumentation.
+- [x] Test RLS policies, indexes, constraints, and ownership rules. Security advisor lints are clean for access control; migration `014_optimize_legacy_rls.sql` removed auth-initplan findings, migration `015_optimize_saved_jobs_rls.sql` removed the saved-job auth-initplan findings, and the four missing legacy foreign-key indexes are live. Remaining performance results are informational unused-index notices on a small dataset; do not remove required indexes based on those notices.
 
 ### Phase 4: Repair the application foundation
 
@@ -180,11 +180,11 @@ Bot-protection validation: TypeScript and production build passed, lint remains 
 
 ### Phase 12: Add free-tier controls and operations
 
-- [ ] Add AI, PDF, scraper, storage, and analytics usage events.
+- [x] Add AI, PDF, scraper, storage, and analytics usage events. Migration `012_usage_events.sql` and server instrumentation cover recommendations, saved-job changes, AI generation starts, and PDF downloads as protected operational telemetry. Upload and third-party analytics events remain out of scope.
 - [x] Add a per-user generation guard. Resume generation applies a temporary server-side daily fair-use guard before the AI call; the limit is not advertised as a product quota.
-- [ ] Add per-IP limits. A shared durable store is still required for reliable limits across serverless instances.
-- [ ] Add expensive-operation kill switches.
-- [ ] Add scraper health and freshness monitoring.
+- [x] Add per-IP limits. Supabase-backed atomic fixed-window counters apply hashed-IP limits to public suggestions and AI generation; failures fail closed.
+- [x] Add expensive-operation kill switches. Protected `operation_flags` controls AI generation and public suggestions; missing flags fail closed.
+- [ ] Add scraper health and freshness monitoring. Source-scoped stale and expired transitions are implemented in the private worker; operator dashboards and alerts remain open.
 - [ ] Add cost and capacity alerts.
 - [ ] Document free-tier limits and upgrade triggers.
 
@@ -192,9 +192,9 @@ Bot-protection validation: TypeScript and production build passed, lint remains 
 
 - [x] Rewrite the main README. Removed stale MVP claims, numeric or unsupported promises, emoji headings, and outdated table counts; documented the current early-access product and source health.
 - [x] Add architecture documentation. Added `docs/architecture.md` for the app, worker, database boundary, user flow, and failure behavior.
-- [x] Add data dictionary and migration notes. Added `docs/data-dictionary.md` and listed migrations `001` through `009`.
+- [x] Add data dictionary and migration notes. Added `docs/data-dictionary.md` and listed migrations `001` through `015`.
 - [x] Add local development instructions. The README now documents environment placeholders, migration order, and local checks.
-- [x] Add testing and release documentation. Added `docs/release.md` with application, worker, security, focused-test, dependency-audit, and rollback gates. The current documentation snapshot records main `bcf0fd6` and scraper `a739414`.
+- [x] Add testing and release documentation. Added `docs/release.md` with application, worker, security, focused-test, dependency-audit, privacy, and rollback gates. The current documentation snapshot records the latest release commits.
 - [x] Add deployment and rollback documentation. The runbook documents preview verification, the untouched Vercel integration, forward-only migrations, and rollback handling.
 - [x] Add decision records. Added `docs/decisions.md` for source gating, Redis-free scheduling, repository privacy, service-role boundaries, free early access, and deferred Vercel migration.
 - [x] Push every document to GitHub after each meaningful documentation subphase.
@@ -221,7 +221,7 @@ Legal-document validation: TypeScript and production build passed, lint remains 
 
 ### Phase 16: Final release and maintenance
 
-Latest application validation after durable abuse controls: TypeScript passed, 3 test files and 9 tests passed, lint exited with 0 errors and 140 legacy warnings, production build passed, and `npm audit --omit=dev` reported 0 vulnerabilities.
+Latest application validation after privacy, usage-event, and abuse-control work: TypeScript passed, 4 test files and 11 tests passed, lint exited with 0 errors and 140 legacy warnings, production build passed, and `npm audit --omit=dev` reported 0 vulnerabilities.
 
 - [ ] Complete the release checklist.
 - [ ] Confirm all product claims match shipped behavior.

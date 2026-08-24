@@ -93,9 +93,9 @@ Record these values in the release issue or deployment note:
 
 | Item | Value |
 |---|---|
-| Main commit | `83fcd70` privacy controls |
+| Main commit | `f246a33` usage events |
 | Scraper commit | `c8166ff` freshness policy |
-| Supabase migration | `011_lock_abuse_controls` and any later migration |
+| Supabase migration | `015_optimize_saved_jobs_rls` and any later migration |
 | Vercel preview URL | Fill after preview |
 | Schedule verification run | Pending until the first post-gate schedule event |
 | Legal review | Required before commercial launch |
