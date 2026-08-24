@@ -28,10 +28,10 @@
 - [x] Add the Applytics catalog schema mapping in the scraper repository. See scraper commit `c4a56a6`.
 - [x] Add the first Applytics `jobs` catalog migration file. See commit `557edb0`.
 - [x] Apply and verify the `jobs` migration in Supabase. Applied `jobs_catalog` to project `ndcchdxnjdcowyocmcyo`; verified the table, columns, indexes, constraints, and RLS. Mustakbil run `32735373095` then wrote and verified five active rows.
-- [ ] Add ingestion run records.
+- [x] Add ingestion run records. Migration `003_ingestion_health.sql` and worker reporting are live; reporting run `32736499139` verified five scraped, five enriched, and five upserted jobs with zero errors.
 - [x] Configure safe GitHub Actions schedules and manual dispatch.
 - [x] Add scraper README and operations documentation.
-- [ ] Run and verify the first scheduled scrape. Mustakbil manual run `32735373095` wrote five active catalog rows; the scheduled path still needs verification.
+- [ ] Run and verify the first scheduled scrape. Mustakbil manual run `32735373095` wrote five active catalog rows; the automatic schedule still needs verification.
 
 ### Phase 2: Create and migrate the main application repository
 
@@ -47,7 +47,7 @@
 - [ ] Add the canonical data dictionary.
 - [ ] Reconcile migration history with the live Supabase schema.
 - [ ] Add the normalized job catalog schema.
-- [ ] Add ingestion run and ingestion error tables.
+- [x] Add ingestion run and ingestion error tables. Applied as `ingestion_health` in Supabase and verified through an Actions run.
 - [ ] Add saved jobs, recommendation events, and usage events.
 - [ ] Test RLS policies, indexes, constraints, and ownership rules.
 
@@ -65,7 +65,7 @@
 - [x] Apply and verify the migration before enabling production writes. Supabase project has the verified `public.jobs` table, and Mustakbil run `32735373095` wrote five active records.
 - [ ] Add freshness, stale, expired, and source-status rules.
 - [ ] Add pagination and server-side filtering.
-- [ ] Add protected ingestion diagnostics.
+- [x] Add protected ingestion diagnostics in the worker. Main-application diagnostic views remain pending.
 
 ### Phase 6: Build discovery and recommendations
 
