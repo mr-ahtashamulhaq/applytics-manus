@@ -221,6 +221,8 @@ Legal-document validation: TypeScript and production build passed, lint remains 
 
 ### Phase 16: Final release and maintenance
 
+Latest application validation after durable abuse controls: TypeScript passed, 3 test files and 9 tests passed, lint exited with 0 errors and 140 legacy warnings, production build passed, and `npm audit --omit=dev` reported 0 vulnerabilities.
+
 - [ ] Complete the release checklist.
 - [ ] Confirm all product claims match shipped behavior.
 - [ ] Confirm the scraper schedule and run history. The automatic schedule is gated to Mustakbil, but the first post-gate scheduled event still needs logs and protected `ingestion_runs` verification.
