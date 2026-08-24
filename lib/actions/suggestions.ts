@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { suggestionInputSchema } from '@/lib/validation/suggestions'
+import { abuseControlMessage, checkAbuseControl } from '@/lib/security/abuseControls'
 
 export async function submitSuggestion(input: {
   name?: string
@@ -15,6 +16,11 @@ export async function submitSuggestion(input: {
   const parsed = suggestionInputSchema.safeParse(input)
   if (!parsed.success) return { success: false, error: 'Please check your suggestion and email.' }
   const data = parsed.data
+  const control = await checkAbuseControl({
+    operation: 'public_suggestions',
+    ipLimit: 5,
+  })
+  if (!control.allowed) return { success: false, error: abuseControlMessage('public_suggestions', control.reason) }
 
   const { error } = await supabaseAdmin
     .from('suggestions')

@@ -6,6 +6,7 @@ import { ensureUser } from '@/lib/auth/ensureUser'
 import { getGroqClient, GROQ_MODEL } from '@/lib/groq/client'
 import { z } from 'zod'
 import { aiResultSchema, validateResumeEvidence } from '@/lib/validation/resume'
+import { abuseControlMessage, checkAbuseControl } from '@/lib/security/abuseControls'
 export type { AIResult } from '@/lib/validation/resume'
 
 // ── Types ───────────────────────────────────────────────────────
@@ -218,6 +219,16 @@ export async function generateResume(rawInput: GenerateInput): Promise<GenerateR
         success: false,
         error: 'Add your work experience or projects to your profile first.',
       }
+    }
+
+    const abuseControl = await checkAbuseControl({
+      operation: 'ai_generation',
+      userId: String(user.id),
+      ipLimit: 10,
+      userLimit: DAILY_GENERATION_GUARD,
+    })
+    if (!abuseControl.allowed) {
+      return { success: false, error: abuseControlMessage('ai_generation', abuseControl.reason) }
     }
 
     // 5. Build prompt

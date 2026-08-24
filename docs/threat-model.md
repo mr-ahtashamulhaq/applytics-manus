@@ -27,10 +27,11 @@ The main assets are profile details, uploaded resume references, generated resum
 | A client changes a protected field | Server actions parse input and build database payloads. Linked jobs and resumes are checked server-side. | A future action can reintroduce a gap if it accepts a full database object. |
 | A malicious request submits unsafe text | Zod bounds text fields. React renders user text as text. The AI prompt treats profile content as data. | Text can still be harmful or misleading if a user publishes it elsewhere. |
 | A model invents candidate evidence | The resume output uses a strict schema and checks skills, roles, companies, projects, dates, and numbers against profile evidence. | Semantic claims can still require human review. |
-| An attacker spends AI resources | Resume generation has an authenticated daily fair-use guard. | Per-IP limits, bot protection, and a shared kill switch are pending. |
+| An attacker spends AI resources | Resume generation checks a Supabase operation flag, a hashed-IP hourly limit, and the authenticated daily fair-use limit before the model call. | Limits are fixed-window and conservative; deployed monitoring and secret rotation still need verification. |
 | A user downloads another resume | The PDF route validates the UUID and filters the resume by the authenticated user id. | Credentials and session compromise remain outside the app boundary. |
 | A scraper imports unsafe or false source data | Scheduled ingestion uses only the verified Mustakbil source. Other boards are manual recovery tests. | Source markup and source availability can change. |
 | A public client reads ingestion errors | RLS is enabled. `anon` and `authenticated` receive explicit deny policies. | Service-role credentials must never reach the browser. |
+| A bot floods public feedback | The form has a honeypot. A Supabase operation flag and hashed-IP hourly limit run before insert. | Fixed-window counters need operational review and cleanup monitoring. |
 | A dependency contains a known production issue | Next.js was updated to 16.3.2. Unused runtime packages were removed. The production audit reports zero vulnerabilities. | Re-run the audit before each release. |
 | The app is embedded in another site | CSP `frame-ancestors` and `X-Frame-Options: DENY` block framing. | Verify headers on the deployed domain. |
 
@@ -42,4 +43,4 @@ The private scraper uses a service-role credential. The credential must exist on
 
 ## Open risks before public release
 
-The product still needs per-IP controls for public feedback, upload validation review for all resume paths, a shared expensive-operation kill switch, deployed-header verification, and a tested secret-rotation procedure. Legal copy also needs qualified legal review.
+The product still needs upload validation review for all resume paths, deployed-header verification, a tested secret-rotation procedure, durable usage monitoring, deletion/export flows, and legal review. The Supabase-backed per-IP controls and shared operation flags are implemented, but they must be exercised in preview and monitored after release.

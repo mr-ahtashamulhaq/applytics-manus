@@ -94,6 +94,20 @@ The server checks application ownership and checks that linked resumes belong to
 
 `ingestion_runs` stores non-sensitive worker status, source names, counters, workflow run IDs, and timestamps. `ingestion_errors` stores bounded source and role error records linked to a run. Both tables have RLS and explicit deny policies for the `anon` and `authenticated` roles. The worker service-role key is the only normal writer.
 
+## Abuse controls
+
+| Table | Column | Type | Meaning | Access |
+|---|---|---|---|---|
+| `operation_flags` | `key` | text | Lowercase operation identifier | Service role only |
+| `operation_flags` | `enabled` | boolean | Whether the operation is available | Service role only |
+| `operation_flags` | `note` | text | Operator-facing purpose | Service role only |
+| `rate_limit_buckets` | `bucket_key` | text | Hashed operation and request scope | Service role only |
+| `rate_limit_buckets` | `window_started_at` | timestamptz | Fixed-window start | Service role only |
+| `rate_limit_buckets` | `request_count` | integer | Requests consumed in the window | Service role only |
+| `rate_limit_buckets` | `expires_at` | timestamptz | Cleanup and window boundary | Service role only |
+
+The application calls atomic, security-definer functions for these tables. IP values are hashed before storage. Public API roles cannot read or write the tables or execute the functions. A missing control record or database error fails closed for the protected operation.
+
 ## Migration record
 
 | Migration | Scope |
@@ -107,5 +121,6 @@ The server checks application ownership and checks that linked resumes belong to
 | `007_link_catalog_workflows.sql` | Nullable catalog links across resume and tracker tables |
 | `008_saved_jobs.sql` | User-owned saved catalog jobs |
 | `009_tracker_followups.sql` | Deadlines, follow-up dates, outcomes, and indexes |
+| `010_abuse_controls.sql` | Protected operation flags and atomic fixed-window rate-limit counters |
 
 Migration files are ordered. Apply them to a new environment in numeric order. The live schema contains a few fields that were added during earlier operation, so inspect the target schema before applying an older baseline to an existing project.
