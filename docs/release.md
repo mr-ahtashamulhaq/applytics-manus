@@ -93,8 +93,8 @@ Record these values in the release issue or deployment note:
 
 | Item | Value |
 |---|---|
-| Main commit | `fea707c` before the privacy-flow changes |
-| Scraper commit | `a739414` at this documentation update |
+| Main commit | `83fcd70` privacy controls |
+| Scraper commit | `c8166ff` freshness policy |
 | Supabase migration | `011_lock_abuse_controls` and any later migration |
 | Vercel preview URL | Fill after preview |
 | Schedule verification run | Pending until the first post-gate schedule event |
