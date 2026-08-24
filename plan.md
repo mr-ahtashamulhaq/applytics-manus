@@ -155,9 +155,11 @@ FAQ validation: TypeScript and production build passed, lint remains 0 errors wi
 - [ ] Add rate limiting and bot protection.
 - [x] Add security headers and HTTPS checks. `next.config.ts` adds CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy; production responses add HSTS and `upgrade-insecure-requests`.
 - [x] Run dependency security scans. Updated Next.js and its ESLint config to `16.3.2`, removed unused `lucide-react` and `shadcn` dependencies, removed the obsolete stylesheet import, and verified `npm audit --omit=dev` reports zero vulnerabilities.
-- [ ] Create a threat model and incident runbook.
+- [x] Create a threat model and incident runbook. Added `docs/threat-model.md` and `docs/security-incident-runbook.md` with trust boundaries, residual risks, containment steps, recovery checks, and communication fields.
 
 RLS validation: live policy and RLS-enabled queries passed against Supabase project `ndcchdxnjdcowyocmcyo`.
+
+Security documentation validation: threat boundaries, residual risks, credential rotation, data-exposure response, AI-abuse response, scraper containment, and rollback checks are documented in the security runbooks.
 
 Security-header validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
 
