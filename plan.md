@@ -53,6 +53,8 @@
 
 ### Phase 4: Repair the application foundation
 
+- [x] Resolve the existing Clerk appearance typecheck errors on sign-in and sign-up pages.
+- [x] Update handwritten TypeScript types for the live users, profiles, generated-resumes, jobs, ingestion-runs, and ingestion-errors tables.
 - [ ] Repair authentication and ownership checks.
 - [ ] Add server-side schemas and validation.
 - [ ] Add safe error handling and structured logging.
