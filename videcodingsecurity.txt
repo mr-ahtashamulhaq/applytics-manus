@@ -1,0 +1,53 @@
+FOR SECURITY MAKE SURE TO FOLLOW THESE RULES:
+Escape and Sanitize anything a user submits before it ever gets shown on the page.
+check the file and size on every upload and store files somewhere they can never be executed.
+chec that the loggedin user actually owns the data before handing anything back.
+Parameterize every query so whetever people type into my formsa is treated as data not code.
+
+Before generating the production build and launching this project, ensure every single requirement from this checklist is implemented and verified in the code:
+
+Website & SEO Checklist:
+* Build a custom 404 page.
+* Place the primary CTA above the fold.
+* Add internal links across relevant pages.
+* Create a conversion thank you page.
+* Add breadcrumb navigation.
+* Include case study sections.
+* Add a 5-item FAQ section.
+* Add a response time promise.
+* Implement a sticky mobile CTA.
+* Include a robots.txt file.
+* Set unique page titles for every route.
+* Set unique meta descriptions for every route.
+* Add Open Graph social share image tags.
+* Embed maps and direct location directions.
+* Display real customer reviews.
+* Add descriptive alt text to all images.
+* Implement local Schema.org structured data.
+* Add a Privacy Policy (PP) page.
+* Integrate Google Analytics tracking script.
+* Include a team photo section.
+
+Security & Backend Checklist:
+* Hide all API keys in backend environment variables.
+* Purge git secrets and sensitive history from the repository.
+* Use public client database keys safely.
+* Enable database Row-Level Security (RLS).
+* Encrypt sensitive data at rest and in transit.
+* Enforce strict server-side authentication.
+* Lock down record access per user role.
+* Block client-side field tampering on updates.
+* Configure secure, HttpOnly, SameSite session cookies.
+* Hash all passwords with a strong algorithm (e.g., Argon2 or bcrypt).
+* Add rate limiting to login and authentication routes.
+* Implement bot protection on public form submissions.
+* Parameterize all database queries to eliminate SQL injection.
+* Validate all user input on the server side.
+* Escape all user-generated content before rendering to prevent XSS.
+* Restrict file upload types, file extensions, and file sizes.
+* Trim API responses to exclude unnecessary database fields.
+* Add security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options).
+* Force HTTPS redirects across all routes.
+* Scan and update dependencies to resolve known vulnerabilities.
+
+

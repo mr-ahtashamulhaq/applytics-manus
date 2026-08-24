@@ -1,0 +1,328 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─────────────────────────────────────────────────────────────────
+   APPLYTICS DESIGN TOKENS
+   Source of truth — all values from DESIGN.md
+   ───────────────────────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand-red:          #de0d12;
+  --brand-red-deep:     #b30a0f;
+  --brand-red-subtle:   #fdf1f1;
+  --brand-black:        #0f0f0f;
+  --brand-black-mid:    #1a1a1a;
+
+  /* Canvas & surfaces */
+  --canvas:             #ffffff;
+  --surface:            #f7f6f5;
+  --surface-soft:       #fafaf9;
+  --surface-dark:       #0f0f0f;
+
+  /* Borders */
+  --hairline:           #e5e3df;
+  --hairline-soft:      #edebe7;
+  --hairline-strong:    #c8c4be;
+
+  /* Text hierarchy */
+  --ink-deep:           #0f0f0f;
+  --ink:                #1a1a1a;
+  --charcoal:           #37352f;
+  --slate:              #5d5b54;
+  --steel:              #787671;
+  --stone:              #a4a097;
+  --muted-color:        #bbb8b1;
+
+  /* On-dark */
+  --on-dark:            #ffffff;
+  --on-dark-muted:      #a4a097;
+
+  /* Semantic */
+  --success:            #1aae39;
+  --warning:            #dd5b00;
+  --error:              #de0d12;
+
+  /* Status chips */
+  --status-draft-bg:     #f7f6f5;
+  --status-draft-text:   #787671;
+  --status-applied-bg:   #dbeafe;
+  --status-applied-text: #1d4ed8;
+  --status-interview-bg: #d1fae5;
+  --status-interview-text:#065f46;
+  --status-rejected-bg:  #fde8e8;
+  --status-rejected-text:#b30a0f;
+  --status-accepted-bg:  #d1fae5;
+  --status-accepted-text:#065f46;
+
+  /* Border radius scale */
+  --radius-none:  0px;
+  --radius-xs:    3px;
+  --radius-sm:    4px;
+  --radius-md:    6px;    /* buttons */
+  --radius-lg:    8px;    /* cards */
+  --radius-xl:    12px;   /* larger containers */
+  --radius-full:  9999px;
+
+  /* Spacing */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Elevation */
+  --shadow-subtle: 0 1px 3px 0 rgba(15, 12, 8, 0.05);
+  --shadow-card:   0 4px 12px 0 rgba(15, 12, 8, 0.07);
+  --shadow-modal:  0 16px 48px -8px rgba(15, 12, 8, 0.14);
+
+  /* Motion */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:    150ms;
+  --dur-standard:220ms;
+  --dur-smooth:  350ms;
+
+  /* shadcn overrides — mapped to Applytics tokens */
+  --background:              var(--canvas);
+  --foreground:              var(--ink-deep);
+  --card:                    var(--canvas);
+  --card-foreground:         var(--ink-deep);
+  --popover:                 var(--canvas);
+  --popover-foreground:      var(--ink-deep);
+  --primary:                 var(--brand-red);
+  --primary-foreground:      var(--on-dark);
+  --secondary:               var(--surface);
+  --secondary-foreground:    var(--ink);
+  --muted:                   var(--surface);
+  --muted-foreground:        var(--steel);
+  --accent:                  var(--surface);
+  --accent-foreground:       var(--ink);
+  --destructive:             var(--brand-red);
+  --border:                  var(--hairline);
+  --input:                   var(--hairline-strong);
+  --ring:                    var(--brand-red);
+  --radius:                  0.375rem; /* 6px — our base radius */
+
+  /* Chart colors (status-mirrored) */
+  --chart-1: #de0d12;
+  --chart-2: #1aae39;
+  --chart-3: #dd5b00;
+  --chart-4: #1d4ed8;
+  --chart-5: #787671;
+
+  /* Sidebar tokens */
+  --sidebar:                       var(--canvas);
+  --sidebar-foreground:            var(--charcoal);
+  --sidebar-primary:               var(--brand-red);
+  --sidebar-primary-foreground:    var(--on-dark);
+  --sidebar-accent:                var(--brand-red-subtle);
+  --sidebar-accent-foreground:     var(--brand-red);
+  --sidebar-border:                var(--hairline);
+  --sidebar-ring:                  var(--brand-red);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   THEME INLINE MAPPING  (Tailwind v4 @theme)
+   ───────────────────────────────────────────────────────────────── */
+@theme inline {
+  --color-background:              var(--background);
+  --color-foreground:              var(--foreground);
+  --color-card:                    var(--card);
+  --color-card-foreground:         var(--card-foreground);
+  --color-popover:                 var(--popover);
+  --color-popover-foreground:      var(--popover-foreground);
+  --color-primary:                 var(--primary);
+  --color-primary-foreground:      var(--primary-foreground);
+  --color-secondary:               var(--secondary);
+  --color-secondary-foreground:    var(--secondary-foreground);
+  --color-muted:                   var(--muted);
+  --color-muted-foreground:        var(--muted-foreground);
+  --color-accent:                  var(--accent);
+  --color-accent-foreground:       var(--accent-foreground);
+  --color-destructive:             var(--destructive);
+  --color-border:                  var(--border);
+  --color-input:                   var(--input);
+  --color-ring:                    var(--ring);
+
+  /* Brand direct utilities */
+  --color-brand-red:               var(--brand-red);
+  --color-brand-red-deep:          var(--brand-red-deep);
+  --color-brand-red-subtle:        var(--brand-red-subtle);
+  --color-brand-black:             var(--brand-black);
+  --color-surface:                 var(--surface);
+  --color-surface-soft:            var(--surface-soft);
+  --color-hairline:                var(--hairline);
+  --color-hairline-strong:         var(--hairline-strong);
+  --color-ink-deep:                var(--ink-deep);
+  --color-ink:                     var(--ink);
+  --color-charcoal:                var(--charcoal);
+  --color-slate:                   var(--slate);
+  --color-steel:                   var(--steel);
+  --color-stone:                   var(--stone);
+  --color-on-dark:                 var(--on-dark);
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+
+  /* Radius */
+  --radius-sm:  var(--radius-sm);
+  --radius-md:  var(--radius-md);
+  --radius-lg:  var(--radius-lg);
+  --radius-xl:  var(--radius-xl);
+
+  /* Sidebar */
+  --color-sidebar:                      var(--sidebar);
+  --color-sidebar-foreground:           var(--sidebar-foreground);
+  --color-sidebar-primary:              var(--sidebar-primary);
+  --color-sidebar-primary-foreground:   var(--sidebar-primary-foreground);
+  --color-sidebar-accent:               var(--sidebar-accent);
+  --color-sidebar-accent-foreground:    var(--sidebar-accent-foreground);
+  --color-sidebar-border:               var(--sidebar-border);
+  --color-sidebar-ring:                 var(--sidebar-ring);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   BASE RESETS
+   ───────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip; /* prevent horizontal scroll — NOT hidden */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    overflow-x: clip;
+    min-height: 100dvh;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  /* Typography base */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-geist-sans);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    overflow-wrap: anywhere;
+    min-width: 0;
+    color: var(--ink-deep);
+  }
+
+  p {
+    color: var(--charcoal);
+    line-height: 1.6;
+    max-width: 65ch;
+  }
+
+  /* Focus visible — brand red outline */
+  :focus-visible {
+    outline: 2px solid var(--brand-red);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar — minimal, matches surface */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--hairline-strong);
+    border-radius: var(--radius-full);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--steel);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   UTILITY CLASSES
+   ───────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Typography */
+  .text-display  { font-size: 72px; font-weight: 700; line-height: 1.05; letter-spacing: -2.5px; }
+  .text-display-lg { font-size: 52px; font-weight: 700; line-height: 1.10; letter-spacing: -1.5px; }
+  .text-h1 { font-size: 40px; font-weight: 700; line-height: 1.15; letter-spacing: -0.75px; }
+  .text-h2 { font-size: 32px; font-weight: 700; line-height: 1.20; letter-spacing: -0.5px; }
+  .text-h3 { font-size: 24px; font-weight: 600; line-height: 1.30; }
+  .text-h4 { font-size: 18px; font-weight: 600; line-height: 1.35; }
+  .text-label { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; font-family: var(--font-geist-mono); color: var(--steel); }
+
+  /* Brand accent */
+  .accent-red { color: var(--brand-red); }
+  .bg-brand-red { background-color: var(--brand-red); }
+
+  /* Micro-animation slide-up */
+  .animate-slide-up {
+    animation: slideUp var(--dur-standard) var(--ease-out) both;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--surface) 25%,
+      var(--hairline-soft) 50%,
+      var(--surface) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Score ring animation */
+  .score-ring-fill {
+    transition: stroke-dashoffset 600ms var(--ease-out);
+  }
+
+  /* Hairline divider */
+  .divider-h { border-top: 1px solid var(--hairline); }
+  .divider-v { border-left: 1px solid var(--hairline); }
+
+  /* Row hover — use on server-component rows instead of onMouseEnter */
+  .row-hover { transition: background 120ms ease; }
+  .row-hover:hover { background: var(--surface) !important; }
+
+  /* Landing page input focus */
+  .landing-input:focus {
+    border-color: var(--brand-red) !important;
+    outline: none;
+    box-shadow: 0 0 0 2px var(--brand-red-subtle);
+  }
+
+  /* Footer link hover — server-component safe (no JS event handlers) */
+  .footer-link {
+    color: var(--slate);
+    transition: color 150ms ease;
+  }
+  .footer-link:hover {
+    color: var(--ink);
+  }
+}
