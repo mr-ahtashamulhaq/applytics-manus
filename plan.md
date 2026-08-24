@@ -196,7 +196,7 @@ Bot-protection validation: TypeScript and production build passed, lint remains 
 - [x] Add local development instructions. The README now documents environment placeholders, migration order, and local checks.
 - [x] Add testing and release documentation. Added `docs/release.md` with application and worker gates.
 - [x] Add deployment and rollback documentation. The runbook documents preview verification, the untouched Vercel integration, forward-only migrations, and rollback handling.
-- [ ] Add decision records.
+- [x] Add decision records. Added `docs/decisions.md` for source gating, Redis-free scheduling, repository privacy, service-role boundaries, free early access, and deferred Vercel migration.
 - [x] Push every document to GitHub after each meaningful documentation subphase.
 
 ### Phase 14: Verify and deploy
