@@ -54,7 +54,7 @@ function JobCard({ job }: { job: Job }) {
             <span>{job.status === 'stale' ? 'Older listing' : 'Recently checked'}</span>
           </div>
           <h2 className="text-h3 truncate" style={{ color: 'var(--ink-deep)' }}>
-            {job.title}
+            <Link href={`/app/jobs/${encodeURIComponent(job.id)}`} className="hover:underline underline-offset-4">{job.title}</Link>
           </h2>
           <p className="mt-1 text-sm font-medium" style={{ color: 'var(--charcoal)' }}>
             {job.company}

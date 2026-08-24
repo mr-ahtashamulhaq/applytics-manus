@@ -80,7 +80,7 @@
 
 - [x] Build `/app/jobs`. Added server-loaded filters, source health messaging, job cards, direct source links, resume handoff links, pagination, loading skeletons, and an accessible empty state. Design direction is documented in `design-system/applytics/pages/jobs.md`.
 
-- [ ] Build `/app/jobs/[id]`. The catalog cards currently link directly to the source while detail-page implementation remains pending.
+- [x] Build `/app/jobs/[id]`. Added full description, source metadata, skills, source link, tailoring action, and tracker action with safe not-found handling.
 - [ ] Build `/app/saved-jobs`.
 - [ ] Build `/app/recommendations`.
 - [ ] Add explainable deterministic ranking. Show evidence only when matched skills or experience data exists; never fabricate scores or metrics.
