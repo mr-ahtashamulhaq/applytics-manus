@@ -2,7 +2,8 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
-import type { Job, JobSourceBoard } from '@/lib/types/database'
+import type { Job } from '@/lib/types/database'
+import { jobCatalogFiltersSchema } from '@/lib/validation/jobs'
 import { z } from 'zod'
 
 const jobFields = [
@@ -38,17 +39,6 @@ const jobFields = [
   'created_at',
   'updated_at',
 ].join(',')
-
-export const jobCatalogFiltersSchema = z.object({
-  q: z.string().trim().max(120).optional(),
-  location: z.string().trim().max(120).optional(),
-  source_board: z.enum(['linkedin', 'indeed', 'rozee', 'mustakbil']).optional(),
-  employment_type: z.string().trim().max(40).optional(),
-  page: z.number().int().min(1).max(1000).optional(),
-  page_size: z.number().int().min(1).max(50).optional(),
-})
-
-export type JobCatalogFilters = z.infer<typeof jobCatalogFiltersSchema>
 
 export interface JobCatalogResult {
   jobs: Job[]
@@ -115,9 +105,3 @@ export async function loadJob(id: unknown): Promise<Job | null> {
   return data as unknown as Job
 }
 
-export const supportedJobBoards: JobSourceBoard[] = [
-  'linkedin',
-  'indeed',
-  'rozee',
-  'mustakbil',
-]

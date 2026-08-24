@@ -16,9 +16,11 @@ import {
   CircleNotch,
 } from '@phosphor-icons/react'
 import { generateResume } from '@/lib/actions/generate'
+import type { Job } from '@/lib/types/database'
 
 // ── Schema ───────────────────────────────────────────────────────
 const generateSchema = z.object({
+  job_id: z.string().uuid().optional(),
   job_title: z.string().min(2, 'Job title is required'),
   company_name: z.string().min(1, 'Company name is required'),
   job_description: z.string().optional(),
@@ -131,7 +133,7 @@ function InputField(props: React.InputHTMLAttributes<HTMLInputElement> & { error
 }
 
 // ── Main form component ──────────────────────────────────────────
-export default function GenerateForm() {
+export default function GenerateForm({ initialJob }: { initialJob?: Job | null }) {
   const router = useRouter()
   const [isGenerating, setIsGenerating] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
@@ -142,7 +144,18 @@ export default function GenerateForm() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(generateSchema) })
+  } = useForm<FormValues>({
+    resolver: zodResolver(generateSchema),
+    defaultValues: initialJob
+      ? {
+          job_id: initialJob.id,
+          job_title: initialJob.title,
+          company_name: initialJob.company,
+          job_description: initialJob.description ?? '',
+          required_skills: initialJob.skills_required.join(', '),
+        }
+      : undefined,
+  })
 
   const jdLength = watch('job_description')?.length ?? 0
 
@@ -165,7 +178,7 @@ export default function GenerateForm() {
     setIsGenerating(true)
     runStepAnimation()
 
-    const result = await generateResume(data)
+    const result = await generateResume({ ...data, job_id: initialJob?.id ?? data.job_id })
 
     if (result.success && result.resumeId) {
       router.push(`/app/generate/result/${result.resumeId}`)
@@ -183,6 +196,12 @@ export default function GenerateForm() {
       </AnimatePresence>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+
+        {initialJob && (
+          <div className="border px-4 py-3 text-sm" style={{ borderColor: 'rgba(222,13,18,0.2)', background: 'var(--brand-red-subtle)', color: 'var(--brand-red-deep)' }} role="status">
+            Tailoring for the selected {initialJob.company} role. Applytics uses the verified listing as the source of truth.
+          </div>
+        )}
 
         {/* Job details card */}
         <div
@@ -206,6 +225,7 @@ export default function GenerateForm() {
                 id="job_title"
                 placeholder="Software Engineer Intern"
                 error={!!errors.job_title}
+                readOnly={!!initialJob}
                 {...register('job_title')}
               />
               <FieldError msg={errors.job_title?.message} />
@@ -219,6 +239,7 @@ export default function GenerateForm() {
                 id="company_name"
                 placeholder="Arbisoft"
                 error={!!errors.company_name}
+                readOnly={!!initialJob}
                 {...register('company_name')}
               />
               <FieldError msg={errors.company_name?.message} />
@@ -231,6 +252,7 @@ export default function GenerateForm() {
               <InputField
                 id="required_skills"
                 placeholder="React, Node.js, Python, REST APIs"
+                readOnly={!!initialJob}
                 {...register('required_skills')}
               />
             </div>
@@ -267,6 +289,7 @@ export default function GenerateForm() {
               minHeight: '200px',
               lineHeight: '1.65',
             }}
+            readOnly={!!initialJob}
             {...register('job_description', {
               onBlur: (e: React.FocusEvent<HTMLTextAreaElement>) => {
                 e.currentTarget.style.borderColor = errors.job_description ? 'var(--brand-red)' : 'var(--hairline-strong)'

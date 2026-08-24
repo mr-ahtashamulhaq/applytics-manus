@@ -1,11 +1,22 @@
 import GenerateForm from '@/components/generate/GenerateForm'
+import { loadJob } from '@/lib/actions/jobs'
 
 export const metadata = {
   title: 'Applytics',
   description: 'Paste a job description and get an AI-tailored, ATS-optimised resume in seconds.',
 }
 
-export default function GeneratePage() {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>
+
+function firstValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value
+}
+
+export default async function GeneratePage({ searchParams }: { searchParams: SearchParams }) {
+  const params = await searchParams
+  const jobId = firstValue(params.jobId)
+  const catalogJob = jobId ? await loadJob(jobId) : null
+
   return (
     <div className="max-w-2xl mx-auto w-full">
       <div className="mb-8">
@@ -16,7 +27,7 @@ export default function GeneratePage() {
         </p>
       </div>
 
-      <GenerateForm />
+      <GenerateForm initialJob={catalogJob} />
     </div>
   )
 }

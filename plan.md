@@ -46,6 +46,7 @@
 
 - [ ] Add the canonical data dictionary.
 - [ ] Reconcile migration history with the live Supabase schema.
+- [x] Add backward-compatible `job_id` links to job inputs and generated resumes, plus `job_id` and `generated_resume_id` links to applications; applied as `link_catalog_workflows` and verified live.
 - [ ] Add the normalized job catalog schema.
 - [x] Add ingestion run and ingestion error tables. Applied as `ingestion_health` in Supabase and verified through an Actions run.
 - [ ] Add saved jobs, recommendation events, and usage events.
@@ -87,6 +88,8 @@
 
 ### Phase 7: Improve resume generation and PDF output
 
+- [x] Connect `/app/jobs` to `/app/generate?jobId=...`; resolve the catalog record server-side, prefill the form, and persist `job_id` on job inputs and generated resumes.
+- [x] Validate generation input bounds and catalog-job IDs server-side.
 - [ ] Improve generation input and review flow.
 - [ ] Add strict AI output validation.
 - [ ] Prevent invented resume content.
