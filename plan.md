@@ -61,11 +61,11 @@
 - [x] Add server-side Zod schemas for tracker inputs, statuses, dates, notes, and UUIDs.
 - [x] Return bounded, user-safe tracker errors instead of raw database messages.
 - [x] Clear the two baseline lint errors in the research chart and liquid button; the lint check now has zero errors, with existing warnings documented for later cleanup.
-- [ ] Repair authentication and ownership checks across all server actions. Profile, catalog, recommendations, saved jobs, tracker, and generation paths now enforce authenticated server-side access; remaining review is still required for every route consumer.
+- [x] Repair authentication and ownership checks across all server actions. Profile, catalog, recommendations, saved jobs, tracker, generation, dashboard, suggestions, and PDF paths were reviewed; the current controls and remaining gates are recorded in `docs/server-action-audit.md`.
 - [x] Add server-side schemas and validation to the remaining server actions. Profile and public suggestion inputs now use bounded Zod schemas; raw database messages are no longer returned.
 - [ ] Add structured logging.
 
-Action-audit validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings.
+Action-audit validation: TypeScript and production build passed; lint remains 0 errors with the existing 140 warnings. The audit records user filters, selected responses, strict schemas, and safe errors for every current action.
 - [ ] Repair environment validation.
 - [ ] Add unit, integration, and end-to-end tests.
 
