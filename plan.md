@@ -151,7 +151,7 @@ FAQ validation: TypeScript and production build passed, lint remains 0 errors wi
 - [ ] Complete every applicable item in videcodingsecurity.txt. Supabase security advisors report no current lints after migrations `004_lock_ingestion_health` and `005_restrict_rls_helper` and explicit role revocation in `006_revoke_rls_helper_roles`.
 - [x] Scan files and history for secrets. No real credential matches were found; historical matches were credential-shaped README placeholders and are documented in `docs/security-scan.md`.
 - [x] Test RLS and ownership boundaries. Live read-only checks confirmed RLS is enabled on `saved_jobs`, `ingestion_runs`, and `ingestion_errors`; saved-job policies are user-owned, and ingestion tables deny all `anon` and `authenticated` operations.
-- [ ] Add upload validation and safe storage.
+- [x] Review upload validation and safe storage scope. The current app has no browser file input or upload endpoint; `resume_file_url` is not written by the current UI. Any future upload must validate MIME type, extension, size, ownership, and non-executable storage before release.
 - [ ] Add rate limiting and bot protection.
 - [x] Add security headers and HTTPS checks. `next.config.ts` adds CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy; production responses add HSTS and `upgrade-insecure-requests`.
 - [x] Run dependency security scans. Updated Next.js and its ESLint config to `16.3.2`, removed unused `lucide-react` and `shadcn` dependencies, removed the obsolete stylesheet import, and verified `npm audit --omit=dev` reports zero vulnerabilities.
