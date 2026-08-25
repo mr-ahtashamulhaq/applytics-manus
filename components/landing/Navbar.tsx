@@ -48,15 +48,19 @@ export default function Navbar() {
     >
       <nav className="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-between">
         {/* Wordmark */}
-        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+        <Link href="/" className="flex items-center gap-2 flex-shrink-0" aria-label="Applytics home">
           <Image
-            src="/wordmark.png"
-            alt="Applytics"
-            width={120}
+            src="/applytics-logo.png"
+            alt=""
+            width={32}
             height={32}
-            className="h-7 w-auto object-contain"
+            className="h-8 w-8 object-contain"
             priority
+            aria-hidden="true"
           />
+          <span className="text-base font-semibold tracking-tight" style={{ color: 'var(--ink-deep)' }}>
+            Applytics
+          </span>
         </Link>
 
         {/* Desktop nav links */}

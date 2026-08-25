@@ -22,8 +22,9 @@ export default function SignInPage() {
         }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Image src="/chrome-shiny-wordmark.png" alt="Applytics" width={100} height={32} className="object-contain" />
+        <div className="flex items-center gap-3">
+          <Image src="/applytics-logo.png" alt="" width={40} height={40} className="h-10 w-10 object-contain" aria-hidden="true" />
+          <span className="text-lg font-semibold tracking-tight" style={{ color: 'var(--on-dark)' }}>Applytics</span>
         </div>
 
         {/* Tagline */}
@@ -50,7 +51,8 @@ export default function SignInPage() {
         <div className="w-full max-w-sm">
           <div className="mb-6 lg:hidden">
             <div className="flex items-center gap-2 mb-4">
-              <Image src="/chrome-shiny-wordmark.png" alt="Applytics" width={100} height={32} className="object-contain" />
+              <Image src="/applytics-logo.png" alt="" width={32} height={32} className="h-8 w-8 object-contain" aria-hidden="true" />
+              <span className="text-base font-semibold tracking-tight" style={{ color: 'var(--ink-deep)' }}>Applytics</span>
             </div>
           </div>
 

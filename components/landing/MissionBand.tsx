@@ -35,14 +35,14 @@ export default function MissionBand() {
       <div className="relative z-10 max-w-[1280px] mx-auto px-6">
         <div className="mission-content max-w-[860px] mx-auto text-center">
 
-          {/* Chrome logo */}
+          {/* Brand mark */}
           <div className="flex justify-center mb-8">
             <Image
-              src="/wordmark.png"
-              alt="Applytics"
-              width={48}
-              height={48}
-              className="h-12 w-auto object-contain opacity-80"
+              src="/applytics-logo.png"
+              alt="Applytics logo"
+              width={64}
+              height={64}
+              className="h-16 w-16 object-contain opacity-90"
             />
           </div>
 

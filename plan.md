@@ -249,3 +249,10 @@ Latest application validation after privacy, usage-event, and abuse-control work
 - `.agents` archive extracted into the main project workspace.
 - Detailed plan added as `APPLYTICS_REFACTOR_PLAN.md`.
 - Simple-English review added as `APPLYTICS_PRODUCTION_DIRECTION_REVIEW_SIMPLE.md`.
+
+### Logo replacement subphase
+
+- [x] Replace the previous wordmark and inline mobile mark with the supplied transparent `APPLYTICS.png`, stored as `public/applytics-logo.png` and `app/icon.png`.
+- [x] Update global metadata, landing navbar, footer, mission band, desktop sidebar, mobile app top bar, and both responsive Clerk sign-in/sign-up wrappers. The square mark uses explicit square boxes at 30px, 32px, 36px, 40px, and 64px according to each surface’s available space, with the Applytics text lockup retained where the prior asset carried the name.
+- [x] Confirm no legacy `wordmark` or `chrome-shiny-wordmark` references remain in application source or public assets.
+- [x] Run the Impeccable detector: `[]`. Main tests pass with 4 files and 11 tests; TypeScript, production build, lint, and `npm audit --omit=dev` pass. The requested My Browser visual inspection was intentionally deferred after the user asked to set up the original Vercel-linked repository first.

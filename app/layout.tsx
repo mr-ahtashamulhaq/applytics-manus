@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   description: 'Find jobs, tailor a resume to a selected listing, and track applications in one place.',
   keywords: ['jobs in Pakistan', 'resume tailoring', 'application tracker', 'CV', 'career'],
   alternates: { canonical: '/' },
-  icons: { icon: '/chrome-shiny-wordmark.png' },
+  icons: { icon: '/applytics-logo.png' },
   openGraph: {
     title: 'Applytics | Job search tools for Pakistan',
     description: 'Find jobs, tailor a resume to a selected listing, and track applications in one place.',

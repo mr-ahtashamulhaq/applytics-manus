@@ -93,7 +93,7 @@ export default function Sidebar() {
       >
         {/* Wordmark */}
         <Link href="/" className="flex items-center gap-2 group">
-          <Image src="/wordmark.png" alt="Applytics Logo" width={32} height={32} className="object-contain" />
+          <Image src="/applytics-logo.png" alt="Applytics logo" width={32} height={32} className="h-8 w-8 object-contain" />
           <span
             className="text-h4 tracking-tight select-none"
             style={{ color: 'var(--ink-deep)', letterSpacing: '-0.5px' }}

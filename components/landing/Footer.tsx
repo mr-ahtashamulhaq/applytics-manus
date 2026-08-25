@@ -35,13 +35,19 @@ export default function Footer() {
 
           {/* Brand column */}
           <div>
-            <Image
-              src="/wordmark.png"
-              alt="Applytics"
-              width={100}
-              height={28}
-              className="h-7 w-auto object-contain mb-4"
-            />
+            <div className="mb-4 flex items-center gap-2">
+              <Image
+                src="/applytics-logo.png"
+                alt=""
+                width={36}
+                height={36}
+                className="h-9 w-9 object-contain"
+                aria-hidden="true"
+              />
+              <span className="text-base font-semibold tracking-tight" style={{ color: 'var(--ink-deep)' }}>
+                Applytics
+              </span>
+            </div>
             <p className="text-sm max-w-[240px]" style={{ color: 'var(--slate)', lineHeight: 1.65 }}>
               Career operating system for Pakistan&apos;s students and fresh graduates.
             </p>

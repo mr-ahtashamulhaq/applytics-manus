@@ -51,6 +51,7 @@ Check the following flows in an authenticated preview:
 11. Download the account export and confirm it contains only the signed-in user's records.
 12. Test typed-confirmation account deletion, local data cleanup, known private-file cleanup, sign-out, and provider-cleanup failure handling.
 13. Edit the summary and emphasized skills, save a separate version, reopen the result, confirm the latest version is shown, and download a PDF from that version.
+14. After the user pushes the replacement through the original `APPLYTICS` repository, inspect the public landing, auth, desktop app, and mobile app logo placements in My Browser before release.
 
 Check that another user cannot read or modify the first user's rows. Check that a missing job stops new resume or tracker links. Check that invalid UUIDs, dates, URLs, long text, and malformed AI JSON return safe errors. Review `docs/server-action-audit.md` and `docs/threat-model.md` before release.
 

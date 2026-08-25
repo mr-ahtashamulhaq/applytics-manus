@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { UserButton } from '@clerk/nextjs'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -51,14 +52,15 @@ export default function MobileTopBar() {
           borderBottom: '1px solid var(--hairline)',
         }}
       >
-        <Link href="/" className="flex items-center gap-2">
-          <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-            <rect width="28" height="28" rx="6" fill="var(--brand-red)" />
-            <path
-              d="M14 6L20 22H17.5L16 18H12L10.5 22H8L14 6ZM14 10.5L12.7 14.5H15.3L14 10.5Z"
-              fill="white"
-            />
-          </svg>
+        <Link href="/" className="flex items-center gap-2" aria-label="Applytics home">
+          <Image
+            src="/applytics-logo.png"
+            alt=""
+            width={30}
+            height={30}
+            className="h-[30px] w-[30px] object-contain"
+            aria-hidden="true"
+          />
           <span className="font-semibold text-sm tracking-tight" style={{ color: 'var(--ink-deep)' }}>
             Applytics
           </span>
